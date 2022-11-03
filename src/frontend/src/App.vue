@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from "vue";
-
-const name = ref("Hello world");
+const name = ref("Hello World");
 </script>
 
 <template>
-  <h1>Hello {{ name }}</h1>
+  <p>{{ name }}</p>
 </template>

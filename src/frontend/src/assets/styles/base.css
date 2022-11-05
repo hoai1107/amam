@@ -1,0 +1,149 @@
+/* FONT */
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;600&display=swap");
+:root {
+  --font-family: "Readex Pro", sans-serif;
+}
+
+html {
+  font-family: var(--font-family);
+}
+
+.xxs-400 {
+  font-family: var(--font-family);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.xxs-600 {
+  font-family: var(--font-family);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.xs-400 {
+  font-family: var(--font-family);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.xs-600 {
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.sm-400 {
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.sm-600 {
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.base-400 {
+  font-family: var(--font-family);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.base-600 {
+  font-family: var(--font-family);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.lg-400 {
+  font-family: var(--font-family);
+  font-size: 20px;
+  line-height: 32px;
+}
+
+.lg-600 {
+  font-family: var(--font-family);
+  font-size: 20px;
+  line-height: 32px;
+  font-weight: 600;
+}
+
+.xl-400 {
+  font-family: var(--font-family);
+  font-size: 24px;
+  line-height: 36px;
+}
+
+.xl-600 {
+  font-family: var(--font-family);
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 600;
+}
+
+.xxl-400 {
+  font-family: var(--font-family);
+  font-size: 32px;
+  line-height: 48px;
+}
+
+.xxl-600 {
+  font-family: var(--font-family);
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 600;
+}
+
+.xxxl-400 {
+  font-family: var(--font-family);
+  font-size: 48px;
+  line-height: 64px;
+}
+
+.xxxl-600 {
+  font-family: var(--font-family);
+  font-size: 48px;
+  line-height: 64px;
+  font-weight: 600;
+}
+
+.xxxxl-400 {
+  font-family: var(--font-family);
+  font-size: 64px;
+  line-height: 80px;
+}
+
+.xxxxl-600 {
+  font-family: var(--font-family);
+  font-size: 64px;
+  line-height: 80px;
+  font-weight: 600;
+}
+
+/* COLORS */
+:root {
+  --blueSky-light-800: #e8dcff;
+  --blueSky-primary: #8cf2ff;
+  --blueSky-dark-100: #7edae6;
+  --blueSky-dark-200: #70c2cc;
+  --blueSky-dark-300: #62a9b3;
+  --blueSky-dark-400: #549199;
+  --blueSky-dark-500: #467980;
+  --blueSky-dark-600: #386166;
+  --blueSky-dark-700: #2a494c;
+  --blueSky-dark-800: #1c3033;
+  --yellow-secondary: #ffef8c;
+  --yellow-light-800: #fffce8;
+  --red: #e33232;
+  --blue: #5c5cf0;
+  --black: #000000;
+  --white: #ffffff;
+  --gray-100: #e6e6e6;
+  --gray-300: #b3b3b3;
+  --gray-400: #999999;
+}

@@ -7,5 +7,5 @@ const name = ref("Hello World");
 
 <template>
   <p>{{ name }}</p>
-  <ButtonItem></ButtonItem>
+  <ButtonItem type="primary" state="normal"></ButtonItem>
 </template>

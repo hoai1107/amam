@@ -6,6 +6,6 @@ const name = ref("Hello World");
 </script>
 
 <template>
-  <p>{{ name }}</p>
+  <p class="text-blue-600 text-xl">{{ name }}</p>
   <ButtonItem type="primary" state="normal"></ButtonItem>
 </template>

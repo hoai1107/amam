@@ -5,15 +5,15 @@ import { mdiChevronDown } from '@mdi/js';
 
 <template>
     <div class="dropdown-container">
-      <select class="dropdown-form" key="" v-model="selected" label="Sort by">
-          <option selected disabled value="undefined">Sort by</option>
-          <option>Most vote</option>
-          <option>Most answer</option>
-          <option>Most view</option>
-      </select>
-      <div class="dropdown-icon">
-        <svg-icon type="mdi" :path="mdiChevronDown"></svg-icon>
-      </div>
+        <select class="dropdown-form" key="" v-model="selected" label="Sort by">
+            <option selected disabled value="undefined">Sort by</option>
+            <option>Most vote</option>
+            <option>Most answer</option>
+            <option>Most view</option>
+        </select>
+        <div class="dropdown-icon">
+          <svg-icon type="mdi" :path="mdiChevronDown"></svg-icon>
+        </div>
     </div>
 </template>
 <style lang="scss" scoped>
@@ -50,8 +50,8 @@ import { mdiChevronDown } from '@mdi/js';
 }
 
 .dropdown-icon {
-  position: relative;
-  padding: 12px 0px;
   margin-left: -48px;
+  padding-top: 12px;
+  pointer-events: none;
 }
 </style>

@@ -36,7 +36,7 @@ import { mdiChevronDown } from '@mdi/js';
 }
 
 .dropdown-form {
-  padding: 12px 24px;
+  padding: 0px 24px;
   width: 200px;
   height: 48px;
 

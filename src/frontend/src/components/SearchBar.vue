@@ -1,15 +1,19 @@
 <script setup>
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiMagnify } from '@mdi/js';
+import SvgIcon from "@jamescoyle/vue-icon";
+import { mdiMagnify } from "@mdi/js";
 </script>
 
 <template>
-    <div class="container">
-        <input class="search-bar" v-model="message" placeholder="Search a question" />
-        <div class="dropdown-icon">
-            <svg-icon type="mdi" :path="mdiMagnify"></svg-icon>
-        </div>
+  <div class="container">
+    <input
+      class="search-bar"
+      v-model="message"
+      placeholder="Search a question"
+    />
+    <div class="dropdown-icon">
+      <svg-icon type="mdi" :path="mdiMagnify"></svg-icon>
     </div>
+  </div>
 </template>
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
@@ -21,7 +25,7 @@ import { mdiMagnify } from '@mdi/js';
   flex-direction: row;
   align-items: flex-start;
   position: relative;
-  
+
   flex: none;
   order: 2;
   align-self: stretch;
@@ -35,14 +39,14 @@ import { mdiMagnify } from '@mdi/js';
 
   padding: 0px 24px;
 
-  background: #FFFFFF;
+  background: #ffffff;
   border: 2px solid #000000;
   border-radius: 8px;
   box-shadow: 4px 4px #000000;
 
-  -moz-appearance:none; /* Firefox */
-  -webkit-appearance:none; /* Safari and Chrome */
-  appearance:none;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
 }
 
 .dropdown-icon {

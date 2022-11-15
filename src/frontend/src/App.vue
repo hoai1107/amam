@@ -12,3 +12,7 @@ const name = ref("Hello World");
   <SortMenu></SortMenu>
   <SearchBar></SearchBar>
 </template>
+
+<script setup></script>
+
+<style lang="scss" scoped></style>

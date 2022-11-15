@@ -1,10 +1,8 @@
 <script setup>
-const props = defineProps(
-  {
-    type: String,
-    state: String
-  }
-)
+const props = defineProps({
+  type: String,
+  state: String,
+});
 </script>
 
 <template>
@@ -15,7 +13,7 @@ const props = defineProps(
 
 .button {
   border-radius: 8px;
-  transition: all .5s;
+  transition: all 0.5s;
   padding: 12px 24px;
   @extend .base-600;
 }
@@ -32,7 +30,7 @@ const props = defineProps(
 /* BUTTON STATE */
 .button:hover {
   box-shadow: 4px 4px #000000;
-  transform: translate(-4px,-4px);
+  transform: translate(-4px, -4px);
 }
 .primary.disabled {
   color: var(--blueSky-dark-100);
@@ -42,7 +40,7 @@ const props = defineProps(
 
 .primary.disabled:hover {
   box-shadow: 0px 0px #000000;
-  transform: translate(0px,0px);
+  transform: translate(0px, 0px);
 }
 
 .secondary.disabled {
@@ -52,7 +50,6 @@ const props = defineProps(
 
 .secondary.disabled:hover {
   box-shadow: 0px 0px #000000;
-  transform: translate(0px,0px);
+  transform: translate(0px, 0px);
 }
 </style>
-

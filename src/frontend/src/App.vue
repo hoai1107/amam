@@ -6,6 +6,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import SignUpForm from "@/components/SignUpForm.vue";
 import CommentForm from "@/components/CommentForm.vue";
 import CommentItem from "@/components/CommentItem.vue";
+import QuestionForm from "@/components/QuestionForm.vue";
 const name = ref("Hello World");
 </script>
 
@@ -17,6 +18,7 @@ const name = ref("Hello World");
   <SignUpForm></SignUpForm>
   <CommentForm></CommentForm>
   <CommentItem></CommentItem>
+  <QuestionForm></QuestionForm>
 </template>
 
 <script setup></script>

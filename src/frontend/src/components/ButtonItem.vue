@@ -6,16 +6,15 @@ const props = defineProps({
 </script>
 
 <template>
-  <button class="button" :class="[type, state]">Hello</button>
+  <button class="button hover:shadow-sm rounded text-base font-semibold" :class="[type, state]">Hello</button>
 </template>
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
 
 .button {
-  border-radius: 8px;
+
   transition: all 0.5s;
   padding: 12px 24px;
-  @extend .base-600;
 }
 /* BUTTON TYPE */
 .primary {
@@ -29,7 +28,6 @@ const props = defineProps({
 
 /* BUTTON STATE */
 .button:hover {
-  box-shadow: 4px 4px #000000;
   transform: translate(-4px, -4px);
 }
 .primary.disabled {

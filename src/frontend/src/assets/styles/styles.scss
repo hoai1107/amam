@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;600&display=swap");
+
+@layer base {
+    html {
+      font-family: "Readex Pro", sans-serif;
+    }
+  }

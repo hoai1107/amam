@@ -3,7 +3,7 @@ import ButtonItem from "@/components/ButtonItem.vue";
 </script>
 
 <template>
-    <div class="container">
+    <div class="container flex flex-col text-base">
         <div class="input-container">
             <p>Name</p>
             <input class="input-form" v-model="name" />
@@ -16,29 +16,32 @@ import ButtonItem from "@/components/ButtonItem.vue";
             <p>Password</p>
             <input type="password" class="input-form" v-model="password" />
         </div>
-        <ButtonItem style="margin-top: 10px;" type="primary" state="normal"></ButtonItem>
+        <ButtonItem class="mt-3" type="primary" state="normal"></ButtonItem>
     </div>
 </template>
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
 
 .container {
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    @extend .base-400;
+    // display: flex;
+    // flex-direction: column;
+    // box-sizing: border-box;
+    // @extend .base-400;
+    gap: 12px;
 }
 
 .input-container {
     display: flex;
     flex-direction: column;
     align-content: stretch;
-    margin-bottom: 12px;
+    // margin-bottom: 12px;
 }
 
 .input-form {
+    width: 100%;
     padding: 12px 24px;
-    gap: 8px;
+    margin-top: 4px;
+    // gap: 8px;
     background: #FFFFFF;
     border: 2px solid #000000;
     border-radius: 8px;
@@ -48,7 +51,4 @@ import ButtonItem from "@/components/ButtonItem.vue";
     appearance:none;
 }
 
-.button-container {
-    padding-top: 12px;
-}
 </style>

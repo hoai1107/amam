@@ -3,11 +3,11 @@ import datetime
 from typing import Union
 
 class UserBase(BaseModel):
-    userId: str
-    userName: str
+    user_Id: str
+    user_Name: str
 
 class PostBase(BaseModel):
-    postId: str
+    post_id: str
     title: str
 
 class User(UserBase):
@@ -20,7 +20,8 @@ class VotingUser(UserBase):
     upvote_downvote: str 
 
 class Comments(BaseModel):
-    userId: str
+    comment_id: str
+    user_id: str
     is_deleted: bool = False
     content_of_comment: str
     upvote: int

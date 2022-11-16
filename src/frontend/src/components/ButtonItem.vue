@@ -16,6 +16,7 @@ const props = defineProps({
 button {
   transition: all 0.3s;
   padding: 12px 24px;
+  text-align: center;
 }
 /* BUTTON TYPE */
 .primary {

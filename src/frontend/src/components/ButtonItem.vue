@@ -6,48 +6,51 @@ const props = defineProps({
 </script>
 
 <template>
-  <button class="button hover:shadow-sm rounded text-base font-semibold" :class="[type, state]">Hello</button>
+  <button class="hover:shadow-sm border-2 border-solid rounded text-base font-semibold" :class="[type, state]">
+    Create a question
+  </button>
 </template>
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
 
-.button {
-
-  transition: all 0.5s;
+button {
+  transition: all 0.3s;
   padding: 12px 24px;
 }
 /* BUTTON TYPE */
 .primary {
-  background-color: var(--blueSky-primary);
-  border: 2px solid black;
+  background-color: theme('colors.blueSky.DEFAULT');
+  border-color:black;
 }
 .secondary {
-  background-color: var(--white);
-  border: 2px solid black;
+  background-color: theme('colors.white');
+  border-color:black;
 }
 
 /* BUTTON STATE */
-.button:hover {
+button:hover {
   transform: translate(-4px, -4px);
 }
 .primary.disabled {
-  color: var(--blueSky-dark-100);
-  border-color: var(--blueSky-dark-100);
-  background-color: var(--blueSky-light-800);
+  color: theme('colors.blueSky.dark.100');
+  border-color: theme('colors.blueSky.dark.100');
+  background-color: theme('colors.blueSky.light.800');
 }
 
 .primary.disabled:hover {
   box-shadow: 0px 0px #000000;
   transform: translate(0px, 0px);
+  cursor: default;
 }
 
 .secondary.disabled {
-  color: var(--blueSky-dark-100);
-  border-color: var(--blueSky-dark-100);
+  color: theme('colors.blueSky.dark.100');
+  border-color: theme('colors.blueSky.dark.100');
 }
 
 .secondary.disabled:hover {
   box-shadow: 0px 0px #000000;
   transform: translate(0px, 0px);
+  cursor: default;
 }
 </style>

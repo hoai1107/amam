@@ -6,7 +6,10 @@ const props = defineProps({
 </script>
 
 <template>
-  <button class="hover:shadow-sm border-2 border-solid rounded text-base font-semibold" :class="[type, state]">
+  <button
+    class="hover:shadow-sm border-2 border-solid rounded text-base font-semibold"
+    :class="[type, state]"
+  >
     Create a question
   </button>
 </template>
@@ -20,12 +23,12 @@ button {
 }
 /* BUTTON TYPE */
 .primary {
-  background-color: theme('colors.blueSky.DEFAULT');
-  border-color:black;
+  background-color: theme("colors.blueSky.DEFAULT");
+  border-color: black;
 }
 .secondary {
-  background-color: theme('colors.white');
-  border-color:black;
+  background-color: theme("colors.white");
+  border-color: black;
 }
 
 /* BUTTON STATE */
@@ -33,9 +36,9 @@ button:hover {
   transform: translate(-4px, -4px);
 }
 .primary.disabled {
-  color: theme('colors.blueSky.dark.100');
-  border-color: theme('colors.blueSky.dark.100');
-  background-color: theme('colors.blueSky.light.800');
+  color: theme("colors.blueSky.dark.100");
+  border-color: theme("colors.blueSky.dark.100");
+  background-color: theme("colors.blueSky.light.800");
 }
 
 .primary.disabled:hover {
@@ -45,8 +48,8 @@ button:hover {
 }
 
 .secondary.disabled {
-  color: theme('colors.blueSky.dark.100');
-  border-color: theme('colors.blueSky.dark.100');
+  color: theme("colors.blueSky.dark.100");
+  border-color: theme("colors.blueSky.dark.100");
 }
 
 .secondary.disabled:hover {

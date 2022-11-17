@@ -1,7 +1,5 @@
-<script setup></script>
-
 <template>
-  <router-view></router-view>
+  <div>Sign Up</div>
 </template>
 
 <script setup></script>

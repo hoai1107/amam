@@ -1,5 +1,5 @@
 <script setup>
-import ButtonItem from "@/components/ButtonItem.vue";
+import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiArrowUpBoldOutline, mdiArrowDownBoldOutline } from "@mdi/js";
 

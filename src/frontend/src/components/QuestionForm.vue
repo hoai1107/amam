@@ -3,17 +3,28 @@ import ButtonItem from "@/components/ButtonItem.vue";
 </script>
 
 <template>
-    <div class="container">
-        <div class="input-container">
-            <p>Title</p>
-            <p style="font-size: 14px; color: #467980;">Be specific about what you want to ask (maximum 100 characters)</p>
-            <input class="input-form" v-model="name" placeholder="Write something..." />
-        </div>
-        <div class="input-container">
-            <p>Can you tell us more detail about what you want to ask?</p>
-            <textarea class="input-form" v-model="question" placeholder="Write something..." rows="5"></textarea>
-        </div>
+  <div class="container">
+    <div class="input-container">
+      <p>Title</p>
+      <p style="font-size: 14px; color: #467980">
+        Be specific about what you want to ask (maximum 100 characters)
+      </p>
+      <input
+        class="input-form"
+        v-model="name"
+        placeholder="Write something..."
+      />
     </div>
+    <div class="input-container">
+      <p>Can you tell us more detail about what you want to ask?</p>
+      <textarea
+        class="input-form"
+        v-model="question"
+        placeholder="Write something..."
+        rows="5"
+      ></textarea>
+    </div>
+  </div>
 </template>
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
@@ -24,20 +35,20 @@ import ButtonItem from "@/components/ButtonItem.vue";
 }
 
 .input-container {
-    padding-bottom: 12px;
+  padding-bottom: 12px;
 }
 
 .input-form {
-    width: 1056px;
+  width: 1056px;
 
-    padding: 12px 24px;
-    gap: 8px;
-    background: #FFFFFF;
-    border: 2px solid #000000;
-    border-radius: 8px;
+  padding: 12px 24px;
+  gap: 8px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 8px;
 
-    -moz-appearance:none; /* Firefox */
-    -webkit-appearance:none; /* Safari and Chrome */
-    appearance:none;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
 }
 </style>

@@ -1,5 +1,9 @@
 <script setup>
 import ButtonItem from "@/components/ButtonItem.vue";
+
+function signUp() {
+  console.log("Sign Up");
+}
 </script>
 
 <template>
@@ -21,6 +25,7 @@ import ButtonItem from "@/components/ButtonItem.vue";
       type="primary"
       state="normal"
       text="Submit"
+      @button-click="signUp"
     ></ButtonItem>
   </div>
 </template>

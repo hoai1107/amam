@@ -10,6 +10,7 @@ const props = defineProps({
   <button
     class="hover:shadow-sm border-2 border-solid rounded text-base font-semibold"
     :class="[type, state]"
+    @click="$emit('buttonClick')"
   >
     {{ props.text }}
   </button>

@@ -1,7 +1,12 @@
 <template>
   <div>Home</div>
   <p>{{ name }}</p>
-  <ButtonItem type="primary" state="normal" text="Click me!"></ButtonItem>
+  <ButtonItem
+    type="primary"
+    state="normal"
+    text="Click me!"
+    @button-click="helloWorld"
+  ></ButtonItem>
   <SortMenu></SortMenu>
   <SearchBar></SearchBar>
   <SignUpForm></SignUpForm>
@@ -20,6 +25,10 @@ import CommentForm from "@/components/CommentForm.vue";
 import CommentItem from "@/components/CommentItem.vue";
 import QuestionForm from "@/components/QuestionForm.vue";
 const name = ref("Hello World");
+
+function helloWorld() {
+  console.log("Hello World");
+}
 </script>
 
 <style lang="scss" scoped></style>

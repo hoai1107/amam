@@ -16,6 +16,7 @@ import ButtonItem from "@/components/ButtonItem.vue";
           style="margin-top: 12px"
           type="primary"
           state="normal"
+          text="Comment"
         ></ButtonItem>
       </div>
     </div>

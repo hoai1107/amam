@@ -50,6 +50,7 @@ const props = defineProps({
               style="height: 48px"
               type="primary"
               state="normal"
+              text="Comment"
             ></ButtonItem>
           </div>
         </Transition>

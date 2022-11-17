@@ -16,7 +16,12 @@ import ButtonItem from "@/components/ButtonItem.vue";
       <p>Password</p>
       <input type="password" class="input-form" v-model="password" />
     </div>
-    <ButtonItem class="mt-3" type="primary" state="normal"></ButtonItem>
+    <ButtonItem
+      class="mt-3"
+      type="primary"
+      state="normal"
+      text="Submit"
+    ></ButtonItem>
   </div>
 </template>
 <style lang="scss" scoped>

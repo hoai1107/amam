@@ -1,7 +1,7 @@
 <template>
   <div>Home</div>
   <p>{{ name }}</p>
-  <ButtonItem type="primary" state="normal"></ButtonItem>
+  <ButtonItem type="primary" state="normal" text="Click me!"></ButtonItem>
   <SortMenu></SortMenu>
   <SearchBar></SearchBar>
   <SignUpForm></SignUpForm>

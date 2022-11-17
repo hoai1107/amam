@@ -2,6 +2,7 @@
 const props = defineProps({
   type: String,
   state: String,
+  text: String,
 });
 </script>
 
@@ -10,7 +11,7 @@ const props = defineProps({
     class="hover:shadow-sm border-2 border-solid rounded text-base font-semibold"
     :class="[type, state]"
   >
-    Create a question
+    {{ props.text }}
   </button>
 </template>
 <style lang="scss" scoped>

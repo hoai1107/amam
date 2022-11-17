@@ -40,6 +40,7 @@ import ButtonItem from "@/components/ButtonItem.vue";
 .avatar {
   height: 48px;
   width: 48px;
+
   border: 2px solid #000000;
   border-radius: 8px;
   background-color: var(--white);

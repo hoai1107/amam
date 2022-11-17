@@ -5,7 +5,12 @@ import { mdiChevronDown } from "@mdi/js";
 
 <template>
   <div class="dropdown-container">
-    <select class="dropdown-form" key="" v-model="selected" label="Sort by">
+    <select
+      class="dropdown-form rounded border-2 border-solid border-black"
+      key=""
+      v-model="selected"
+      label="Sort by"
+    >
       <option selected disabled value="undefined">Sort by</option>
       <option>Most vote</option>
       <option>Most answer</option>
@@ -36,13 +41,10 @@ import { mdiChevronDown } from "@mdi/js";
 }
 
 .dropdown-form {
-  padding: 0px 24px;
+  padding: 12px 24px;
   width: 200px;
-  height: 48px;
 
-  background: #ffffff;
-  border: 2px solid #000000;
-  border-radius: 8px;
+  background: theme("colors.white");
 
   -moz-appearance: none; /* Firefox */
   -webkit-appearance: none; /* Safari and Chrome */
@@ -51,7 +53,7 @@ import { mdiChevronDown } from "@mdi/js";
 
 .dropdown-icon {
   margin-left: -48px;
-  padding-top: 12px;
+  padding-top: 14px;
   pointer-events: none;
 }
 </style>

@@ -50,7 +50,7 @@ module.exports = {
       lg: ["20px", "32px"],
       xl: ["24px", "36px"],
       "2xl": ["32px", "48px"],
-      "3xl": ["48px", "64px"],
+      "3xl": ["56px", "64px"],
       "4xl": ["64px", "80px"],
     },
     borderRadius: {

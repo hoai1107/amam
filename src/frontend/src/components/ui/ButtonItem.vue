@@ -2,6 +2,7 @@
 const props = defineProps({
   type: String,
   state: String,
+  text: String,
 });
 </script>
 
@@ -9,8 +10,9 @@ const props = defineProps({
   <button
     class="hover:shadow-sm border-2 border-solid rounded text-base font-semibold"
     :class="[type, state]"
+    @click="$emit('buttonClick')"
   >
-    Create a question
+    {{ props.text }}
   </button>
 </template>
 <style lang="scss" scoped>
@@ -33,7 +35,7 @@ button {
 
 /* BUTTON STATE */
 button:hover {
-  transform: translate(-4px, -4px);
+  transform: translate(-2px, -2px);
 }
 .primary.disabled {
   color: theme("colors.blueSky.dark.100");

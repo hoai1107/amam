@@ -1,5 +1,5 @@
 <script setup>
-import ButtonItem from "@/components/ButtonItem.vue";
+import ButtonItem from "@/components/ui/ButtonItem.vue";
 </script>
 
 <template>
@@ -16,6 +16,7 @@ import ButtonItem from "@/components/ButtonItem.vue";
           style="margin-top: 12px"
           type="primary"
           state="normal"
+          text="Comment"
         ></ButtonItem>
       </div>
     </div>

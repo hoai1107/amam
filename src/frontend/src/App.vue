@@ -7,6 +7,7 @@ import SignUpForm from "@/components/SignUpForm.vue";
 import CommentForm from "@/components/CommentForm.vue";
 import CommentItem from "@/components/CommentItem.vue";
 import QuestionForm from "@/components/QuestionForm.vue";
+import LoginForm from "@/components/LoginForm.vue";
 const name = ref("Hello World");
 </script>
 
@@ -19,6 +20,7 @@ const name = ref("Hello World");
   <CommentForm></CommentForm>
   <CommentItem></CommentItem>
   <QuestionForm></QuestionForm>
+  <LoginForm></LoginForm>
 </template>
 
 <script setup></script>

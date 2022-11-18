@@ -1,14 +1,18 @@
 <template>
-  <div class="w-full bg-[#FFFCE8] h-[80px] px-[84px]">
-    <div class="h-full py-4 grid grid-cols-12 gap-x-8">
-      <div class="col-span-2 border-2 border-solid border-black">
-        <!-- <img class="" src="@/assets/test.jpg" alt="AMAM" /> -->
+  <div class="w-full bg-[#FFFCE8] h-fit px-[84px] py-0.5">
+    <div class="h-full grid grid-cols-12 gap-x-8 items-center">
+      <div class="col-span-2 border-black">
+        <img
+          class="w-full object-center object-none"
+          src="@/assets/img/logo-sm.png"
+          alt="logo"
+        />
         <div></div>
       </div>
       <div class="col-span-7">
         <SearchBar />
       </div>
-      <div class="col-span-3">
+      <div class="col-span-3 h-12">
         <ProfileItem />
       </div>
     </div>

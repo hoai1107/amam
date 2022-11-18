@@ -1,17 +1,22 @@
 <template>
   <div class="h-full w-full">
     <div class="flex flex-row gap-[20px] h-full items-center">
-      <div class="w-[24px] h-[28px] border-2 border-solid flex content-center">
-        <SvgIcon type="mdi" :path="mdiBellOutline"></SvgIcon>
+      <!--Noti icon-->
+      <div class="flex items-center">
+        <SvgIcon size="32" type="mdi" :path="mdiBellOutline"></SvgIcon>
       </div>
-      <div class="w-[48px] h-[48px] border-2 border-solid"></div>
-      <ButtonItem
-        text="Create a question"
-        width="188px"
-        height="48px"
-        font-size="14px"
-        is-primary="true"
-      />
+
+      <!--Avatar-->
+      <div
+        class="img-container w-auto h-full flex grow-0 items-center content-center"
+      >
+        <img src="@/assets/img/user.webp " alt="avatar" />
+      </div>
+
+      <!--Button-->
+      <div class="h-full">
+        <ButtonItem type="primary" state="normal" text="Create a question" />
+      </div>
     </div>
   </div>
 </template>
@@ -22,4 +27,17 @@ import { mdiBellOutline } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.img-container {
+  font-size: 0;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid black;
+  border-radius: theme("borderRadius.DEFAULT");
+}
+</style>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import ButtonItem from "@/components/ButtonItem.vue";
+import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SortMenu from "@/components/SortMenu.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import SignUpForm from "@/components/SignUpForm.vue";
@@ -22,7 +22,5 @@ const name = ref("Hello World");
   <QuestionForm></QuestionForm>
   <LoginForm></LoginForm>
 </template>
-
-<script setup></script>
 
 <style lang="scss" scoped></style>

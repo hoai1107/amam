@@ -7,10 +7,41 @@
       </div>
 
       <!--Avatar-->
-      <div
-        class="img-container w-auto h-full flex grow-0 items-center content-center"
-      >
-        <img src="@/assets/img/user.webp " alt="avatar" />
+      <div class="aspect-square h-full relative" v-click-outside="hideMenu">
+        <div
+          class="img-container aspect-square h-full flex grow-0 items-center content-center"
+        >
+          <img src="@/assets/img/user.webp " alt="avatar" @click="toggleMenu" />
+        </div>
+
+        <!--Menu-->
+        <div
+          v-show="showMenu"
+          class="text-base mt-2 border-2 border-solid rounded p-4 absolute bg-white z-10"
+        >
+          <ul class="flex flex-col gap-2">
+            <router-link :to="{ name: 'user', params: { id: 1 } }">
+              <li class="flex flex-row gap-3 items-center">
+                <SvgIcon
+                  size="20"
+                  type="mdi"
+                  :path="mdiAccountOutline"
+                ></SvgIcon>
+                <p>Profile</p>
+              </li>
+            </router-link>
+            <router-link :to="{ name: 'login' }">
+              <li class="flex flex-row gap-3 items-center text-red">
+                <SvgIcon
+                  size="20"
+                  type="mdi"
+                  :path="mdiLogoutVariant"
+                ></SvgIcon>
+                <p>Logout</p>
+              </li>
+            </router-link>
+          </ul>
+        </div>
       </div>
 
       <!--Button-->
@@ -23,8 +54,20 @@
 
 <script setup>
 import ButtonItem from "@/components/ui/ButtonItem.vue";
-import { mdiBellOutline } from "@mdi/js";
+import { mdiBellOutline, mdiAccountOutline, mdiLogoutVariant } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
+
+import { ref } from "vue";
+
+const showMenu = ref(false);
+
+function toggleMenu() {
+  showMenu.value = !showMenu.value;
+}
+
+function hideMenu() {
+  showMenu.value = false;
+}
 </script>
 
 <style lang="scss" scoped>

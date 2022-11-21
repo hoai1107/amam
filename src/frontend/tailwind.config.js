@@ -27,7 +27,10 @@ module.exports = {
         },
       },
       red: "#e33232",
-      blue: "#5c5cf0",
+      blue: {
+        DEFAULT: "#5c5cf0",
+        dark: "#4949BF",
+      },
       black: "#000000",
       white: "#ffffff",
       gray: {
@@ -47,7 +50,7 @@ module.exports = {
       lg: ["20px", "32px"],
       xl: ["24px", "36px"],
       "2xl": ["32px", "48px"],
-      "3xl": ["48px", "64px"],
+      "3xl": ["56px", "64px"],
       "4xl": ["64px", "80px"],
     },
     borderRadius: {

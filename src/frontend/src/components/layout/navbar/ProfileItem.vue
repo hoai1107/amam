@@ -17,13 +17,15 @@
         <!--Menu-->
         <div
           v-show="showMenu"
-          class="text-base mt-2 border-2 border-solid rounded p-4 absolute bg-white z-10"
+          class="text-lg mt-2 border-2 border-solid rounded px-4 py-2 absolute bg-white z-10 shadow-sm"
         >
-          <ul class="flex flex-col gap-2">
+          <ul class="flex flex-col gap-1">
             <router-link :to="{ name: 'user', params: { id: 1 } }">
-              <li class="flex flex-row gap-3 items-center">
+              <li
+                class="flex flex-row gap-3 items-center px-2 hover:bg-blueSky-light-800"
+              >
                 <SvgIcon
-                  size="20"
+                  size="24"
                   type="mdi"
                   :path="mdiAccountOutline"
                 ></SvgIcon>
@@ -31,9 +33,11 @@
               </li>
             </router-link>
             <router-link :to="{ name: 'login' }">
-              <li class="flex flex-row gap-3 items-center text-red">
+              <li
+                class="flex flex-row gap-3 items-center text-red px-2 hover:bg-blueSky-light-800"
+              >
                 <SvgIcon
-                  size="20"
+                  size="24"
                   type="mdi"
                   :path="mdiLogoutVariant"
                 ></SvgIcon>

@@ -1,20 +1,20 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 import datetime
 from typing import Union
 
 class UserBase(BaseModel):
-    user_Id: str
-    user_Name: str
+    user_id: Union[str,None] = None
+    user_name: str
 
 class PostBase(BaseModel):
-    post_id: str
+    post_id: Union[str,None] = None
     title: str
 
 class User(UserBase):
-    avartar: Union[None,str] = None
-    list_of_user_question: Union[list(PostBase),None] = None
+    avartar: Union[str,None] = None
+    list_of_user_question: Union[list[PostBase],None] = None
     number_of_answer: int = 0
-    list_of_followed: Union[list(UserBase),None] = None
+    list_of_followed: Union[list[UserBase],None] = None
 
 class VotingUser(UserBase):
     upvote_downvote: str 
@@ -26,17 +26,17 @@ class Comments(BaseModel):
     content_of_comment: str
     upvote: int
     downvote: int
-    list_of_user_upvote_downvote_cmt: Union[list(VotingUser),None] = None 
+    list_of_user_upvote_downvote_cmt: Union[list[VotingUser],None] = None 
 
 class Post(PostBase):
     view: int = 0
     time_create: datetime.date
-    tags: Union[None,list(str)] = None
+    tags: Union[None,list[str]] = None
     upvote: int = 0
     downvote: int = 0
-    comments: Union[list(Comments),None] = None
-    list_of_user_upvote_downvote: Union[list(VotingUser),None] = None
-    list_of_user_see_post: Union[list(UserBase),None] = None
+    comments: Union[list[Comments],None] = None
+    list_of_user_upvote_downvote: Union[list[VotingUser],None] = None
+    list_of_user_see_post: Union[list[UserBase],None] = None
 
 
 

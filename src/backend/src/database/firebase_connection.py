@@ -1,23 +1,15 @@
-'''// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import collections 
+import sys
+if sys.version_info.major == 3 and sys.version_info.minor >= 10:
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyA2UriO3yX8eygs2GGc44IPjWgnoQgPcUU",
-  authDomain: "cs300-project.firebaseapp.com",
-  projectId: "cs300-project",
-  storageBucket: "cs300-project.appspot.com",
-  messagingSenderId: "772462018723",
-  appId: "1:772462018723:web:f9d44024c0d105d162bf16",
-  measurementId: "G-PK0MK3ZPD2"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);'''
+    from collections.abc import MutableMapping
+else:
+    from collections import MutableMapping
+from firebase_admin import credentials
+from firebase_admin import auth
 import firebase_admin
-cred_obj=firebase_admin.credentials.Certificate('...')
+#cred = credentials.RefreshToken('cs300-project-firebase-adminsdk-z5mzh-43da7b3a43.json')
+#default_app = firebase_admin.initialize_app(cred)
+#default_app = firebase_admin.initialize_app(cred)
+default_app = firebase_admin.initialize_app()
+print(default_app.name)

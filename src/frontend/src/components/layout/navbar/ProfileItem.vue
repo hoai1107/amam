@@ -7,7 +7,7 @@
       </div>
 
       <!--Avatar-->
-      <div class="aspect-square h-full relative" v-click-outside="hideMenu">
+      <div class="aspect-square h-full relative cursor-pointer" v-click-outside="hideMenu">
         <div
           class="img-container aspect-square h-full flex grow-0 items-center content-center"
         >
@@ -17,12 +17,12 @@
         <!--Menu-->
         <div
           v-show="showMenu"
-          class="text-lg mt-2 border-2 border-solid rounded px-4 py-2 absolute bg-white z-10 shadow-sm"
+          class="text-lg mt-2 border-2 border-solid rounded px-2 py-2 absolute bg-white z-10 shadow-sm"
         >
           <ul class="flex flex-col gap-1">
             <router-link :to="{ name: 'user', params: { id: 1 } }">
               <li
-                class="flex flex-row gap-3 items-center px-2 hover:bg-blueSky-light-800"
+                class="rounded flex flex-row gap-2 items-center justify-start px-4 hover:bg-blueSky-light-800"
               >
                 <SvgIcon
                   size="24"
@@ -34,7 +34,7 @@
             </router-link>
             <router-link :to="{ name: 'login' }">
               <li
-                class="flex flex-row gap-3 items-center text-red px-2 hover:bg-blueSky-light-800"
+                class="rounded flex flex-row gap-2 items-center text-red px-4 hover:bg-blueSky-light-800"
               >
                 <SvgIcon
                   size="24"

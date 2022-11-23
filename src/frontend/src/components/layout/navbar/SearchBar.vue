@@ -30,7 +30,7 @@ import { mdiMagnify } from "@mdi/js";
 }
 
 .search-bar {
-  padding: 12px 48px 12px 24px;
+  padding: 10px 48px 10px 24px;
 
   -moz-appearance: none; /* Firefox */
   -webkit-appearance: none; /* Safari and Chrome */

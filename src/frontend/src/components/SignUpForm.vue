@@ -24,7 +24,7 @@ function signUp() {
       class="mt-3"
       type="primary"
       state="normal"
-      text="Submit"
+      text="Sign up"
       @button-click="signUp"
     ></ButtonItem>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="h-full w-full">
-    <div class="flex flex-row gap-[20px] h-full items-center">
+    <div class="flex flex-row justify-between h-12 items-center">
       <!--Noti icon-->
       <div class="flex items-center">
         <SvgIcon size="32" type="mdi" :path="mdiBellOutline"></SvgIcon>

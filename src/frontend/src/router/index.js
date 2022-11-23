@@ -18,6 +18,11 @@ const baseRoutes = [
     name: "signup",
     component: () => import("@/views/SignUpView.vue"),
   },
+  {
+    path: "/test",
+    name: "test",
+    component: () => import("@/views/TestView.vue"),
+  },
 ];
 
 const questionsRoutes = [
@@ -62,7 +67,7 @@ const userRoutes = [
   {
     path: "/user/edit/:id",
     name: "user.edit",
-    component: () => import("@/views/user/UserEditProfileView.vue"),
+    component: () => import("@/views/user/UserProfileEditView.vue"),
     props: (route) => ({ id: route.params.id }),
   },
 ];

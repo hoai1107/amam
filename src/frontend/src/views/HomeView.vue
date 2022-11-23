@@ -19,7 +19,7 @@
 import { ref } from "vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SortMenu from "@/components/SortMenu.vue";
-import SearchBar from "@/components/SearchBar.vue";
+import SearchBar from "@/components/layout/navbar/SearchBar.vue";
 import SignUpForm from "@/components/SignUpForm.vue";
 import CommentForm from "@/components/CommentForm.vue";
 import CommentItem from "@/components/CommentItem.vue";

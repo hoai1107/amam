@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response, status
-from ..database.test_firebase_connection import db
+from ..database_connection.test_firebase_connection import db
 from ..data_model.post_model import Post
 
 router = APIRouter(

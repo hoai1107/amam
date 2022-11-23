@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response, status, Depends ,HTTPException
-from ..database.test_firebase_connection import db, auth
+from ..database_connection.test_firebase_connection import db, auth
 from ..data_model.user_model import User
 
 router = APIRouter(

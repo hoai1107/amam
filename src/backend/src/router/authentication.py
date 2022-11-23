@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from ..database.test_firebase_connection import  auth
+from ..database_connection.test_firebase_connection import  auth
 from ..data_model.user_model import User, Account
 from fastapi.security import OAuth2PasswordRequestForm
 from user import post_user_profile

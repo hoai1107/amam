@@ -1,26 +1,14 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel
 import datetime
 from typing import Union
-
-class UserBase(BaseModel):
-    user_id: Union[str,None] = None
-    user_name: str
+from user_model import VotingUser, UserBase
 
 class PostBase(BaseModel):
-    post_id: Union[str,None] = None
+    id: Union[str,None] = None
     title: str
 
-class User(UserBase):
-    avartar: Union[str,None] = None
-    list_of_user_question: Union[list[PostBase],None] = None
-    number_of_answer: int = 0
-    list_of_followed: Union[list[UserBase],None] = None
-
-class VotingUser(UserBase):
-    upvote_downvote: str 
-
 class Comments(BaseModel):
-    comment_id: str
+    id: str
     user_id: str
     is_deleted: bool = False
     content_of_comment: str
@@ -37,10 +25,3 @@ class Post(PostBase):
     comments: Union[list[Comments],None] = None
     list_of_user_upvote_downvote: Union[list[VotingUser],None] = None
     list_of_user_see_post: Union[list[UserBase],None] = None
-
-
-
-
-
-
-

@@ -20,7 +20,7 @@ docs_build
 venv
 docs.zip
 archive.zip
-
+./src/backend/test/.py
 # vim temporary files
 *~
 .*.sw?

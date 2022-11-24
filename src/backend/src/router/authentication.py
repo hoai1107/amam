@@ -10,7 +10,7 @@ router = APIRouter(
 
 #This is for signing up
 # This is for the future need (can be changed)
-@router.post("/Signup")
+@router.post("/sign-up")
 async def sign_up(account: Account = Depends()):
     email = account.email
     password = account.password
@@ -26,7 +26,7 @@ async def sign_up(account: Account = Depends()):
 # This is to create the token
 # email = user_name is due to the conflict between the specification and our app
 # This just for future need (can be changed)
-@router.post("/Signin")
+@router.post("/sign-in")
 async def sign_in(signin_form: OAuth2PasswordRequestForm = Depends()):
     email = signin_form.username
     password = signin_form.password

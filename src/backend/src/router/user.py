@@ -1,7 +1,6 @@
-from fastapi import APIRouter, Response, status
-from ..database.test_firebase_connection import db
-from ..data_mode.model import User
-
+from fastapi import APIRouter, Response, status, Depends ,HTTPException
+from ..database_connection.test_firebase_connection import db, auth
+from ..data_model.user_model import User
 
 router = APIRouter(
     prefix="/users",
@@ -27,3 +26,4 @@ async def post_user_profile(user: User):
         return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!")
     # the Id of the user
     return current_user["name"]
+

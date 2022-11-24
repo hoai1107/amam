@@ -22,6 +22,8 @@ button {
   transition: all 0.3s;
   padding: 12px 24px;
   text-align: center;
+  height: 100%;
+  width: 100%;
 }
 /* BUTTON TYPE */
 .primary {

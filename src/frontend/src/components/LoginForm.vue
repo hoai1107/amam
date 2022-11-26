@@ -1,5 +1,5 @@
 <script setup>
-import ButtonItem from "@/components/ButtonItem.vue";
+import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiCheckBold } from '@mdi/js';
 const props = defineProps(
@@ -28,8 +28,15 @@ const props = defineProps(
             </div>
             <label for="remembered">Remember me</label>
         </div>
-        <p class="warning" v-if="wrong">Wrong account or password</p>
-        <ButtonItem style="margin-top: 10px;" type="primary" state="normal"></ButtonItem>
+        <p class="warning" v-if="false">Wrong account or password</p>
+        <p class="warning" v-if="false">Your email hasn't verified yet!</p>
+        <p class="warning" style="color: var(--blue)" v-if="true">Please verify email before logging in</p>
+        <ButtonItem
+              style="margin-top: 10px"
+              type="primary"
+              state="normal"
+              text="Login"
+            ></ButtonItem>
     </div>
 </template>
 <style lang="scss" scoped>

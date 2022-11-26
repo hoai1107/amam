@@ -23,4 +23,6 @@ const name = ref("Hello World");
   <LoginForm></LoginForm>
 </template>
 
+<script setup></script>
+
 <style lang="scss" scoped></style>

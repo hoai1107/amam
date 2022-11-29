@@ -1,4 +1,5 @@
 <template>
+  <QuestionCard></QuestionCard>
   <div>Home</div>
   <p>{{ name }}</p>
   <ButtonItem
@@ -17,6 +18,8 @@
 
 <script setup>
 import { ref } from "vue";
+import Tag from "../components/ui/Tag.vue";
+import QuestionCard from "../components/layout/QuestionCard.vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SortMenu from "@/components/SortMenu.vue";
 import SearchBar from "@/components/layout/navbar/SearchBar.vue";

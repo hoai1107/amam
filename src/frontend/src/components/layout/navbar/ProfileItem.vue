@@ -7,7 +7,10 @@
       </div>
 
       <!--Avatar-->
-      <div class="aspect-square h-full relative cursor-pointer" v-click-outside="hideMenu">
+      <div
+        class="aspect-square h-full relative cursor-pointer"
+        v-click-outside="hideMenu"
+      >
         <div
           class="img-container aspect-square h-full flex grow-0 items-center content-center"
         >

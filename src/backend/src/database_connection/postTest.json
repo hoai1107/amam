@@ -1,0 +1,25 @@
+{
+    "tilte":"The journey of finding data engineer job (str)",
+    "view":12,
+    "time_created":"11/5/202 (timestamp)",
+    "tags":[
+        "Book",
+        "Bussiness"
+    ],
+    "upvote":12,
+    "comments":[
+        {
+            "user_id":12,
+            "is_delete":false,
+            "content_of_comment":"DE (str)",
+            "upvote":12,
+            "downvote":12
+        }
+    ],
+    "list_of_user_upvote_or_downvote":[
+        {
+            "user_id":"dsfad",
+            "upvote_or_downvote":"upvote"
+        }
+    ]
+}

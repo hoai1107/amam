@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import Union
 from fastapi import Path
-from .post_model import PostBase
 
 class UserBase(BaseModel):
     id: Union[str,None] = None
@@ -10,6 +9,8 @@ class UserBase(BaseModel):
 
 class VotingUser(UserBase):
     upvote_downvote: str 
+
+from .post_model import PostBase
 
 class User(UserBase):
     avatar: Union[str,None] = None

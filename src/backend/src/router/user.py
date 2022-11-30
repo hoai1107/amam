@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Response, status, Depends ,HTTPException
 from ..database_connection.test_firebase_connection import db, auth
-from ..data_model.model import User
+from ..data_model.user_model import User
 
 router = APIRouter(
     prefix="/users",
     tags= ["Users"]
 )
 
-# Query 1 in the design schema (on Notion)
-@router.get("/user_profile/{user_id}", response_model= User)
-async def get_user_profile(user_id: str):
+# This is to get all information related to a specific user
+@router.get("/user_info/{user_id}", response_model= User)
+async def get_user(user_id: str):
     try:    
         current_user = db.child("users").child(user_id).get().val()
         profile_user_model = User(**(current_user))
@@ -18,9 +18,9 @@ async def get_user_profile(user_id: str):
         return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!") 
     return profile_user_model
 
-# post the user information to the firebase and return the id
-@router.put("/user_profile/")
-async def post_user_profile(user: User):
+# This is to create the a user information (and get the ID of the user)
+@router.put("/user_info/")
+async def create_user(user: User):
     try:
         user_dict = user.dict()
         del user_dict["id"]

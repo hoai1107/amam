@@ -7,13 +7,15 @@
         </div>
 
         <div class="col-span-7">
-          <div class="text-xl font-semibold mb-3">All Questions</div>
-          <div class="flex flex-col gap-y-6">
-            <QuestionCard />
-            <QuestionCard />
-            <QuestionCard />
-            <QuestionCard />
-          </div>
+          <slot>
+            <div class="text-xl font-semibold mb-3">All Questions</div>
+            <div class="flex flex-col gap-y-6">
+              <QuestionCard />
+              <QuestionCard />
+              <QuestionCard />
+              <QuestionCard />
+            </div>
+          </slot>
         </div>
 
         <div class="col-span-3">
@@ -26,8 +28,8 @@
 
 <script setup>
 import QuestionCard from "@/components/layout/QuestionCard.vue";
-import SidebarCategory from "@/components/layout/SidebarCategory.vue";
-import SidebarHistory from "@/components/layout/SidebarHistory.vue";
+import SidebarCategory from "@/components/layout/sidebar/SidebarCategory.vue";
+import SidebarHistory from "@/components/layout/sidebar/SidebarHistory.vue";
 </script>
 
 <style lang="scss" scoped></style>

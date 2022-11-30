@@ -16,6 +16,7 @@
               <QuestionCard />
             </div>
           </slot>
+          <Pagination :current-page="10" :total-pages="10" />
         </div>
 
         <div class="col-span-3">
@@ -30,6 +31,7 @@
 import QuestionCard from "@/components/layout/QuestionCard.vue";
 import SidebarCategory from "@/components/layout/sidebar/SidebarCategory.vue";
 import SidebarHistory from "@/components/layout/sidebar/SidebarHistory.vue";
+import Pagination from "@/components/layout/pagination/Pagination.vue";
 </script>
 
 <style lang="scss" scoped></style>

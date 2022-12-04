@@ -1,7 +1,8 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-cred=credentials.Certificate('cs300-project-firebase-adminsdk-z5mzh-43da7b3a43.json')
+import os
+cred=credentials.Certificate(os.getcwd()+'\\src\\database_connection\\cs300-project-firebase-adminsdk-z5mzh-43da7b3a43.json')
 firebase_admin.initialize_app(cred)
 db=firestore.client()
 obj1={

@@ -1,5 +1,7 @@
 # This is just for testing the endpoints and will be deleted in the future
 import pyrebase
+from .firebase_connection import db as firestore
+import pymongo
 
 firebaseConfig = {
   "apiKey": "AIzaSyAqFS-ecMT6oJ4Dcf5dD4sAFNVUJflnLJo",
@@ -16,3 +18,5 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 db = firebase.database()
 storage = firebase.storage()
 auth = firebase.auth()
+client = pymongo.MongoClient("mongodb+srv://root:zi2kQbzaJQ5LS4jD@cluster0.evfi3hk.mongodb.net/?retryWrites=true&w=majority")
+mongodb = client["ANAM"]

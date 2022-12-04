@@ -23,27 +23,56 @@ async def get_post(
 
 # This is to get the number of documents available in the database
 @router.get("/post_all/number_of_post")
-async def number_of_post_homepage():
-    return mongodb.posts.count_documents(filter={})
+async def number_of_post_homepage(
+        filter: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
+    ):
+    if filter == ["all"]:
+        return mongodb.posts.count_documents(filter={})
+    else:
+        return mongodb.posts.count_documents(filter={"tags": {"$in": filter}})
 
 @router.get("/post_all/")
 async def get_posts_on_homepage(
         page_index : int = Query(title="The page index in the homepage", default=1),
-        order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default)
+        order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default),
+        filter: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
     ):
-    list_of_full_posts = mongodb.posts.aggregate([
-        {"$sort":
-                {
-                    "_id":-1
-                }
-        },
-        {
-            "$skip":(page_index - 1)*pagination_number
-        },
-        {
-            "$limit": pagination_number
-        }
-    ])
+    if filter == ["all"]:
+        list_of_full_posts = mongodb.posts.aggregate([
+            {"$sort":
+                    {
+                        "_id":-1
+                    }
+            },
+            {
+                "$skip":(page_index - 1)*pagination_number
+            },
+            {
+                "$limit": pagination_number
+            }
+        ])
+    else:
+        list_of_full_posts = mongodb.posts.aggregate([
+            {"$match":
+                    {
+                        "tags":
+                            {
+                                "$in": filter
+                            }
+                    }
+            },
+            {"$sort":
+                    {
+                        "_id":-1
+                    }
+            },
+            {
+                "$skip":(page_index - 1)*pagination_number
+            },
+            {
+                "$limit": pagination_number
+            }
+        ])
     res = list[ShortPost]()
     for doc in list_of_full_posts:
         res.append(ShortPost(num_comments=len(doc["comments"]),**doc))

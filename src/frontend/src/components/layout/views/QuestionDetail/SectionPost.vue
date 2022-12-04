@@ -1,7 +1,11 @@
 <template>
-  <div>SectionPost</div>
+  <div>
+    <PostMetaData :hours-from-last-edit="2" views="35" />
+  </div>
 </template>
 
-<script setup></script>
+<script setup>
+import PostMetaData from "./PostMetaData.vue";
+</script>
 
 <style lang="scss" scoped></style>

@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar></NavigationBar>
   <div class="w-full h-fit mb-6">
     <div class="w-[1272px] mx-auto">
       <div class="grid grid-cols-12 gap-x-6">
@@ -32,6 +33,7 @@ import QuestionCard from "@/components/layout/QuestionCard.vue";
 import SidebarCategory from "@/components/layout/sidebar/SidebarCategory.vue";
 import SidebarHistory from "@/components/layout/sidebar/SidebarHistory.vue";
 import Pagination from "@/components/layout/pagination/Pagination.vue";
+import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
 </script>
 
 <style lang="scss" scoped></style>

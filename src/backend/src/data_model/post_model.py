@@ -34,10 +34,10 @@ from .user_model import VotingUser, UserBase
 class Comments(BaseModel):
     id: Union[PyObjectId,None] = Field(default_factory=PyObjectId,alias="_id")
     user_id: str
-    is_deleted: bool = False
+    is_deleted: bool = Field(default= False)
     content_of_comment: str
-    upvote: int
-    downvote: int
+    up_vote: int
+    down_vote: int
     list_of_user_upvote_downvote_cmt: list[VotingUser]= Field(default=list[VotingUser]())
     class Config:
         allow_population_by_field_name = True
@@ -46,12 +46,12 @@ class Comments(BaseModel):
 
 # This model plays a role as a view in the architecture
 class ShortPost(PostBase):
-    view: int = 0
+    view: int = Field(default=0)
     time_created: datetime.datetime
     tags: list[str] = Field(default=list[str]())
-    up_vote: int = 0
-    down_vote: int = 0
-    num_comments: int = 0
+    up_vote: int = Field(default=0)
+    down_vote: int = Field(default=0)
+    num_comments: int = Field(default=0)
 
 # This model plays a role as a view in the architecture
 class FullPost(ShortPost):
@@ -62,11 +62,11 @@ class FullPost(ShortPost):
 # This model plays a role as a model in the architecture
 class PostDB(BaseModel):
     title: str
-    view: int = 0
+    view: int = Field(default=0)
     time_created: datetime.datetime
     tags: list[str] = Field(default=list[str]())
-    upvote: int = 0
-    downvote: int = 0
+    up_vote: int = Field(default=0)
+    down_vote: int = Field(default=0)
     comments: list[Comments]= Field(default=list[Comments]())
     list_of_user_upvote_downvote: list[VotingUser] = Field(default=list[VotingUser]())
     list_of_user_see_post: list[UserBase] = Field(default=list[UserBase]())

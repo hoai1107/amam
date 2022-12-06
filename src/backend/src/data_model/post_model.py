@@ -30,6 +30,7 @@ class PostBase(BaseModel):
 
 from .user_model import VotingUser, UserBase
 
+# This model plays a role as a view in the architecture
 class Comments(BaseModel):
     id: Union[PyObjectId,None] = Field(default_factory=PyObjectId,alias="_id")
     user_id: str
@@ -43,16 +44,7 @@ class Comments(BaseModel):
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
 
-class Post(PostBase):
-    view: int = 0
-    time_created: datetime.datetime
-    tags: list[str] = Field(default=list[str]())
-    upvote: int = 0
-    downvote: int = 0
-    comments: list[Comments]= Field(default=list[Comments]())
-    list_of_user_upvote_downvote: list[VotingUser] = Field(default=list[VotingUser]())
-    list_of_user_see_post: list[UserBase] = Field(default=list[UserBase]())
-
+# This model plays a role as a view in the architecture
 class ShortPost(PostBase):
     view: int = 0
     time_created: datetime.datetime
@@ -61,6 +53,24 @@ class ShortPost(PostBase):
     down_vote: int = 0
     num_comments: int = 0
 
+# This model plays a role as a view in the architecture
+class FullPost(ShortPost):
+    comments: list[Comments]= Field(default=list[Comments]())
+    list_of_user_upvote_downvote: list[VotingUser] = Field(default=list[VotingUser]())
+    list_of_user_see_post: list[UserBase] = Field(default=list[UserBase]())
+
+# This model plays a role as a model in the architecture
+class PostDB(BaseModel):
+    title: str
+    view: int = 0
+    time_created: datetime.datetime
+    tags: list[str] = Field(default=list[str]())
+    upvote: int = 0
+    downvote: int = 0
+    comments: list[Comments]= Field(default=list[Comments]())
+    list_of_user_upvote_downvote: list[VotingUser] = Field(default=list[VotingUser]())
+    list_of_user_see_post: list[UserBase] = Field(default=list[UserBase]())
+    
 # This will be refined in the future when the frontend is fullfiled
 class SearchFilter(str,Enum):
     all = "all"

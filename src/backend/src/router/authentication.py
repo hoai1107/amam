@@ -26,7 +26,7 @@ async def sign_up(account: Account = Depends()):
         return HTTPException(status_code= 400, detail={"message":"There is a problem in the process"})
     return {"user_id": created_user_id, "email_verification_link": auth_admin.generate_email_verification_link(email=email)}
 
-def send_verification_to_mail(email_receiver: str):
+async def send_verification_to_mail(email_receiver: str):
     email_sender = 'quocthogminhqtm@gmail.com'
     email_password = "qjikpcbndhxofrvr"
     authentication_link = auth_admin.generate_email_verification_link(email=email_receiver)
@@ -58,7 +58,7 @@ async def sign_in(signin_form: OAuth2PasswordRequestForm = Depends()):
         user = auth.sign_in_with_email_and_password(email=email, password= password)
         token = user["idToken"]
         if not auth.get_account_info(id_token=token)['users'][0]['emailVerified']:
-            send_verification_to_mail(email_receiver=email)
+            await send_verification_to_mail(email_receiver=email)
             return HTTPException(status_code=400, detail={'message':'Email needs to be verified first'})
     except:
         raise HTTPException(status_code= 400, detail={"message":"There is a problem in the process"})

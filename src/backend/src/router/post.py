@@ -82,7 +82,7 @@ async def get_posts_on_homepage(
         res.sort(key= lambda x: x.view, reverse= True)
     elif order_by_option.value == OrderByOption.vote:
         res.sort(key= lambda x: x.up_vote + x.down_vote, reverse= True)
-    return {"data": res, "number_post_queried": len(res)}
+    return res
 
 @router.get("/search_post/number_of_post")
 async def number_of_posts_queried(

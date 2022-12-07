@@ -1,28 +1,188 @@
-from fastapi import APIRouter, Response, status
-from ..database_connection.test_firebase_connection import db
-from ..data_model.post_model import Post
+from fastapi import APIRouter, Response, status, Path, Query, Depends
+from ..database_connection.db_connection import mongodb
+from ..data_model.post_model import FullPost, PostDB, ShortPost, ObjectId, SearchFilter, OrderByOption
+from .constant import pagination_number
+from ..dependencies import search_query_processing
 
 router = APIRouter(
     prefix= "/posts",
     tags= ["Posts"]
 )
 
-@router.get("/post_info/{post_id}", response_model=Post)
-async def get_post_info(post_id: str):
-    current_post = db.child("posts").child(post_id).get().val()
-    post_info_model = Post(**(current_post))
-    post_info_model.post_id = post_id
-    return post_info_model
-
-# put the post information and get the id of that post
-@router.put("/post_info")
-async def post_post_info(post: Post):
+# This is to get all information related to a specific post
+# Remember to add the query to retrieve the avatar from the userid gotten from the db 
+# This lateness is due to the lack of user model on Mongo DB
+@router.get("/{post_id}/", response_model=FullPost)
+async def get_post(
+        post_id: str = Path(title="The ID to get the post detailed information")
+    ):
     try:
-        post_dict = post.dict()
-        del post_dict["post_id"]
-        post_dict["time_create"] = str(post_dict["time_create"])
-        current_post = db.child("posts").push(post_dict)
+        current_post = mongodb.posts.find_one({"_id":ObjectId(post_id)})
+        current_post["num_comments"] = len(current_post["comments"])
+        post_info_model = FullPost(**(current_post))
     except:
         return Response(status_code= status.HTTP_400_BAD_REQUEST)
-    return current_post["name"]
+    return post_info_model
+
+@router.get("/all")
+async def get_posts_on_homepage(
+        page_index : int = Query(title="The page index in the homepage", default=1),
+        order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default),
+        filter: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
+    ):
+    count = 0 
+    if filter == ["all"]:
+        list_of_full_posts = mongodb.posts.aggregate([
+            {"$sort":
+                    {
+                        "_id":-1
+                    }
+            },
+            {
+                "$skip": (page_index - 1)*pagination_number
+            },
+            {
+                "$limit": pagination_number
+            }
+        ])
+        count = mongodb.posts.count_documents(filter={})
+    else:
+        list_of_full_posts = mongodb.posts.aggregate([
+            {"$match":
+                    {
+                        "tags":
+                            {
+                                "$in": filter
+                            }
+                    }
+            },
+            {"$sort":
+                    {
+                        "_id":-1
+                    }
+            },
+            {
+                "$skip":(page_index - 1)*pagination_number
+            },
+            {
+                "$limit": pagination_number
+            }
+        ])
+        count = mongodb.posts.count_documents(filter={"tags": {"$in": filter}})
+    res = list[ShortPost]()
+    for doc in list_of_full_posts:
+        res.append(ShortPost(num_comments=len(doc["comments"]),**doc))
+    if order_by_option.value == OrderByOption.comment:
+        res.sort(key= lambda x: x.num_comments, reverse=True)
+    elif order_by_option.value ==  OrderByOption.view:
+        res.sort(key= lambda x: x.view, reverse= True)
+    elif order_by_option.value == OrderByOption.vote:
+        res.sort(key= lambda x: x.up_vote + x.down_vote, reverse= True)
+    return {"data":res, "total": count}
+
+# this is to search the post
+@router.get("/search")
+async def get_searched_posts(
+        query_title_pattern: str = Depends(search_query_processing),
+        filter: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all]),
+        page_index : int = Query(title="The page index in the homepage", default=1),
+        order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default)
+    ):
+    count = 0
+    if filter == ["all"]:
+        list_of_full_posts = mongodb.posts.aggregate([
+            {"$match":
+                {"title":
+                        {
+                            "$regex": query_title_pattern,
+                            "$options": 'i'
+                        }
+                }
+            },
+            {"$sort":
+                {
+                    "_id":-1
+                }
+            },
+            {
+                "$skip": (page_index - 1)*pagination_number
+            },
+            {
+                "$limit": pagination_number
+            }
+        ])
+        count = mongodb.posts.count_documents(filter =
+                {"title":
+                    {
+                        "$regex":query_title_pattern,
+                        "$options":"i"
+                    }
+                })
+    else:
+        list_of_full_posts = mongodb.posts.aggregate([
+            {"$match":
+                {
+                    "tags":
+                        {
+                            "$in": filter
+                        },
+                    "title":
+                        { 
+                            
+                            "$regex":query_title_pattern,
+                            "$options":'i'
+                            
+                        }
+                }
+            },
+            {"$sort":
+                {
+                    "_id":-1
+                }
+            },
+            {
+                "$skip":(page_index - 1)*pagination_number
+            },
+            {
+                "$limit": pagination_number
+            }
+        ])
+        count = mongodb.posts.count_documents(filter =
+            {
+                "tags":
+                    {
+                        "$in": filter
+                    },
+                "title":
+                    {
+                        "$regex":query_title_pattern,
+                        "$options":"i"
+                    }
+            })
+    res = list[ShortPost]()
+    for doc in list_of_full_posts:
+        res.append(ShortPost(num_comments=len(doc["comments"]),**doc))
+    if order_by_option.value == OrderByOption.comment:
+        res.sort(key= lambda x: x.num_comments, reverse=True)
+    elif order_by_option.value ==  OrderByOption.view:
+        res.sort(key= lambda x: x.view, reverse= True)
+    elif order_by_option.value == OrderByOption.vote:
+        res.sort(key= lambda x: x.up_vote + x.down_vote, reverse= True)
+    return {"data":res, "total": count}
+
+# This is to create the a post information (and get the ID of the post)
+@router.post("/create")
+async def create_post(post: PostDB):
+    try:
+        post_dict = post.dict()
+        post_dict["time_created"] = str(post_dict["time_created"])
+        current_post = mongodb["posts"].insert_one(post_dict)
+    except:
+        return Response(status_code= status.HTTP_400_BAD_REQUEST)    
+    return str(current_post.inserted_id)
+
+
+    
+    
+    
     

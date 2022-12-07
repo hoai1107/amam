@@ -20,7 +20,7 @@ class User(UserBase):
     list_of_user_question: list[PostBase] = Field(default=list[PostBase]())
     number_of_answer: int = 0
     list_of_followed: list[UserBase] = Field(default=list[UserBase]())
-    book_mark: list[PostBase] = Field(default=list[PostBase]())
+    bookmark: list[PostBase] = Field(default=list[PostBase]())
 
 # This is the form of information used in the authentication process 
 class Account(BaseModel):

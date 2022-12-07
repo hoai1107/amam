@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>SectionComment</div>
 </template>
 
 <script setup></script>

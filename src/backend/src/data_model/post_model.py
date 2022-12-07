@@ -55,12 +55,15 @@ class ShortPost(PostBase):
 
 # This model plays a role as a view in the architecture
 class FullPost(ShortPost):
+    user_id: str
+    avatar: str = Field(default= None)
     comments: list[Comments]= Field(default=list[Comments]())
     list_of_user_upvote_downvote: list[VotingUser] = Field(default=list[VotingUser]())
     list_of_user_see_post: list[UserBase] = Field(default=list[UserBase]())
 
 # This model plays a role as a model in the architecture
 class PostDB(BaseModel):
+    user_id: str
     title: str
     view: int = Field(default=0)
     time_created: datetime.datetime

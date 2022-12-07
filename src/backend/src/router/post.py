@@ -10,6 +10,8 @@ router = APIRouter(
 )
 
 # This is to get all information related to a specific post
+# Remember to add the query to retrieve the avatar from the userid gotten from the db 
+# This lateness is due to the lack of user model on Mongo DB
 @router.get("/{post_id}/", response_model=FullPost)
 async def get_post(
         post_id: str = Path(title="The ID to get the post detailed information")

@@ -30,11 +30,10 @@ async def send_verification_to_mail(email_receiver: str):
     email_sender = 'quocthogminhqtm@gmail.com'
     email_password = "qjikpcbndhxofrvr"
     authentication_link = auth_admin.generate_email_verification_link(email=email_receiver)
-    subject = "Please Verify Your Email in AMAM APP With The Given Link :)))"
+    subject = "Account Verification"
     body= \
     """
-    This is a test e-mail message.
-    Please access this link to authenticate the account: {}
+Please access this link to authenticate the account: {}
     """.format(authentication_link)
     em = EmailMessage()
     em["From"] = email_sender

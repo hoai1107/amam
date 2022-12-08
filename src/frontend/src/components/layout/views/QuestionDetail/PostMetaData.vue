@@ -1,5 +1,5 @@
 <template>
-  <div class="h-12 mb-3 flex flex-row gap-3">
+  <div class="h-12 mt-2 flex flex-row gap-3">
     <!--Avatar---->
     <div
       class="aspect-square h-full cursor-pointer flex grow-0 items-center content-center"

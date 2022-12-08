@@ -6,7 +6,7 @@ import ButtonItem from "@/components/ui/ButtonItem.vue";
   <div class="container">
     <div class="input-container">
       <p>Title</p>
-      <p style="font-size: 14px; color: #467980">
+      <p class="text-sm text-blueSky-dark-500">
         Be specific about what you want to ask (maximum 100 characters)
       </p>
       <input

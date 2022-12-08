@@ -33,7 +33,7 @@ const props = defineProps({
     </div>
     <p class="warning" v-if="false">Wrong account or password</p>
     <p class="warning" v-if="false">Your email hasn't verified yet!</p>
-    <p class="warning" style="color: var(--blue)" v-if="true">
+    <p class="warning" style="color: var(--blue)" v-if="false">
       Please verify email before logging in
     </p>
     <ButtonItem

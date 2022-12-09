@@ -4,8 +4,8 @@ from firebase_admin import firestore, auth as auth_admin
 import os
 import pymongo
 import pyrebase
-
-cred=credentials.Certificate(os.getcwd()+'\\src\\database_connection\\cs300-project-firebase-adminsdk-z5mzh-43da7b3a43.json')
+from pathlib import Path
+cred=credentials.Certificate(os.path.join(os.path.join(Path(__file__).parents[1],'database_connection','cs300-project-firebase-adminsdk-z5mzh-43da7b3a43.json')))
 firebase_admin.initialize_app(cred)
 firestore=firestore.client()
 

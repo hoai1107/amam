@@ -2,10 +2,9 @@
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiArrowUpBoldOutline, mdiArrowDownBoldOutline } from "@mdi/js";
+import { ref } from "vue";
 
-const props = defineProps({
-  is_clicked: { type: Boolean, default: false },
-});
+const is_clicked = ref(false);
 </script>
 
 <template>
@@ -34,13 +33,13 @@ const props = defineProps({
             id="reply"
             role="button"
             tabindex="0"
-            v-on:click.native="is_clicked = !is_clicked"
+            @click="is_clicked = !is_clicked"
           >
             Reply
           </div>
         </div>
         <Transition>
-          <div class="form-container" v-if="is_clicked">
+          <div class="form-container" v-show="is_clicked">
             <input
               class="input-comment"
               v-model="comment"

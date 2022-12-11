@@ -4,7 +4,7 @@ import ButtonItem from "@/components/ui/ButtonItem.vue";
 
 <template>
   <div class="container">
-    <div class="input-container">
+    <div class="py-6">
       <p>Title</p>
       <p class="text-sm text-blueSky-dark-500">
         Be specific about what you want to ask (maximum 100 characters)
@@ -15,7 +15,7 @@ import ButtonItem from "@/components/ui/ButtonItem.vue";
         placeholder="Write something..."
       />
     </div>
-    <div class="input-container">
+    <div class="pb-6">
       <p>Can you tell us more detail about what you want to ask?</p>
       <textarea
         class="input-form"
@@ -33,11 +33,6 @@ import ButtonItem from "@/components/ui/ButtonItem.vue";
   box-sizing: border-box;
   @extend .base-400;
 }
-
-.input-container {
-  padding-bottom: 12px;
-}
-
 .input-form {
   width: 1056px;
 

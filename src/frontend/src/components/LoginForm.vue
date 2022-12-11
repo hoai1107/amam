@@ -1,6 +1,6 @@
 <script setup>
 import ButtonItem from "@/components/ui/ButtonItem.vue";
-import CheckBox from "@/components/ui/CheckBox.vue"
+import CheckBox from "@/components/ui/CheckBox.vue";
 const props = defineProps({
   wrong: { type: Boolean, default: true },
 });

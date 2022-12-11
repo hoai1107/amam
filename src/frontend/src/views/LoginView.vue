@@ -18,16 +18,18 @@
         </p>
         <LoginForm></LoginForm>
         <p class="mt-6">
-          or <a href="#" class="text-blue hover:text-blue-dark">continue as guest</a>
+          or
+          <a href="#" class="text-blue hover:text-blue-dark"
+            >continue as guest</a
+          >
         </p>
       </div>
     </div>
   </div>
 </template>
 
-
 <script setup>
-import LoginForm from '../components/LoginForm.vue';
+import LoginForm from "../components/LoginForm.vue";
 </script>
 
 <style lang="scss" scoped></style>

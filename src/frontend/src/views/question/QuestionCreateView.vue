@@ -14,8 +14,8 @@
           <p class="text-sm text-blueSky-dark-500">
             Select up to 5 tags to describe what your question is about
           </p>
-          
-          <div class="grid grid-rows-6 grid-flow-col gap-y-2 mb-8">
+
+          <div class="grid grid-rows-6 grid-flow-col gap-y-2 pb-9">
             <div v-for="(category, index) in categories" v-bind:key="index">
               <CheckBox :text="category"></CheckBox>
             </div>
@@ -34,11 +34,10 @@
 
 <script setup>
 import SidebarCategory from "@/components/layout/sidebar/SidebarCategory.vue";
-import SidebarHistory from "@/components/layout/sidebar/SidebarHistory.vue";
 import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
-import QuestionForm from "@/components/QuestionForm.vue"
-import CheckBox from "@/components/ui/CheckBox.vue"
-import ButtonItem from "@/components/ui/ButtonItem.vue"
+import QuestionForm from "@/components/QuestionForm.vue";
+import CheckBox from "@/components/ui/CheckBox.vue";
+import ButtonItem from "@/components/ui/ButtonItem.vue";
 const categories = [
   "Books",
   "Business",
@@ -66,7 +65,7 @@ const categories = [
   "Technology",
   "Travel",
   "Writing",
-  "Others"
+  "Others",
 ];
 </script>
 

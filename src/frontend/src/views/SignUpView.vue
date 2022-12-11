@@ -18,7 +18,10 @@
         </p>
         <SignUpForm></SignUpForm>
         <p class="mt-6">
-          or <a href="#" class="text-blue hover:text-blue-dark">continue as guest</a>
+          or
+          <a href="#" class="text-blue hover:text-blue-dark"
+            >continue as guest</a
+          >
         </p>
       </div>
     </div>

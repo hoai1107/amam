@@ -1,155 +1,97 @@
-<script setup>
-import ButtonItem from "@/components/ui/ButtonItem.vue";
-import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiArrowUpBoldOutline, mdiArrowDownBoldOutline } from "@mdi/js";
-import { ref } from "vue";
-
-const is_clicked = ref(false);
-</script>
-
 <template>
-  <div class="container">
-    <div class="comment-container">
-      <img class="avatar" />
-      <div class="detail-container">
-        <div class="comment-info">
-          <p id="name">Name</p>
-          <p id="timestamp">2 hours ago</p>
+  <div class="flex flex-row gap-3">
+    <!-- Avatar -->
+    <div class="h-12">
+      <Avatar />
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col gap-2">
+      <div class="flex flex-row gap-6">
+        <!-- Username -->
+        <div class="text-base font-semibold">Hoai Tu</div>
+        <!-- Timestamp -->
+        <div class="text-base text-gray-400">2 hours ago</div>
+      </div>
+
+      <!-- Content -->
+      <div class="text-base">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
+        purus sit amet luctus venenatis
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex flex-row justify-between">
+        <div class="flex flex-row gap-8">
+          <!-- Like -->
+          <div class="flex flex-row gap-2">
+            <p>10</p>
+            <button>
+              <SvgIcon
+                size="24"
+                type="mdi"
+                :path="mdiArrowUpBoldOutline"
+              ></SvgIcon>
+            </button>
+          </div>
+
+          <!-- Dislike -->
+          <div class="flex flex-row gap-2">
+            <p>2</p>
+            <button>
+              <SvgIcon
+                size="24"
+                type="mdi"
+                :path="mdiArrowDownBoldOutline"
+              ></SvgIcon>
+            </button>
+          </div>
+
+          <div>
+            <button @click="toggleReply">Reply</button>
+          </div>
         </div>
-        <p id="comment-detail">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
-          purus sit amet luctus venenatis
-        </p>
-        <div class="interaction-container">
-          <div class="vote" id="upvote">
-            <p class="vote-count" id="upvote-count">10</p>
-            <svg-icon type="mdi" :path="mdiArrowUpBoldOutline"></svg-icon>
-          </div>
-          <div class="vote" id="downvote">
-            <p class="vote-count" id="downvote-count">5</p>
-            <svg-icon type="mdi" :path="mdiArrowDownBoldOutline"></svg-icon>
-          </div>
-          <div
-            id="reply"
-            role="button"
-            tabindex="0"
-            @click="is_clicked = !is_clicked"
-          >
-            Reply
-          </div>
+        <button>
+          <SvgIcon size="24" type="mdi" :path="mdiDotsHorizontal"></SvgIcon>
+        </button>
+      </div>
+
+      <!-- Reply form -->
+      <div class="flex flex-row gap-3" v-show="showReply">
+        <input
+          class="border-2 border-solid w-full px-6 rounded"
+          type="text"
+          placeholder="Add an answer..."
+        />
+        <div>
+          <ButtonItem
+            class="w-fit"
+            type="primary"
+            state="normal"
+            text="Submit"
+          />
         </div>
-        <Transition>
-          <div class="form-container" v-show="is_clicked">
-            <input
-              class="input-comment"
-              v-model="comment"
-              placeholder="Add an answer..."
-            />
-            <ButtonItem
-              style="height: 48px"
-              type="primary"
-              state="normal"
-              text="Comment"
-            ></ButtonItem>
-          </div>
-        </Transition>
       </div>
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
-@import "@/assets/styles/base.scss";
 
-.container {
-  box-sizing: border-box;
-  @extend .base-400;
+<script setup>
+import Avatar from "@/components/ui/Avatar.vue";
+import ButtonItem from "@/components/ui/ButtonItem.vue";
+import SvgIcon from "@jamescoyle/vue-icon";
+import {
+  mdiArrowUpBoldOutline,
+  mdiArrowDownBoldOutline,
+  mdiDotsHorizontal,
+} from "@mdi/js";
+import { ref } from "vue";
+
+const showReply = ref(false);
+
+function toggleReply() {
+  showReply.value = !showReply.value;
 }
+</script>
 
-.comment-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  position: relative;
-  padding-bottom: 8px;
-}
-
-.avatar {
-  height: 48px;
-  width: 48px;
-  border: 2px solid #000000;
-  border-radius: 8px;
-  background-color: var(--white);
-}
-
-.detail-container {
-  flex-direction: column;
-  width: calc(100% - 48px);
-  margin-left: 12px;
-}
-
-.form-container {
-  display: flex;
-  align-items: flex-end;
-  width: 100%;
-}
-
-.input-comment {
-  height: 48px;
-  width: 100%;
-  padding: 0px 24px;
-  margin-right: 12px;
-  background: #ffffff;
-  border: 2px solid #000000;
-  border-radius: 8px;
-
-  -moz-appearance: none; /* Firefox */
-  -webkit-appearance: none; /* Safari and Chrome */
-  appearance: none;
-}
-
-.comment-info,
-.interaction-container,
-.vote {
-  display: flex;
-  flex-direction: row;
-}
-
-#name {
-  @extend .base-600;
-}
-
-#timestamp {
-  margin-left: 24px;
-  color: var(--gray-400);
-}
-
-#comment-detail {
-  padding: 8px 0px;
-}
-
-.interaction-container {
-  padding-bottom: 12px;
-}
-
-.vote {
-  padding-right: 20px;
-}
-
-.vote-count {
-  padding-right: 5px;
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
-}
-
-#reply {
-  cursor: pointer;
-}
-</style>
+<style lang="scss" scoped></style>

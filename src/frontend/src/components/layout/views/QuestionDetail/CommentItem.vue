@@ -26,11 +26,17 @@
           <!-- Like -->
           <div class="flex flex-row gap-2">
             <p>10</p>
-            <button>
+            <button @click="changeSentiment(userSentiment, Sentiment.LIKE)">
               <SvgIcon
+                class="transition-none"
+                :class="userSentiment === Sentiment.LIKE ? 'text-blue' : ''"
                 size="24"
                 type="mdi"
-                :path="mdiArrowUpBoldOutline"
+                :path="
+                  userSentiment === Sentiment.LIKE
+                    ? mdiArrowUpBold
+                    : mdiArrowUpBoldOutline
+                "
               ></SvgIcon>
             </button>
           </div>
@@ -38,11 +44,17 @@
           <!-- Dislike -->
           <div class="flex flex-row gap-2">
             <p>2</p>
-            <button>
+            <button @click="changeSentiment(userSentiment, Sentiment.DISLIKE)">
               <SvgIcon
+                class="transition-none"
+                :class="userSentiment === Sentiment.DISLIKE ? 'text-blue' : ''"
                 size="24"
                 type="mdi"
-                :path="mdiArrowDownBoldOutline"
+                :path="
+                  userSentiment === Sentiment.DISLIKE
+                    ? mdiArrowDownBold
+                    : mdiArrowDownBoldOutline
+                "
               ></SvgIcon>
             </button>
           </div>
@@ -83,14 +95,41 @@ import SvgIcon from "@jamescoyle/vue-icon";
 import {
   mdiArrowUpBoldOutline,
   mdiArrowDownBoldOutline,
+  mdiArrowDownBold,
+  mdiArrowUpBold,
   mdiDotsHorizontal,
 } from "@mdi/js";
 import { ref } from "vue";
 
+const Sentiment = {
+  DISLIKE: -1,
+  NEUTRAL: 0,
+  LIKE: 1,
+};
+
 const showReply = ref(false);
+const userSentiment = ref(Sentiment.NEUTRAL);
 
 function toggleReply() {
   showReply.value = !showReply.value;
+}
+
+function changeSentiment(oldSentiment, newSentiment) {
+  if (oldSentiment == Sentiment.NEUTRAL) {
+    userSentiment.value = newSentiment;
+  } else if (oldSentiment == Sentiment.LIKE) {
+    if (newSentiment == Sentiment.LIKE) {
+      userSentiment.value = Sentiment.NEUTRAL;
+    } else {
+      userSentiment.value = newSentiment;
+    }
+  } else {
+    if (newSentiment == Sentiment.DISLIKE) {
+      userSentiment.value = Sentiment.NEUTRAL;
+    } else {
+      userSentiment.value = newSentiment;
+    }
+  }
 }
 </script>
 

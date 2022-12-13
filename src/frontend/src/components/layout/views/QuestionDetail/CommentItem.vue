@@ -117,14 +117,8 @@ function toggleReply() {
 function changeSentiment(oldSentiment, newSentiment) {
   if (oldSentiment == Sentiment.NEUTRAL) {
     userSentiment.value = newSentiment;
-  } else if (oldSentiment == Sentiment.LIKE) {
-    if (newSentiment == Sentiment.LIKE) {
-      userSentiment.value = Sentiment.NEUTRAL;
-    } else {
-      userSentiment.value = newSentiment;
-    }
   } else {
-    if (newSentiment == Sentiment.DISLIKE) {
+    if (oldSentiment === newSentiment) {
       userSentiment.value = Sentiment.NEUTRAL;
     } else {
       userSentiment.value = newSentiment;

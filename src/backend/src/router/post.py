@@ -1,8 +1,13 @@
 from fastapi import APIRouter, Response, status, Path, Query, Depends
-from ..database_connection.db_connection import mongodb
-from ..data_model.post_model import FullPost, PostDB, ShortPost, ObjectId, SearchFilter, OrderByOption
-from .constant import pagination_number
-from ..dependencies import search_query_processing
+import sys,os
+from pathlib import Path
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],"database_connection"))
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],"data_model"))
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],""))
+from db_connection import mongodb
+from post_model import FullPost, PostDB, ShortPost, ObjectId, SearchFilter, OrderByOption
+from constant import pagination_number
+from dependencies import search_query_processing
 
 router = APIRouter(
     prefix= "/posts",

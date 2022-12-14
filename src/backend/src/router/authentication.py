@@ -1,8 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
-from ..database_connection.db_connection import auth, auth_admin
-from ..data_model.user_model import User, Account
+import sys,os
+from pathlib import Path
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],"database_connection"))
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],"data_model"))
+from db_connection import auth, auth_admin
+from user_model import User, Account
 from fastapi.security import OAuth2PasswordRequestForm
-from .user import create_user
+from user import create_user
 import smtplib
 from email.message import EmailMessage
 import ssl

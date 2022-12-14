@@ -6,10 +6,13 @@ from collections import namedtuple
 from json import JSONEncoder,loads,dumps
 sys.path.insert(0,os.path.join(Path(__file__).parents[1],"database_connection"))
 sys.path.insert(0,os.path.join(Path(__file__).parents[1],"data_model"))
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],""))
 from db_connection import mongodb
 from user_model import User
+from main import app
 def customDecoder(studentDict):
     return namedtuple("X", studentDict.keys())(*studentDict.values())
+@app.get('/userID/{userID}')
 def getUser(userId: str) -> dict:
     c=mongodb.users.find({"_id":ObjectId(userId)})
     temp=dict()
@@ -48,6 +51,79 @@ def getPostInUserPorfile(postId: str) -> str:
     del t['_id']
     del t['comments']
     return dumps(t,indent=4)
-
-
-#print(getCommentOfPost('638ae63335e7efcac19700d1'))
+def upVoteUser(postId: str, userID: str, isUpVote: bool):
+    cmd=mongodb.posts.find({"_id":ObjectId(postId),"list_of_user_upvote_downvote.id":{
+        '$exists':userID
+    }},{
+        'upvote_downvote':'$list_of_user_upvote_downvote.upvote_downvote',
+        'id':'$list_of_user_upvote_downvote.id'
+    })
+    t=0
+    for i in cmd:
+        t=i
+        i=1
+    cmd=t
+    if t==0: cmd=None
+    if cmd!=None:
+        if (not isUpVote and cmd['upvote_downvote']==['upvote']):
+            mongodb.posts.update_one({"_id":ObjectId(postId)},
+            {'$inc':{
+                'upvote':-1
+            }})
+            mongodb.posts.update_one({"_id":ObjectId(postId)},
+            {'$pull':{
+                'list_of_user_upvote_downvote':{
+                    'id':userID
+                }
+            }})
+    else: 
+        if isUpVote:
+            mongodb.posts.update_one({"_id":ObjectId(postId)},
+            {
+                '$inc':{
+                    'upvote':1
+                },
+                '$addToSet':{
+                    'list_of_user_upvote_downvote':{
+                        'id': userID,
+                        'upvote_downvote': 'upvote'
+                    }
+                }
+            })
+def downVoteUser(postId: str, userID: str, isUpVote: bool):
+    cmd=mongodb.posts.find({"_id":ObjectId(postId),"list_of_user_upvote_downvote.id":{
+        '$exists':userID
+    }},{
+        'upvote_downvote':'$list_of_user_upvote_downvote.upvote_downvote',
+        'id':'$list_of_user_upvote_downvote.id'
+    })
+    t=0
+    for i in cmd:
+        t=i
+        i=1
+    cmd=t
+    if t==0: cmd=None
+    if cmd!=None:
+        if (not isUpVote and cmd['upvote_downvote']==['upvote']):
+            mongodb.posts.update_one({"_id":ObjectId(postId)},
+            {'$inc':{
+                'upvote':-1
+            },'$pull':{
+                'list_of_user_upvote_downvote':{
+                    'id':userID
+                }
+            }})
+    else: 
+        if isUpVote:
+            mongodb.posts.update_one({"_id":ObjectId(postId)},
+            {
+                '$inc':{
+                    'upvote':1
+                },
+                '$addToSet':{
+                    'list_of_user_upvote_downvote':{
+                        'id': userID,
+                        'upvote_downvote': 'upvote'
+                    }
+                }
+            })

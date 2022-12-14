@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
-        "./src/backend/src/database_connection"
+        "./src/backend/src/database_connection",
+        "./src/backend/src/data_model"
     ]
 }

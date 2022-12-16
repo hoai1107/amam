@@ -28,7 +28,7 @@ class PostBase(BaseModel):
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
 
-from .user_model import VotingUser, UserBase
+from user_model import VotingUser, UserBase
 
 # This model plays a role as a model in the architecture
 class CommentDB(BaseModel):

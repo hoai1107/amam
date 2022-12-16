@@ -12,7 +12,7 @@ class UserBase(BaseModel):
 class VotingUser(UserBase):
     upvote_downvote: str 
 
-from .post_model import PostBase
+from post_model import PostBase
 
 # This is the main model of user holding full information of that user
 class User(UserBase):

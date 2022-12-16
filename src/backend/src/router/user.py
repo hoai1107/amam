@@ -1,6 +1,11 @@
 from fastapi import APIRouter, Response, status
-from ..database_connection.db_connection import db
-from ..data_model.user_model import User
+import os
+import sys
+from pathlib import Path
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],"database_connection"))
+sys.path.insert(0,os.path.join(Path(__file__).parents[1],"data_model"))
+from db_connection import db
+from user_model import User
 
 router = APIRouter(
     prefix="/users",

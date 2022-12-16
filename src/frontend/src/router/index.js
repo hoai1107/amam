@@ -7,6 +7,7 @@ const baseRoutes = [
     name: "home",
     component: HomeView,
     alias: ["/index", "/home"],
+    props: (route) => ({ ...route.query }),
   },
   {
     path: "/login",
@@ -75,6 +76,9 @@ const userRoutes = [
 const router = createRouter({
   history: createWebHistory(),
   routes: [...baseRoutes, ...questionsRoutes, ...userRoutes],
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 };
+  },
 });
 
 export default router;

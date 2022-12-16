@@ -2,10 +2,12 @@
   <div
     class="bg-yellow py-1 px-2 border border-solid border-black rounded-sm inline text-xs"
   >
-    Technology
+    {{ props.name }}
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const props = defineProps(["name"]);
+</script>
 
 <style lang="scss" scoped></style>

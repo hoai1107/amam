@@ -1,6 +1,8 @@
 <template>
   <MainContainer>
-    <QuestionContent />
+    <Suspense>
+      <QuestionContent />
+    </Suspense>
   </MainContainer>
 </template>
 

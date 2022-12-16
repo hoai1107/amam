@@ -18,14 +18,15 @@
     </div>
     <div class="px-3 h-[40px]">
       <div class="flex flex-row gap-3">
-        <div
+        <router-link
           v-for="page in pages(props.currentPage, props.totalPages)"
           class="rounded py-2 px-4 hover:bg-blueSky-light-800 cursor-pointer"
           v-bind:key="page"
           :class="{ selected: page === currentPage }"
+          :to="{ name: routeName, query: { page_index: page } }"
         >
           {{ page }}
-        </div>
+        </router-link>
       </div>
     </div>
     <div>
@@ -59,7 +60,7 @@ import SvgIcon from "@jamescoyle/vue-icon";
 const props = defineProps({
   currentPage: Number,
   totalPages: Number,
-  currentUrl: String,
+  routeName: String,
 });
 
 const pages = (currentPage, totalPages) => {

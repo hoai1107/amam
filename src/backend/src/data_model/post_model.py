@@ -61,7 +61,7 @@ class ShortPost(PostBase):
 # This model plays a role as a view in the architecture
 class FullPost(ShortPost):
     user_id: str
-    content: str = Field(default= str)
+    content: str = Field(default="")
     avatar: str = Field(default= None)
     list_of_user_upvote_downvote: list[VotingUser] = Field(default=list[VotingUser]())
 

@@ -1,6 +1,10 @@
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Query
-from .router.constant import shard_number
+import sys
+import os
+from pathlib import Path
+sys.path.insert(0,os.path.join(Path(__file__).parents[0],"router"))
+from constant import shard_number
 import random
 from google.cloud import firestore
 

@@ -12,7 +12,7 @@ class UserBase(BaseModel):
 class VotingUser(UserBase):
     upvote_downvote: str 
 
-from .post_model import PostBase
+from post_model import PostBase
 
 # This is the main model of user holding full information of that user
 class User(UserBase):
@@ -21,6 +21,7 @@ class User(UserBase):
     number_of_answer: int = 0
     list_of_followed: list[UserBase] = Field(default=list[UserBase]())
     bookmark: list[PostBase] = Field(default=list[PostBase]())
+    history_posts: list[PostBase] = Field(default= list[PostBase]())
 
 # This is the form of information used in the authentication process 
 class Account(BaseModel):

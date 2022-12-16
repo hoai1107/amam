@@ -3,11 +3,12 @@
     class="questionCard cursor-pointer border-2 border-solid border-black hover:shadow-md rounded bg-blueSky-light-800 py-4 px-6"
   >
     <p class="text-lg font-semibold text-blueSky-dark-800">
-      Where should I store my CSV files for Memgraph?
+      {{ question.title }}
     </p>
     <div class="flex gap-2 mt-2 mb-4">
-      <Tag></Tag>
-      <Tag></Tag>
+      <div v-for="(tag, index) in question.tags" :key="index">
+        <Tag :name="capitalize(tag)" />
+      </div>
     </div>
     <p class="text-base mb-4">
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta facilis
@@ -17,15 +18,17 @@
     <div class="flex flex-row">
       <div class="flex flex-row gap-8">
         <div class="flex flex-row">
-          <div class="mr-2 text-base">5</div>
+          <div class="mr-2 text-base">
+            {{ question.up_vote - question.down_vote }}
+          </div>
           <SvgIcon size="24" type="mdi" :path="mdiArrowUpBoldOutline"></SvgIcon>
         </div>
         <div class="flex flex-row">
-          <div class="mr-2 text-base">5</div>
+          <div class="mr-2 text-base">{{ question.num_comments }}</div>
           <SvgIcon size="24" type="mdi" :path="mdiCommentOutline"></SvgIcon>
         </div>
         <div class="flex flex-row">
-          <div class="mr-2 text-base">5</div>
+          <div class="mr-2 text-base">{{ question.view }}</div>
           <SvgIcon size="24" type="mdi" :path="mdiEyeOutline"></SvgIcon>
         </div>
       </div>
@@ -51,6 +54,12 @@ import {
   mdiBookmark,
 } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
+
+const props = defineProps(["question"]);
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 </script>
 
 <style lang="scss" scoped>

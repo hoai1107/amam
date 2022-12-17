@@ -20,9 +20,8 @@ router = APIRouter(
 @router.get("/{user_id}", response_model= User)
 async def get_user(user_id: str):
     try:    
-        current_user = db.child("users").child(user_id).get().val()
+        current_user = mongodb.users.find_one({"_id": ObjectId(user_id)})
         profile_user_model = User(**(current_user))
-        profile_user_model.id = user_id
     except:
         return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!") 
     return profile_user_model

@@ -23,8 +23,6 @@ class PyObjectId(ObjectId):
 # This is a base unit model just holding small enough information
 class UserBase(BaseModel):
     id: Union[PyObjectId,None] = Field(default_factory=PyObjectId,alias="_id")
-    user_name: str
-    email: str
     class Config:
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
@@ -38,6 +36,8 @@ from post_model import PostBase
 
 # This is the main model of user holding full information of that user
 class User(UserBase):
+    user_name: str
+    email: str
     avatar: str = Field(default=None)
     list_of_user_question: list[PostBase] = Field(default=list[PostBase]())
     number_of_answer: int = 0

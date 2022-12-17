@@ -146,7 +146,7 @@ def change_comment(comment: CommentDB, postID: str):
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 @router.post("/comment/upvote")
-def upvote_comment(userID: str, postID: str, isUpVote: bool, user: VotingUser| None):
+def upvote_comment(userID: str, postID: str, isUpVote: bool, user: VotingUser):
     user_dict=user.dict()
     cmd=mongodb.posts.find_one({'_id': ObjectId(postID), 'comments.user_id': {"$exists": userID}})
     if cmd==None: Response(status_code=status.HTTP_400_BAD_REQUEST)
@@ -170,7 +170,7 @@ def upvote_comment(userID: str, postID: str, isUpVote: bool, user: VotingUser| N
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 @router.post("/comment/downvote")
-def downvote_comment(userID: str, postID: str, isDownvote: bool, user: VotingUser| None):
+def downvote_comment(userID: str, postID: str, isDownvote: bool, user: VotingUser):
     user_dict=user.dict()
     cmd=mongodb.posts.find_one({'_id': ObjectId(postID), 'comments.user_id': {"$exists": userID}})
     if cmd==None: Response(status_code=status.HTTP_400_BAD_REQUEST)

@@ -17,7 +17,7 @@
                 <p class="text-blue ml-2">change</p>
               </div>
             </div>
-            <div class="flex flex-col ml-2">
+            <div class="flex flex-col ml-4">
               <p class="text-2xl font-semibold">Floyd Miles</p>
               <p class="text-gray-400 mt-1">camlansuc@gmail.com</p>
               <div class="flex flex-row text-blue gap-x-8 mt-2">
@@ -35,7 +35,7 @@
               rows="5"
             ></textarea>
             <div class="flex flex-row justify-between mt-2">
-              <div class="flex flex-col">
+              <div class="flex flex-col w-1/2">
                 <p>Location</p>
                 <input
                   class="input-form"
@@ -43,7 +43,7 @@
                   placeholder="e.g Vietnam"
                 />
               </div>
-              <div class="flex flex-col">
+              <div class="flex flex-col w-1/2 ml-4">
                 <p>Title</p>
                 <input
                   class="input-form"
@@ -75,11 +75,21 @@
           </div>
           <div>
             <p class="text-left text-xl font-semibold">Your Questions</p>
-            <p class="text-right text-sm text-blue">See all</p>
+            <p 
+              class="text-sm p-3 border-gray-100 border-solid hover:text-blueSky-dark-300 cursor-pointer" 
+              :class="[index != 1 ? 'border-t-2' : '']" 
+              v-for="index in 3" :key="index"
+            >{{questions[index-1]}}</p>
+            <p class="text-right text-sm text-blue cursor-pointer">See all</p>
           </div>
-          <div>
+          <div class="mt-8">
             <p class="text-left text-xl font-semibold">Saved Questions</p>
-            <p class="text-right text-sm text-blue">See all</p>
+            <p 
+              class="text-sm p-3 border-gray-100 border-solid hover:text-blueSky-dark-300 cursor-pointer" 
+              :class="[index != 1 ? 'border-t-2' : '']" 
+              v-for="index in 3" :key="index"
+            >{{questions[index-1]}}</p>
+            <p class="text-right text-sm text-blue cursor-pointer">See all</p>
           </div>
         </div>
       </div>
@@ -91,6 +101,11 @@
 const props = defineProps({
   id: String,
 });
+const questions = [
+  "Where should I store my CSV files for Memgraph?",
+  "TabView PageTabViewStyle scroll information not working after tab disappears from screen SwiftUI iOS 16",
+  "Switch Statement not working but does for other statement in java"
+]
 import Avatar from "@/components/ui/Avatar.vue";
 import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
 import QuestionCard from "@/components/layout/QuestionCard.vue";

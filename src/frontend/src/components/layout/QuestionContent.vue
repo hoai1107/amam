@@ -2,7 +2,11 @@
   <div class="text-xl font-semibold mb-3">All Questions</div>
   <div class="flex flex-col gap-y-6">
     <div v-for="question in questions.data" :key="question._id">
-      <QuestionCard :question="question" />
+      <router-link
+        :to="{ name: 'questions.single', params: { id: question._id } }"
+      >
+        <QuestionCard :question="question" />
+      </router-link>
     </div>
   </div>
   <Pagination

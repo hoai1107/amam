@@ -20,13 +20,6 @@ def getUser(userId: str) -> dict:
         temp=i
     temp['_id']=userId
     return temp
-def getPost(questionId:str) -> dict:
-    c=mongodb.posts.find({"_id":ObjectId(questionId)})
-    temp=dict()
-    for i in c:
-        temp=i
-    temp['_id']=questionId
-    return temp
 def getUserInfo(userId: str) -> str:
     temp=getUserInfo(userId)
     temp['_id']=userId
@@ -127,3 +120,12 @@ def downVoteUser(postId: str, userID: str, isUpVote: bool):
                     }
                 }
             })
+def create_comment(userID: str, postID: str):
+    cmd=mongodb.posts.find({"_id:":ObjectId(postID)})
+    post=0
+    for i in cmd:
+        post=i
+def create_comment(postID: str):
+    cmd=mongodb.posts.find({"_id": ObjectId(postID)})
+    post=0
+create_comment(None,'638ae63335e7efcac19700d1')

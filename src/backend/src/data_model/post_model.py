@@ -28,7 +28,7 @@ class PostBase(BaseModel):
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
 
-from user_model import VotingUser, UserBase
+from user_model import VotingUser
 
 # This model plays a role as a model in the architecture
 class CommentDB(BaseModel):
@@ -53,6 +53,7 @@ class Comments(CommentDB):
 class ShortPost(PostBase):
     view: int = Field(default=0)
     time_created: datetime.datetime
+    content: str = Field(default="")
     tags: list[str] = Field(default=list[str]())
     up_vote: int = Field(default=0)
     down_vote: int = Field(default=0)
@@ -61,7 +62,6 @@ class ShortPost(PostBase):
 # This model plays a role as a view in the architecture
 class FullPost(ShortPost):
     user_id: str
-    content: str = Field(default= str)
     avatar: str = Field(default= None)
     list_of_user_upvote_downvote: list[VotingUser] = Field(default=list[VotingUser]())
 

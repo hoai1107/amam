@@ -23,7 +23,6 @@ async def get_post(
     ):
     try:
         current_post = mongodb.posts.find_one({"_id":ObjectId(post_id)})
-        current_post["num_comments"] = len(current_post["comments"])
         post_info_model = FullPost(**(current_post))
     except:
         return Response(status_code= status.HTTP_400_BAD_REQUEST)
@@ -76,7 +75,7 @@ async def get_posts_on_homepage(
         count = mongodb.posts.count_documents(filter={"tags": {"$in": filter}})
     res = list[ShortPost]()
     for doc in list_of_full_posts:
-        res.append(ShortPost(num_comments=len(doc["comments"]),**doc))
+        res.append(ShortPost(**doc))
     if order_by_option.value == OrderByOption.comment:
         res.sort(key= lambda x: x.num_comments, reverse=True)
     elif order_by_option.value ==  OrderByOption.view:
@@ -166,7 +165,7 @@ async def get_searched_posts(
             })
     res = list[ShortPost]()
     for doc in list_of_full_posts:
-        res.append(ShortPost(num_comments=len(doc["comments"]),**doc))
+        res.append(ShortPost(**doc))
     if order_by_option.value == OrderByOption.comment:
         res.sort(key= lambda x: x.num_comments, reverse=True)
     elif order_by_option.value ==  OrderByOption.view:
@@ -186,8 +185,6 @@ async def create_post(post: PostDB):
         return Response(status_code= status.HTTP_400_BAD_REQUEST)    
     return str(current_post.inserted_id)
 
-
-    
-    
-    
-    
+@router.delete("/delete/all")
+async def delete_all_posts():
+    mongodb.posts.delete_many({})

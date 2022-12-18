@@ -1,7 +1,7 @@
 <template>
   <MainContainer>
     <Suspense>
-      <QuestionContent endpoint="all" />
+      <QuestionContent endpoint="search" />
     </Suspense>
   </MainContainer>
 </template>

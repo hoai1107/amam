@@ -24,6 +24,10 @@ const instance = axios.create({
   baseURL: Constansts.BACKEND_URL + "posts",
 });
 
+const props = defineProps({
+  endpoint: String,
+});
+
 const route = useRoute();
 const questions = ref([]);
 
@@ -38,8 +42,11 @@ const totalPages = computed(() => {
 });
 
 watchEffect(async () => {
-  const questionsResponse = await instance.get("/all", {
-    params: { page_index: page.value },
+  const questionsResponse = await instance.get(props.endpoint, {
+    params: {
+      ...route.query,
+      page_index: page.value,
+    },
   });
   questions.value = questionsResponse.data;
 });

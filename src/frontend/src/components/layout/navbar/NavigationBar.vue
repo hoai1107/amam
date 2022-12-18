@@ -4,12 +4,13 @@
       class="w-[1272px] h-full grid grid-cols-12 gap-x-6 items-center m-auto"
     >
       <div class="col-span-2 border-black">
-        <img
-          class="object-center object-none"
-          src="@/assets/img/logo-sm.png"
-          alt="logo"
-        />
-        <div></div>
+        <router-link :to="{ name: 'home' }">
+          <img
+            class="object-center object-none"
+            src="@/assets/img/logo-sm.png"
+            alt="logo"
+          />
+        </router-link>
       </div>
       <div class="col-span-7">
         <SearchBar />

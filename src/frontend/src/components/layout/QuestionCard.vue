@@ -11,9 +11,7 @@
       </div>
     </div>
     <p class="text-base mb-4">
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta facilis
-      vitae aperiam, porro quae ducimus architecto! Saepe optio eligendi eum,
-      cumque expedita dolorem omnis iste.
+      {{ question.content }}
     </p>
     <div class="flex flex-row">
       <div class="flex flex-row gap-8">

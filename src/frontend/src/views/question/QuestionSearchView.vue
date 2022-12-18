@@ -1,12 +1,9 @@
 <template>
-  <div>Question Search</div>
-  <div>Search keyword: {{ props.keyword }}</div>
+  <QuestionSearch />
 </template>
 
 <script setup>
-const props = defineProps({
-  keyword: String,
-});
+import QuestionSearch from "@/components/layout/views/QuestionSearch/QuestionSearch.vue";
 </script>
 
 <style lang="scss" scoped></style>

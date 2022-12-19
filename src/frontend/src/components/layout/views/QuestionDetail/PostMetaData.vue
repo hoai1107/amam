@@ -18,7 +18,7 @@
 
       <!--Time, View-->
       <div class="flex flex-row gap-3 text-gray-400">
-        <div>{{ props.hoursFromLastEdit }} hours ago</div>
+        <div>{{ props.timeInterval }}</div>
         <div>{{ props.views }} views</div>
       </div>
     </div>
@@ -27,7 +27,7 @@
 
 <script setup>
 const props = defineProps({
-  hoursFromLastEdit: Number,
+  timeInterval: String,
   views: Number,
 });
 </script>

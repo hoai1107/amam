@@ -6,7 +6,10 @@
     <SvgIcon size="32" type="mdi" :path="mdiDotsVertical"></SvgIcon>
   </div>
   <!--TODO: Calculate how from last edit-->
-  <PostMetaData :hours-from-last-edit="2" :views="content.view"></PostMetaData>
+  <PostMetaData
+    :time-interval="calculateTimeInterval()"
+    :views="content.view"
+  ></PostMetaData>
   <div class="flex gap-2 mb-4 mt-4">
     <div v-for="(tag, index) in content.tags" :key="index">
       <Tag :name="tag" />
@@ -40,6 +43,7 @@
 <script setup>
 import Tag from "@/components/ui/Tag.vue";
 import PostMetaData from "./PostMetaData.vue";
+import { DateTime } from "luxon";
 import {
   mdiArrowUpBoldOutline,
   mdiArrowDownBoldOutline,
@@ -52,6 +56,25 @@ import {
 import SvgIcon from "@jamescoyle/vue-icon";
 
 const props = defineProps(["content"]);
+
+function calculateTimeInterval() {
+  const dateNow = DateTime.now();
+  const dateCreated = DateTime.fromISO(props.content.time_created);
+
+  const diff = dateNow
+    .diff(dateCreated, ["years", "months", "days", "hours", "minutes"])
+    .toObject();
+
+  for (const measurement in diff) {
+    const val = Math.floor(diff[measurement]);
+
+    if (val !== 0) {
+      return `${val} ${measurement} ago`;
+    }
+  }
+
+  return "Just a second ago";
+}
 </script>
 
 <style lang="scss" scoped></style>

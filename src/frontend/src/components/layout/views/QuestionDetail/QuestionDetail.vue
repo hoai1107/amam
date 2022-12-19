@@ -18,8 +18,6 @@ const response = await axios.get(
   Constansts.BACKEND_URL + `posts/${route.params.id}`
 );
 content.value = response.data;
-
-console.log(response);
 </script>
 
 <style lang="scss" scoped></style>

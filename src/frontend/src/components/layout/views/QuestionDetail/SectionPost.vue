@@ -7,7 +7,7 @@
   </div>
   <!--TODO: Calculate how from last edit-->
   <PostMetaData
-    :time-interval="calculateTimeInterval()"
+    :time-interval="timeInterval"
     :views="content.view"
   ></PostMetaData>
   <div class="flex gap-2 mb-4 mt-4">
@@ -54,10 +54,10 @@ import {
   mdiDotsVertical,
 } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
+import { computed } from "vue";
 
 const props = defineProps(["content"]);
-
-function calculateTimeInterval() {
+const timeInterval = computed(() => {
   const dateNow = DateTime.now();
   const dateCreated = DateTime.fromISO(props.content.time_created);
 
@@ -74,7 +74,7 @@ function calculateTimeInterval() {
   }
 
   return "Just a second ago";
-}
+});
 </script>
 
 <style lang="scss" scoped></style>

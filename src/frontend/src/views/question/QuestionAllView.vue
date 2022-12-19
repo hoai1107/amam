@@ -1,13 +1,9 @@
 <template>
-  <div>All Questions</div>
-  <div>Query: {{ props }}</div>
+  <QuestionAll />
 </template>
 
 <script setup>
-const props = defineProps({
-  name: String,
-  author: String,
-});
+import QuestionAll from "@/components/layout/views/QuestionAll/QuestionAll.vue";
 </script>
 
 <style lang="scss" scoped></style>

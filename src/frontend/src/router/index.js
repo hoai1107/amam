@@ -42,6 +42,9 @@ const questionsRoutes = [
   {
     path: "/questions/categories/:category",
     name: "questions.category",
+    // redirect: (to) => {
+    //   return { name: "questions", query: { category: to.params.category } };
+    // },
     component: () => import("@/views/question/QuestionCategoryView.vue"),
     props: (route) => ({ category: route.params.category }),
   },

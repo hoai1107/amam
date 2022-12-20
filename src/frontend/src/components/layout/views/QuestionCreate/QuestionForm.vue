@@ -62,6 +62,7 @@ import CheckBox from "@/components/ui/CheckBox.vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiCheckBold } from "@mdi/js";
+import axios from "axios";
 
 import { ref } from "vue";
 
@@ -72,9 +73,16 @@ const content = ref();
 const categories = ref([]);
 
 function submitQuestion() {
-  console.log(title.value);
-  console.log(content.value);
-  console.log(categories.value);
+  const instance = axios.create({
+    baseURL: Constants.BACKEND_URL + "posts",
+  });
+
+  instance.post("/create", {
+    user_id: "not_yet_implemented",
+    title: title.value,
+    content: content.value,
+    tags: categories.value,
+  });
 }
 </script>
 

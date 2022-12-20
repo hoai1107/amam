@@ -2,23 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Union
 from fastapi import Path
 from bson.objectid import ObjectId
-
-class PyObjectId(ObjectId):
-    """ Custom Type for reading MongoDB IDs """
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid object_id")
-        return ObjectId(v)
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
-
+from post_model import PostBase, PyObjectId
 
 # This is a base unit model just holding small enough information
 class UserBase(BaseModel):
@@ -28,11 +12,9 @@ class UserBase(BaseModel):
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
 
-# This is extended from the base model, used for holding information of user upvoting or downvoting
-class VotingUser(UserBase):
+class Voting(BaseModel):
+    id: str
     upvote_downvote: str 
-
-from post_model import PostBase
 
 # This is the main model of user holding full information of that user
 class User(UserBase):
@@ -40,6 +22,9 @@ class User(UserBase):
     email: str
     avatar: str = Field(default=None)
     list_of_user_question: list[PostBase] = Field(default=list[PostBase]())
+    list_of_post_voted: list[Voting] = Field(default= list[Voting]())
+    list_of_comment_voted: list[Voting] = Field(default=list[Voting]())
+    list_of_user_comments_id: list[str] = Field(default=list[str]())
     number_of_answer: int = 0
     list_of_followed: list[UserBase] = Field(default=list[UserBase]())
     bookmark: list[PostBase] = Field(default=list[PostBase]())
@@ -51,6 +36,9 @@ class UserDB(BaseModel):
     email: str
     avatar: str = Field(default=None)
     list_of_user_question: list[PostBase] = Field(default=list[PostBase]())
+    list_of_post_voted: list[Voting] = Field(default= list[Voting]())
+    list_of_comment_voted: list[Voting] = Field(default=list[Voting]())
+    list_of_user_comments_id: list[str] = Field(default=list[str]())
     number_of_answer: int = 0
     list_of_followed: list[UserBase] = Field(default=list[UserBase]())
     bookmark: list[PostBase] = Field(default=list[PostBase]())

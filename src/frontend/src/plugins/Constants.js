@@ -1,5 +1,35 @@
 const BACKEND_URL = "http://localhost:8000/";
+const CATEGORIES = [
+  "Books",
+  "Business",
+  "Cooking",
+  "Design",
+  "Economics",
+  "Education",
+  "Fashion & Style",
+  "Finance",
+  "Fine Art",
+  "Food",
+  "Health",
+  "History",
+  "Journalism",
+  "Literature",
+  "Marketing",
+  "Mathematics",
+  "Movies",
+  "Music",
+  "Philosophy",
+  "Politics",
+  "Psychology",
+  "Science",
+  "Sports",
+  "Technology",
+  "Travel",
+  "Writing",
+  "Others",
+];
 
 export default {
   BACKEND_URL: BACKEND_URL,
+  CATEGORIES: CATEGORIES,
 };

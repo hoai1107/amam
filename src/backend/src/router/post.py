@@ -5,7 +5,7 @@ sys.path.insert(0,os.path.join(Path(__file__).parents[1],"database_connection"))
 sys.path.insert(0,os.path.join(Path(__file__).parents[1],"data_model"))
 sys.path.insert(0,os.path.join(Path(__file__).parents[1],""))
 from db_connection import mongodb
-from post_model import FullPost, PostDB, ShortPost, ObjectId, SearchFilter, OrderByOption
+from post_model import Posts, PostDB, ObjectId, SearchFilter, OrderByOption
 from constant import pagination_number
 from dependencies import search_query_processing
 
@@ -17,13 +17,13 @@ router = APIRouter(
 # This is to get all information related to a specific post
 # Remember to add the query to retrieve the avatar from the userid gotten from the db 
 # This lateness is due to the lack of user model on Mongo DB
-@router.get("/{post_id}/", response_model=FullPost)
+@router.get("/{post_id}/", response_model=Posts)
 async def get_post(
         post_id: str = Path(title="The ID to get the post detailed information")
     ):
     try:
         current_post = mongodb.posts.find_one({"_id":ObjectId(post_id)})
-        post_info_model = FullPost(**(current_post))
+        post_info_model = Posts (**(current_post))
     except:
         return Response(status_code= status.HTTP_400_BAD_REQUEST)
     return post_info_model
@@ -32,10 +32,10 @@ async def get_post(
 async def get_posts_on_homepage(
         page_index : int = Query(title="The page index in the homepage", default=1),
         order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default),
-        filter: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
+        category: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
     ):
     count = 0 
-    if filter == ["all"]:
+    if category == ["all"]:
         list_of_full_posts = mongodb.posts.aggregate([
             {"$sort":
                     {
@@ -56,7 +56,7 @@ async def get_posts_on_homepage(
                     {
                         "tags":
                             {
-                                "$in": filter
+                                "$in": category
                             }
                     }
             },
@@ -72,28 +72,28 @@ async def get_posts_on_homepage(
                 "$limit": pagination_number
             }
         ])
-        count = mongodb.posts.count_documents(filter={"tags": {"$in": filter}})
-    res = list[ShortPost]()
+        count = mongodb.posts.count_documents(filter={"tags": {"$in": category}})
+    res = list[Posts]()
     for doc in list_of_full_posts:
-        res.append(ShortPost(**doc))
+        res.append(Posts(**doc))
     if order_by_option.value == OrderByOption.comment:
         res.sort(key= lambda x: x.num_comments, reverse=True)
     elif order_by_option.value ==  OrderByOption.view:
         res.sort(key= lambda x: x.view, reverse= True)
     elif order_by_option.value == OrderByOption.vote:
-        res.sort(key= lambda x: x.up_vote + x.down_vote, reverse= True)
+        res.sort(key= lambda x: x.upvote + x.downvote, reverse= True)
     return {"data":res, "total": count}
 
 # this is to search the post
 @router.get("/search")
 async def get_searched_posts(
         query_title_pattern: str = Depends(search_query_processing),
-        filter: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all]),
+        category: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all]),
         page_index : int = Query(title="The page index in the homepage", default=1),
         order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default)
     ):
     count = 0
-    if filter == ["all"]:
+    if category == ["all"]:
         list_of_full_posts = mongodb.posts.aggregate([
             {"$match":
                 {"title":
@@ -128,7 +128,7 @@ async def get_searched_posts(
                 {
                     "tags":
                         {
-                            "$in": filter
+                            "$in": category
                         },
                     "title":
                         { 
@@ -155,7 +155,7 @@ async def get_searched_posts(
             {
                 "tags":
                     {
-                        "$in": filter
+                        "$in": category
                     },
                 "title":
                     {
@@ -163,15 +163,15 @@ async def get_searched_posts(
                         "$options":"i"
                     }
             })
-    res = list[ShortPost]()
+    res = list[Posts]()
     for doc in list_of_full_posts:
-        res.append(ShortPost(**doc))
+        res.append(Posts(**doc))
     if order_by_option.value == OrderByOption.comment:
         res.sort(key= lambda x: x.num_comments, reverse=True)
     elif order_by_option.value ==  OrderByOption.view:
         res.sort(key= lambda x: x.view, reverse= True)
     elif order_by_option.value == OrderByOption.vote:
-        res.sort(key= lambda x: x.up_vote + x.down_vote, reverse= True)
+        res.sort(key= lambda x: x.upvote + x.downvote, reverse= True)
     return {"data":res, "total": count}
 
 # This is to create the a post information (and get the ID of the post)

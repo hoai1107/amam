@@ -14,13 +14,19 @@
         <p class="text-3xl mb-4">Login</p>
         <p class="text-base mb-9">
           Don’t have an account?
-          <a href="#" class="text-blue hover:text-blue-dark">Sign up</a>
+          <router-link :to="{ name: 'signup' }"
+            ><a href="#" class="text-blue hover:text-blue-dark"
+              >Sign up</a
+            ></router-link
+          >
         </p>
         <LoginForm></LoginForm>
         <p class="mt-6">
           or
-          <a href="#" class="text-blue hover:text-blue-dark"
-            >continue as guest</a
+          <router-link :to="{ name: 'home' }"
+            ><a href="#" class="text-blue hover:text-blue-dark"
+              >continue as guest</a
+            ></router-link
           >
         </p>
       </div>

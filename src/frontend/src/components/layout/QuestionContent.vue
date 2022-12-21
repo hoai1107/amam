@@ -20,14 +20,14 @@
 
 <script setup>
 import QuestionCard from "@/components/layout/QuestionCard.vue";
-import Constansts from "@/plugins/Constants.js";
+import Constants from "@/plugins/Constants.js";
 import Pagination from "@/components/layout/pagination/Pagination.vue";
 import { useRoute } from "vue-router";
 import { ref, computed, watchEffect } from "vue";
 
 import axios from "axios";
 const instance = axios.create({
-  baseURL: Constansts.BACKEND_URL + "posts",
+  baseURL: Constants.BACKEND_URL + "posts",
 });
 
 const props = defineProps({

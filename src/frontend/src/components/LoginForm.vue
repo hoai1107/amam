@@ -1,11 +1,3 @@
-<script setup>
-import ButtonItem from "@/components/ui/ButtonItem.vue";
-import CheckBox from "@/components/ui/CheckBox.vue";
-const props = defineProps({
-  wrong: { type: Boolean, default: true },
-});
-</script>
-
 <template>
   <div class="container flex flex-col">
     <div class="input-container flex flex-col content-stretch">
@@ -23,6 +15,7 @@ const props = defineProps({
       Please verify email before logging in
     </p>
     <ButtonItem
+      @click="onSubmit"
       style="margin-top: 10px"
       type="primary"
       state="normal"
@@ -30,6 +23,23 @@ const props = defineProps({
     ></ButtonItem>
   </div>
 </template>
+
+<script setup>
+import ButtonItem from "@/components/ui/ButtonItem.vue";
+import CheckBox from "@/components/ui/CheckBox.vue";
+import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+const email = ref();
+const password = ref();
+
+async function onSubmit() {
+  console.log(authStore.isAuthenticated());
+  await authStore.loginUser(email.value, password.value);
+}
+</script>
+
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
 

@@ -1,11 +1,3 @@
-<script setup>
-import ButtonItem from "@/components/ui/ButtonItem.vue";
-
-function signUp() {
-  console.log("Sign Up");
-}
-</script>
-
 <template>
   <div class="container flex flex-col text-base">
     <div class="input-container">
@@ -25,10 +17,26 @@ function signUp() {
       type="primary"
       state="normal"
       text="Sign up"
-      @button-click="signUp"
+      @click="signUp"
     ></ButtonItem>
   </div>
 </template>
+
+<script setup>
+import ButtonItem from "@/components/ui/ButtonItem.vue";
+import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+const name = ref();
+const email = ref();
+const password = ref();
+
+async function signUp() {
+  await authStore.registerUser(name.value, email.value, password.value);
+}
+</script>
+
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
 

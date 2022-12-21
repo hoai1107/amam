@@ -31,19 +31,27 @@ class PostBase(BaseModel):
 # This model plays a role as a model in the architecture
 class CommentDB(BaseModel):
     post_id: str
-    is_root_comment: bool = Field(default= True)
+    root_comment_id: str = Field(default= "root")
     content: str
     upvote: int = Field(default=0)
     downvote: int = Field(default=0)
     list_child_comment_id: list[str] = Field(default= list[str]())
 
 # This model plays a role as a view in the architecture
-class Comments(CommentDB):
+class CommentBase(BaseModel):
     id: Union[PyObjectId,None] = Field(default_factory=PyObjectId,alias="_id")
+    post_id: str
+    root_comment_id: str = Field(default= "root")
+    content: str
+    upvote: int = Field(default=0)
+    downvote: int = Field(default=0)
     class Config:
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+
+class Comments(CommentBase):
+    list_child_comment: list[CommentBase] = Field(default= list[CommentBase]())
 
 # This model plays a role as a view in the architecture
 class Posts(PostBase):

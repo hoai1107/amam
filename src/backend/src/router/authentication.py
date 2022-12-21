@@ -15,21 +15,6 @@ router = APIRouter(
     tags= ["Authentication"]
 )
 
-#This is for signing up
-# This is for the future need (can be changed)
-@router.post("/sign-up")
-async def sign_up(account: Account = Depends()):
-    email = account.email
-    password = account.password
-    user_name= account.user_name
-    created_user =  User(user_name=user_name, email=email)
-    try:
-        auth.create_user_with_email_and_password(email=email,password=password)
-        created_user_id = await create_user(created_user)
-    except:
-        return HTTPException(status_code= 400, detail={"message":"There is a problem in the process"})
-    return {"user_id": created_user_id, "email_verification_link": auth_admin.generate_email_verification_link(email=email)}
-
 async def send_verification_to_mail(email_receiver: str):
     email_sender = 'quocthogminhqtm@gmail.com'
     email_password = "qjikpcbndhxofrvr"
@@ -49,6 +34,21 @@ Please access this link to authenticate the account: {}
         smtp.login(email_sender,email_password)
         smtp.sendmail(email_sender,email_receiver, em.as_string())
 
+#This is for signing up
+# This is for the future need (can be changed)
+@router.post("/sign-up")
+async def sign_up(account: Account = Depends()):
+    email = account.email
+    password = account.password
+    user_name= account.user_name
+    created_user =  User(user_name=user_name, email=email)
+    try:
+        auth.create_user_with_email_and_password(email=email,password=password)
+        created_user_id = await create_user(created_user)
+        await send_verification_to_mail(email_receiver=email)
+    except:
+        return HTTPException(status_code= 400, detail={"message":"There is a problem in the process"})
+    return {"user_id": created_user_id}
 
 # This is to create the token
 # email = user_name is due to the conflict between the specification and our app

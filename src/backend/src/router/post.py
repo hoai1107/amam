@@ -5,7 +5,7 @@ sys.path.insert(0,os.path.join(Path(__file__).parents[1],"database_connection"))
 sys.path.insert(0,os.path.join(Path(__file__).parents[1],"data_model"))
 sys.path.insert(0,os.path.join(Path(__file__).parents[1],""))
 from db_connection import mongodb
-from post_model import Posts, PostDB, ObjectId, SearchFilter, OrderByOption
+from post_model import Posts, PostDB, ObjectId, SearchFilter, OrderByOption, Comments, CommentBase
 from constant import pagination_number
 from dependencies import search_query_processing
 
@@ -17,16 +17,23 @@ router = APIRouter(
 # This is to get all information related to a specific post
 # Remember to add the query to retrieve the avatar from the userid gotten from the db 
 # This lateness is due to the lack of user model on Mongo DB
-@router.get("/{post_id}/", response_model=Posts)
+@router.get("/{post_id}/")
 async def get_post(
         post_id: str = Path(title="The ID to get the post detailed information")
     ):
     try:
         current_post = mongodb.posts.find_one({"_id":ObjectId(post_id)})
         post_info_model = Posts (**(current_post))
+        current_comments= mongodb.comments.find({"post_id": post_id, "root_comment_id": "root"})
+        comment_list = list[Comments]()
+        for cmt in current_comments:
+            commentbase_list = list[CommentBase]()
+            for child_cmt_id in cmt["list_child_comment_id"]:
+                commentbase_list.append(CommentBase(**mongodb.comments.find_one({"_id": child_cmt_id}))) 
+            comment_list.append(Comments(**cmt, list_child_comment= commentbase_list))
     except:
         return Response(status_code= status.HTTP_400_BAD_REQUEST)
-    return post_info_model
+    return {"Post Section":post_info_model, "Comment Section": comment_list}
 
 @router.get("/all")
 async def get_posts_on_homepage(
@@ -181,6 +188,12 @@ async def create_post(post: PostDB):
         post_dict = post.dict()
         post_dict["time_created"] = str(post_dict["time_created"])
         current_post = mongodb["posts"].insert_one(post_dict)
+        mongodb.users.update_one({"_id": post.user_id},{"$addToSet":{"list_of_user_question":{
+                    "id": str(current_post.inserted_id),
+                    "title": post.title
+                }
+            }
+        })
     except:
         return Response(status_code= status.HTTP_400_BAD_REQUEST)    
     return str(current_post.inserted_id)
@@ -188,3 +201,7 @@ async def create_post(post: PostDB):
 @router.delete("/delete/all")
 async def delete_all_posts():
     mongodb.posts.delete_many({})
+
+@router.get("/test_performance")
+async def test_performance():
+    return str(mongodb.comments.find({"post_id": "63a0893d6014c863c0f204c3"}).explain())

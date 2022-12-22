@@ -27,7 +27,12 @@ export const useAuthStore = defineStore("auth", () => {
     console.log(email);
     console.log(password);
     console.log(name);
-    router.push("/");
+
+    // Fake response model
+    return {
+      code: 200,
+      message: "Login successfully",
+    };
   }
 
   function isAuthenticated() {

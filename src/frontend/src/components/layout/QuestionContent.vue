@@ -1,6 +1,13 @@
 <template>
   <div>
     <div class="text-xl font-semibold mb-3">{{ result_heading }}</div>
+    <div class="w-fit border-2 border-solid rounded px-6 py-3 mb-6">
+      <select v-model="sortCriteria">
+        <option>Newest</option>
+        <option>Most View</option>
+        <option>Most Vote</option>
+      </select>
+    </div>
     <div class="flex flex-col gap-y-6">
       <div v-for="question in questions.data" :key="question._id">
         <router-link
@@ -36,8 +43,7 @@ const props = defineProps({
 
 const route = useRoute();
 const questions = ref([]);
-
-console.log(route.params);
+const sortCriteria = ref("Newest");
 
 const page = computed(() => {
   return route.query.page_index ? Number(route.query.page_index) : 1;
@@ -80,4 +86,8 @@ watchEffect(async () => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+select:focus {
+  outline: none;
+}
+</style>

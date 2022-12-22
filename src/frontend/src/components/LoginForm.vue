@@ -9,9 +9,9 @@
       <input type="password" class="input-form" v-model="password" />
     </div>
     <CheckBox text="Remember me"></CheckBox>
-    <p class="warning" v-if="false">Wrong account or password</p>
-    <p class="warning" v-if="false">Your email hasn't verified yet!</p>
-    <p class="warning" style="color: var(--blue)" v-if="false">
+    <p class="warning" v-if="wrongCredentials">Wrong account or password</p>
+    <p class="warning" v-if="notVerify">Your email hasn't verified yet!</p>
+    <p class="warning" style="color: var(--blue)" v-if="afterSignup">
       Please verify email before logging in
     </p>
     <ButtonItem
@@ -29,10 +29,30 @@ import ButtonItem from "@/components/ui/ButtonItem.vue";
 import CheckBox from "@/components/ui/CheckBox.vue";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { useRoute } from "vue-router";
 
 const authStore = useAuthStore();
+const route = useRoute();
 const email = ref();
 const password = ref();
+
+const wrongCredentials = ref(false);
+const notVerify = ref(false);
+const afterSignup = ref(false);
+
+switch (route.query.msg) {
+  case "wrongCredentials":
+    wrongCredentials.value = true;
+    break;
+  case "notVerify":
+    notVerify.value = true;
+    break;
+  case "afterSignup":
+    afterSignup.value = true;
+    break;
+  default:
+    break;
+}
 
 async function onSubmit() {
   console.log(authStore.isAuthenticated());

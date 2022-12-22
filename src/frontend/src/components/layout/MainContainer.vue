@@ -8,15 +8,7 @@
         </div>
 
         <div class="col-span-7">
-          <slot>
-            <div class="text-xl font-semibold mb-3">All Questions</div>
-            <div class="flex flex-col gap-y-6">
-              <QuestionCard />
-              <QuestionCard />
-              <QuestionCard />
-              <QuestionCard />
-            </div>
-          </slot>
+          <slot></slot>
         </div>
 
         <div class="col-span-3">

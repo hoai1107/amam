@@ -26,14 +26,24 @@
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 const authStore = useAuthStore();
+const router = useRouter();
 const name = ref();
 const email = ref();
 const password = ref();
 
 async function signUp() {
-  await authStore.registerUser(name.value, email.value, password.value);
+  const response = await authStore.registerUser(
+    name.value,
+    email.value,
+    password.value
+  );
+
+  if (response.code === 200) {
+    router.push({ name: "login", query: { msg: "afterSignup" } });
+  }
 }
 </script>
 

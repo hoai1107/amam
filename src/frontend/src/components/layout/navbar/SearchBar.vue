@@ -1,6 +1,20 @@
 <script setup>
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiMagnify } from "@mdi/js";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const searchText = ref("");
+
+function searchQuestion() {
+  router.push({
+    name: "questions.search",
+    query: {
+      query_title: searchText.value,
+    },
+  });
+}
 </script>
 
 <template>
@@ -9,25 +23,19 @@ import { mdiMagnify } from "@mdi/js";
   >
     <input
       class="search-bar w-full shadow-sm bg-white rounded border-2 border-black"
-      v-model="message"
+      v-model="searchText"
+      @keyup.enter="searchQuestion"
       placeholder="Search a question"
     />
-    <div class="dropdown-icon">
-      <svg-icon type="mdi" :path="mdiMagnify"></svg-icon>
-    </div>
+    <button type="submit" @click="searchQuestion">
+      <div class="dropdown-icon">
+        <svg-icon type="mdi" :path="mdiMagnify"></svg-icon>
+      </div>
+    </button>
   </div>
 </template>
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
-
-.container {
-  // position: relative;
-
-  // flex: none;
-  // order: 2;
-  // align-self: stretch;
-  // flex-grow: 0;
-}
 
 .search-bar {
   padding: 10px 48px 10px 24px;

@@ -7,12 +7,9 @@
           <SidebarCategory></SidebarCategory>
         </div>
 
-        <div class="col-span-7">
-          <slot></slot>
-        </div>
-
-        <div class="col-span-3">
-          <SidebarHistory></SidebarHistory>
+        <div class="col-span-10">
+          <div class="text-xl font-semibold mb-3">Ask a question</div>
+          <QuestionForm></QuestionForm>
         </div>
       </div>
     </div>
@@ -20,10 +17,9 @@
 </template>
 
 <script setup>
-import QuestionCard from "@/components/layout/QuestionCard.vue";
 import SidebarCategory from "@/components/layout/sidebar/SidebarCategory.vue";
-import SidebarHistory from "@/components/layout/sidebar/SidebarHistory.vue";
 import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
+import QuestionForm from "./QuestionForm.vue";
 </script>
 
 <style lang="scss" scoped></style>

@@ -4,18 +4,24 @@
       class="w-[1272px] h-full grid grid-cols-12 gap-x-6 items-center m-auto"
     >
       <div class="col-span-2 border-black">
-        <img
-          class="object-center object-none"
-          src="@/assets/img/logo-sm.png"
-          alt="logo"
-        />
-        <div></div>
+        <router-link :to="{ name: 'home' }">
+          <img
+            class="object-center object-none"
+            src="@/assets/img/logo-sm.png"
+            alt="logo"
+          />
+        </router-link>
       </div>
       <div class="col-span-7">
         <SearchBar />
       </div>
       <div class="col-span-3 h-full">
-        <ProfileItem />
+        <template v-if="store.isAuthenticated()">
+          <ProfileItem />
+        </template>
+        <template v-else>
+          <ProfileItemAnonymous />
+        </template>
       </div>
     </div>
   </div>
@@ -24,6 +30,10 @@
 <script setup>
 import SearchBar from "@/components/layout/navbar/SearchBar.vue";
 import ProfileItem from "@/components/layout/navbar/ProfileItem.vue";
+import ProfileItemAnonymous from "@/components/layout/navbar/ProfileItemAnonymous.vue";
+import { useAuthStore } from "@/stores/auth";
+
+const store = useAuthStore();
 </script>
 
 <style lang="scss" scoped></style>

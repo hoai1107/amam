@@ -21,11 +21,11 @@
   <div class="flex flex-row mt-4 mb-6">
     <div class="flex flex-row gap-8">
       <div class="flex flex-row">
-        <div class="mr-2 text-base">{{ content.up_vote }}</div>
+        <div class="mr-2 text-base">{{ content.upvote }}</div>
         <SvgIcon size="24" type="mdi" :path="mdiArrowUpBoldOutline"></SvgIcon>
       </div>
       <div class="flex flex-row">
-        <div class="mr-2 text-base">{{ content.down_vote }}</div>
+        <div class="mr-2 text-base">{{ content.downvote }}</div>
         <SvgIcon size="24" type="mdi" :path="mdiArrowDownBoldOutline"></SvgIcon>
       </div>
     </div>

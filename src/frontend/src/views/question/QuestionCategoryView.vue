@@ -1,12 +1,9 @@
 <template>
-  <div>Question in Category</div>
-  <div>Category: {{ props.category }}</div>
+  <QuestionCategory />
 </template>
 
 <script setup>
-const props = defineProps({
-  category: String,
-});
+import QuestionCategory from "@/components/layout/views/QuestionCategory/QuestionCategory.vue";
 </script>
 
 <style lang="scss" scoped></style>

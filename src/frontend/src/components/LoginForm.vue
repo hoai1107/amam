@@ -1,11 +1,3 @@
-<script setup>
-import ButtonItem from "@/components/ui/ButtonItem.vue";
-import CheckBox from "@/components/ui/CheckBox.vue";
-const props = defineProps({
-  wrong: { type: Boolean, default: true },
-});
-</script>
-
 <template>
   <div class="container flex flex-col">
     <div class="input-container flex flex-col content-stretch">
@@ -17,12 +9,13 @@ const props = defineProps({
       <input type="password" class="input-form" v-model="password" />
     </div>
     <CheckBox text="Remember me"></CheckBox>
-    <p class="warning" v-if="false">Wrong account or password</p>
-    <p class="warning" v-if="false">Your email hasn't verified yet!</p>
-    <p class="warning" style="color: var(--blue)" v-if="false">
+    <p class="warning" v-if="wrongCredentials">Wrong account or password</p>
+    <p class="warning" v-if="notVerify">Your email hasn't verified yet!</p>
+    <p class="warning" style="color: var(--blue)" v-if="afterSignup">
       Please verify email before logging in
     </p>
     <ButtonItem
+      @click="onSubmit"
       style="margin-top: 10px"
       type="primary"
       state="normal"
@@ -30,6 +23,43 @@ const props = defineProps({
     ></ButtonItem>
   </div>
 </template>
+
+<script setup>
+import ButtonItem from "@/components/ui/ButtonItem.vue";
+import CheckBox from "@/components/ui/CheckBox.vue";
+import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+import { useRoute } from "vue-router";
+
+const authStore = useAuthStore();
+const route = useRoute();
+const email = ref();
+const password = ref();
+
+const wrongCredentials = ref(false);
+const notVerify = ref(false);
+const afterSignup = ref(false);
+
+switch (route.query.msg) {
+  case "wrongCredentials":
+    wrongCredentials.value = true;
+    break;
+  case "notVerify":
+    notVerify.value = true;
+    break;
+  case "afterSignup":
+    afterSignup.value = true;
+    break;
+  default:
+    break;
+}
+
+async function onSubmit() {
+  console.log(authStore.isAuthenticated());
+  await authStore.loginUser(email.value, password.value);
+}
+</script>
+
 <style lang="scss" scoped>
 @import "@/assets/styles/base.scss";
 

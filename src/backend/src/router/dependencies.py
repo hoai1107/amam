@@ -8,7 +8,19 @@ from constant import shard_number
 import random
 from google.cloud import firestore
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl= "Authentication")
+"""
+In fact, tokenUrl merely does have a meaning for the fastapi documentation
+For example you have async def test_authentication(token: str = Depends(oauth2_scheme)):
+pass
+@router.get("/test_authentication")
+async def test(token: str = Depends(test_authentication)):
+    return token 
+In the documentation, that we have to click to authorize button. That authorize button use this url to create token for the whole
+endpoints in that documentation
+In fact, we just need to input the token for this and that's it.
+oauth2_scheme is an instance of OAuth2PasswordBearer. Therefore, the above endpoint follows the bearer way for the authentication. 
+"""
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl= "authentication/sign-in")
 
 class Shard(object):
     """

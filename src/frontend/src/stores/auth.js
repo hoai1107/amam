@@ -3,45 +3,59 @@ import Constants from "@/plugins/Constants.js";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import router from "@/router";
+import { useUserStore } from "./user";
 
 const instance = axios.create({
-  baseURL: Constants.BACKEND_URL,
+  baseURL: Constants.BACKEND_URL + "authentication",
 });
 
 export const useAuthStore = defineStore("auth", () => {
-  const user = ref({});
+  const user = useUserStore();
+  const accessToken = ref("");
+  const isLogin = ref(false);
 
   async function loginUser(email, password) {
-    // const response = await instance.post("/sign-in", {
-    //   email: email,
-    //   password: password,
-    // });
+    let data = {
+      username: email,
+      password: password,
+    };
 
-    // // Do something with the response here.
-    // console.log(response.data);
-    console.log(email);
-    console.log(password);
+    let config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    const response = await instance.post("/sign-in", data, config);
+
+    if (response.status === 200) {
+      accessToken.value = response.data.access_token;
+      isLogin.value = true;
+      await user.fetchCurrentUserInfo();
+      // router.push({ name: "home" });
+    } else {
+      router.push({ name: "login", query: { msg: "wrongCredentials" } });
+    }
   }
 
   async function registerUser(name, email, password) {
-    console.log(email);
-    console.log(password);
-    console.log(name);
+    const response = await instance.post("/sign-up", {
+      user_name: name,
+      email: email,
+      password: password,
+    });
 
-    // Fake response model
-    return {
-      code: 200,
-      message: "Login successfully",
-    };
+    return response;
   }
 
   function isAuthenticated() {
-    return !(
-      user.value &&
-      Object.keys(user.value).length === 0 &&
-      Object.getPrototypeOf(user.value) === Object.prototype
-    );
+    return accessToken.value != "";
   }
 
-  return { user, loginUser, registerUser, isAuthenticated };
+  return {
+    accessToken,
+    isLogin,
+    loginUser,
+    registerUser,
+    isAuthenticated,
+  };
 });

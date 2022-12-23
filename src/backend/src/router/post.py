@@ -204,4 +204,10 @@ async def delete_all_posts():
 
 @router.get("/test_performance")
 async def test_performance():
-    return str(mongodb.comments.find({"post_id": "63a0893d6014c863c0f204c3"}).explain())
+    return str(mongodb.comments.find({"post_id": "63a3342822a64b9794026112", "root_comment_id": "root"}).explain())
+
+@router.get("/test/mongo")
+async def test_mongo():
+    data = {"_id": 2}
+    user = mongodb.users.insert_one(data)
+    return user.inserted_id

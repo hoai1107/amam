@@ -7,6 +7,7 @@ from post_model import PostBase, PyObjectId
 # This is a base unit model just holding small enough information
 class UserBase(BaseModel):
     id: Union[PyObjectId,None] = Field(default_factory=PyObjectId,alias="_id")
+    user_id: str
     class Config:
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
@@ -32,6 +33,7 @@ class User(UserBase):
 
 # This plays a role as the model for creating data to the database
 class UserDB(BaseModel):
+    user_id: str
     user_name: str
     email: str
     avatar: str = Field(default=None)

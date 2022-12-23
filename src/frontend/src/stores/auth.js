@@ -31,7 +31,7 @@ export const useAuthStore = defineStore("auth", () => {
       accessToken.value = response.data.access_token;
       isLogin.value = true;
       await user.fetchCurrentUserInfo();
-      // router.push({ name: "home" });
+      router.push({ name: "home" });
     } else {
       router.push({ name: "login", query: { msg: "wrongCredentials" } });
     }

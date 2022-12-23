@@ -12,6 +12,7 @@
       <p>Password</p>
       <input type="password" class="input-form" v-model="password" />
     </div>
+    <p class="warning text-red">Wrong account or password</p>
     <ButtonItem
       class="mt-3"
       type="primary"
@@ -33,6 +34,7 @@ const router = useRouter();
 const name = ref();
 const email = ref();
 const password = ref();
+const errorMessage = ref("");
 
 async function signUp() {
   const response = await authStore.registerUser(
@@ -41,8 +43,11 @@ async function signUp() {
     password.value
   );
 
-  if (response.code === 200) {
+  console.log(response);
+  if (response.status === 200) {
     router.push({ name: "login", query: { msg: "afterSignup" } });
+  } else {
+    errorMessage.value = "Sign up failed.";
   }
 }
 </script>

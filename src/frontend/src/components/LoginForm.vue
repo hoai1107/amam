@@ -12,7 +12,7 @@
     <p class="warning" v-if="wrongCredentials">Wrong account or password</p>
     <p class="warning" v-if="notVerify">Your email hasn't verified yet!</p>
     <p class="warning" style="color: var(--blue)" v-if="afterSignup">
-      Please verify email before logging in
+      Sign up successfully! Please verify email before logging in.
     </p>
     <ButtonItem
       @click="onSubmit"
@@ -55,7 +55,6 @@ switch (route.query.msg) {
 }
 
 async function onSubmit() {
-  console.log(authStore.isAuthenticated());
   await authStore.loginUser(email.value, password.value);
 }
 </script>

@@ -3,6 +3,7 @@ import datetime
 from typing import Union
 from bson.objectid import ObjectId
 from enum import Enum
+import pytz
 
 class PyObjectId(ObjectId):
     """ Custom Type for reading MongoDB IDs """
@@ -32,6 +33,8 @@ class PostBase(BaseModel):
 class CommentDB(BaseModel):
     post_id: str
     root_comment_id: str = Field(default= "root")
+    time_created: datetime.datetime = Field(default= datetime.datetime.now(pytz.UTC))
+    user_id: str
     content: str
     upvote: int = Field(default=0)
     downvote: int = Field(default=0)
@@ -40,6 +43,10 @@ class CommentDB(BaseModel):
 # This model plays a role as a view in the architecture
 class CommentBase(BaseModel):
     id: Union[PyObjectId,None] = Field(default_factory=PyObjectId,alias="_id")
+    time_created: str
+    user_id: str
+    user_name: str
+    user_avatar: str = Field(default=None)
     post_id: str
     root_comment_id: str = Field(default= "root")
     content: str
@@ -57,7 +64,7 @@ class Comments(CommentBase):
 class Posts(PostBase):
     user_id: str = Field(default= None)
     view: int = Field(default=0)
-    time_created: datetime.datetime
+    time_created: str
     content: str = Field(default="")
     tags: list[str] = Field(default=list[str]())
     upvote: int = Field(default=0)
@@ -70,7 +77,7 @@ class PostDB(BaseModel):
     title: str
     content: str = Field(default="")
     view: int = Field(default=0)
-    time_created: datetime.datetime
+    time_created: datetime.datetime = Field(default= datetime.datetime.now(pytz.UTC))
     tags: list[str] = Field(default=list[str]())
     upvote: int = Field(default=0)
     downvote: int = Field(default=0)

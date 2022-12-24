@@ -119,15 +119,15 @@ def downvote_User(postId: str, userID: str = Depends(authentication)):
             
 
 @router.post("/comments/create")
-def create_comment(*,userID: str = Depends(authentication),post_id: str, content: str):
-    cmd=mongodb.posts.find_one({"_id": ObjectId(post_id)})
+def create_comment(*,userID: str = Depends(authentication),comment: CommentDB):
+    cmd=mongodb.posts.find_one({"_id": ObjectId(comment.post_id)})
     if cmd==None:
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
     else:
-        comment = CommentDB(post_id=post_id,content=content,user_id=userID)
+        comment.user_id = userID
         current_comment = mongodb.comments.insert_one(comment.dict())
         mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
-        mongodb.posts.update_one({"_id": ObjectId(post_id)},{"$inc":{"num_comments": 1}})
+        mongodb.posts.update_one({"_id": ObjectId(comment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
 @router.post("/comment/change")
@@ -234,7 +234,7 @@ def downvote_comment(*,userID: str = Depends(authentication), commentID: str):
 
 # Will have a meeting for the input of this endpoint
 @router.post("/comments/reply")
-def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str, post_id: str, content: str):
+def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str,replyComment:CommentDB):
     cmd=mongodb.comments.find_one({"_id": ObjectId(parentCommentID)})
     if cmd is None: 
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
@@ -242,7 +242,8 @@ def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str, 
         root_id = parentCommentID
         if not cmd['root_comment_id']== "root":
             root_id = cmd['root_comment_id']
-        replyComment = CommentDB(user_id=userID,post_id=post_id,content=content,root_comment_id=root_id)
+        replyComment.user_id = userID
+        replyComment.root_comment_id = root_id
         current_comment = mongodb.comments.insert_one(replyComment.dict())
         mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
         mongodb.comments.update_one({"_id": ObjectId(root_id)}, {"$addToSet": {"list_child_comment_id": current_comment.inserted_id}})

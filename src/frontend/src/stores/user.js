@@ -15,11 +15,12 @@ export const useUserStore = defineStore("user", () => {
   async function fetchCurrentUserInfo() {
     const config = {
       headers: {
+        Accept: "application/json",
         Authorization: `Bearer ${auth.accessToken}`,
       },
     };
 
-    const response = await instance.get("/", config);
+    const response = await instance.get("", config);
     console.log(response.data);
     user.value = response.data;
   }

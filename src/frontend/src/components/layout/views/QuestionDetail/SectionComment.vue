@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import CommentForm from "@/components/layout/views/QuestionDetail/CommentForm.vue";
 import CommentItem from "@/components/layout/views/QuestionDetail/CommentItem.vue";
 

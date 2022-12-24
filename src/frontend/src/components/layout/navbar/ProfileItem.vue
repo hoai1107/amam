@@ -2,7 +2,7 @@
   <div class="h-full w-full">
     <div class="flex flex-row justify-between h-12 items-center">
       <!--Noti icon-->
-      <div class="flex items-center" @click="onClick">
+      <div class="flex items-center">
         <SvgIcon size="32" type="mdi" :path="mdiBellOutline"></SvgIcon>
       </div>
 
@@ -68,14 +68,7 @@ import SvgIcon from "@jamescoyle/vue-icon";
 
 import { ref } from "vue";
 
-import { useUserStore } from "@/stores/user";
-
 const showMenu = ref(false);
-// const userStore = useUserStore();
-
-async function onClick() {
-  // await userStore.fetchCurrentUserInfo();
-}
 
 function toggleMenu() {
   showMenu.value = !showMenu.value;

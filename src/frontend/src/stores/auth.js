@@ -25,12 +25,13 @@ export const useAuthStore = defineStore("auth", () => {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };
+
     const response = await instance.post("/sign-in", data, config);
 
     if (response.status === 200) {
       accessToken.value = response.data.access_token;
       isLogin.value = true;
-      await user.fetchCurrentUserInfo();
+      // await user.fetchCurrentUserInfo();
       router.push({ name: "home" });
     } else {
       router.push({ name: "login", query: { msg: "wrongCredentials" } });

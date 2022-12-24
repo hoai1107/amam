@@ -20,7 +20,7 @@ export const useUserStore = defineStore("user", () => {
     };
 
     const response = await instance.get("/", config);
-    console.log(response);
+    console.log(response.data);
     user.value = response.data;
   }
   return { user, fetchCurrentUserInfo };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import Constants from "@/plugins/Constants.js";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import router from "@/router";
 import { useUserStore } from "./user";
 
@@ -10,7 +10,7 @@ const instance = axios.create({
 });
 
 export const useAuthStore = defineStore("auth", () => {
-  const user = useUserStore();
+  const userStore = useUserStore();
   const accessToken = ref("");
   const isLogin = ref(false);
 
@@ -31,7 +31,12 @@ export const useAuthStore = defineStore("auth", () => {
     if (response.status === 200) {
       accessToken.value = response.data.access_token;
       isLogin.value = true;
-      // await user.fetchCurrentUserInfo();
+
+      // Access token cannot be used immediately
+      // Temporary solution is to sleep for 5 seconds
+      await sleep(5000);
+      
+      await userStore.fetchCurrentUserInfo();
       router.push({ name: "home" });
     } else {
       router.push({ name: "login", query: { msg: "wrongCredentials" } });
@@ -52,11 +57,24 @@ export const useAuthStore = defineStore("auth", () => {
     return accessToken.value != "";
   }
 
+  function getAuthHeader() {
+    return {
+      headers: {
+        Authorization: `Bearer ${accessToken.value}`,
+      },
+    };
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
   return {
     accessToken,
     isLogin,
     loginUser,
     registerUser,
     isAuthenticated,
+    getAuthHeader,
   };
 });

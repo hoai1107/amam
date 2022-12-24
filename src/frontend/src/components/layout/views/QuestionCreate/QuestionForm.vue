@@ -65,24 +65,33 @@ import { mdiCheckBold } from "@mdi/js";
 import axios from "axios";
 
 import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
 
 const categoriesNames = Constants.CATEGORIES;
 
 const title = ref();
 const content = ref();
 const categories = ref([]);
+const authStore = useAuthStore();
+
+console.log(authStore.getAuthHeader());
 
 function submitQuestion() {
   const instance = axios.create({
     baseURL: Constants.BACKEND_URL + "posts",
   });
 
-  instance.post("/create", {
-    user_id: "not_yet_implemented",
-    title: title.value,
-    content: content.value,
-    tags: categories.value,
-  });
+  let config = authStore.getAuthHeader();
+
+  instance.post(
+    "/create",
+    {
+      title: title.value,
+      content: content.value,
+      tags: categories.value,
+    },
+    config
+  );
 }
 </script>
 

@@ -4,25 +4,30 @@ import axios from "axios";
 import Constants from "@/plugins/Constants.js";
 import { ref } from "vue";
 
-const instance = axios.create({
-  baseURL: Constants.BACKEND_URL + "users",
-});
+// TODO: Watch for authStore to fetch token
 
 export const useUserStore = defineStore("user", () => {
   const auth = useAuthStore();
   const user = ref();
 
-  async function fetchCurrentUserInfo() {
-    const config = {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${auth.accessToken}`,
-      },
-    };
+  const instance = axios.create({
+    baseURL: Constants.BACKEND_URL + "users",
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
-    const response = await instance.get("", config);
-    console.log(response.data);
+  instance.interceptors.request.use((config) => {
+    if (auth.accessToken) {
+      config.headers["Authorization"] = `Bearer ${auth.accessToken}`;
+    }
+    return config;
+  });
+
+  async function fetchCurrentUserInfo() {
+    const response = await instance.get("");
     user.value = response.data;
+    console.log(response);
   }
   return { user, fetchCurrentUserInfo };
 });

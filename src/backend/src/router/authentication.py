@@ -47,7 +47,7 @@ Please access this link to authenticate the account: {}
 #This is for signing up
 # This is for the future need (can be changed)
 @router.post("/sign-up")
-async def sign_up(account: Account = Depends()):
+async def sign_up(account: Account):
         email = account.email
         password = account.password
         user_name= account.user_name

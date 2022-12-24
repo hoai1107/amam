@@ -124,7 +124,7 @@ def create_comment(*,userID: str = Depends(authentication),post_id: str, content
     if cmd==None:
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
     else:
-        comment = CommentDB(post_id=post_id,content=content)
+        comment = CommentDB(post_id=post_id,content=content,user_id=userID)
         current_comment = mongodb.comments.insert_one(comment.dict())
         mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
         mongodb.posts.update_one({"_id": ObjectId(post_id)},{"$inc":{"num_comments": 1}})
@@ -242,7 +242,7 @@ def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str, 
         root_id = parentCommentID
         if not cmd['root_comment_id']== "root":
             root_id = cmd['root_comment_id']
-        replyComment = CommentDB(post_id=post_id,content=content,root_comment_id=root_id)
+        replyComment = CommentDB(user_id=userID,post_id=post_id,content=content,root_comment_id=root_id)
         current_comment = mongodb.comments.insert_one(replyComment.dict())
         mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
         mongodb.comments.update_one({"_id": ObjectId(root_id)}, {"$addToSet": {"list_child_comment_id": current_comment.inserted_id}})

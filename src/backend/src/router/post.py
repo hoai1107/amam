@@ -8,6 +8,7 @@ from db_connection import mongodb
 from post_model import Posts, PostDB, ObjectId, SearchFilter, OrderByOption, Comments, CommentBase
 from constant import pagination_number
 from dependencies import search_query_processing
+from authentication import authentication
 
 router = APIRouter(
     prefix= "/posts",
@@ -29,8 +30,11 @@ async def get_post(
         for cmt in current_comments:
             commentbase_list = list[CommentBase]()
             for child_cmt_id in cmt["list_child_comment_id"]:
-                commentbase_list.append(CommentBase(**mongodb.comments.find_one({"_id": child_cmt_id}))) 
-            comment_list.append(Comments(**cmt, list_child_comment= commentbase_list))
+                child_comment = mongodb.comments.find_one({"_id": child_cmt_id})
+                child_user = mongodb.users.find_one({"user_id": child_comment["user_id"]})
+                commentbase_list.append(CommentBase(**child_comment,user_name=child_user["user_name"],user_avatar=child_user["avatar"])) 
+            parrent_user = mongodb.users.find_one({"user_id": cmt["user_id"]})
+            comment_list.append(Comments(**cmt,user_name=parrent_user["user_name"],user_avatar=parrent_user["avatar"], list_child_comment= commentbase_list))
     except:
         return Response(status_code= status.HTTP_400_BAD_REQUEST)
     return {"Post Section":post_info_model, "Comment Section": comment_list}
@@ -183,8 +187,9 @@ async def get_searched_posts(
 
 # This is to create the a post information (and get the ID of the post)
 @router.post("/create")
-async def create_post(post: PostDB):
+async def create_post(*,userID: str = Depends(authentication),title:str, content:str,tags: list[str] = Query(default=list[str]())):
     try:
+        post = PostDB(user_id=userID,title=title,content=content,tags=tags)
         post_dict = post.dict()
         post_dict["time_created"] = str(post_dict["time_created"])
         current_post = mongodb["posts"].insert_one(post_dict)

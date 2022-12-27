@@ -45,7 +45,7 @@ class CommentBase(BaseModel):
     id: Union[PyObjectId,None] = Field(default_factory=PyObjectId,alias="_id")
     time_created: str
     user_id: str
-    user_name: str
+    user_name: str = Field(default=None)
     user_avatar: str = Field(default=None)
     post_id: str
     root_comment_id: str = Field(default= "root")

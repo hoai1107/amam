@@ -19,12 +19,12 @@ router = APIRouter(
 # This is to get all information related to a specific user
 @router.get("", response_model= User)
 async def get_user(user_id: str = Depends(authentication)):
-    try:    
+    # try:    
         current_user = mongodb.users.find_one({"user_id": user_id})
         profile_user_model = User(**(current_user))
-    except:
-        return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!") 
-    return profile_user_model
+    # except:
+    #     return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!") 
+        return profile_user_model
 
 def customDecoder(studentDict):
     return namedtuple("X", studentDict.keys())(*studentDict.values())
@@ -125,8 +125,10 @@ def create_comment(*,userID: str = Depends(authentication),comment: CommentDB):
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
     else:
         comment.user_id = userID
-        current_comment = mongodb.comments.insert_one(comment.dict())
-        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
+        comment_dict = comment.dict()
+        comment_dict["time_created"] = str(comment_dict["time_created"])
+        current_comment = mongodb.comments.insert_one(comment_dict)
+        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": str(current_comment.inserted_id)}})
         mongodb.posts.update_one({"_id": ObjectId(comment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
@@ -244,9 +246,11 @@ def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str,r
             root_id = cmd['root_comment_id']
         replyComment.user_id = userID
         replyComment.root_comment_id = root_id
-        current_comment = mongodb.comments.insert_one(replyComment.dict())
-        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
-        mongodb.comments.update_one({"_id": ObjectId(root_id)}, {"$addToSet": {"list_child_comment_id": current_comment.inserted_id}})
+        comment_dict = replyComment.dict()
+        comment_dict["time_created"] = str(comment_dict["time_created"])
+        current_comment = mongodb.comments.insert_one(comment_dict)
+        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": str(current_comment.inserted_id)}})
+        mongodb.comments.update_one({"_id": ObjectId(root_id)}, {"$addToSet": {"list_child_comment_id": str(current_comment.inserted_id)}})
         mongodb.posts.update_one({"_id": ObjectId(replyComment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 

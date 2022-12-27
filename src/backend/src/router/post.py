@@ -30,7 +30,7 @@ async def get_post(
         for cmt in current_comments:
             commentbase_list = list[CommentBase]()
             for child_cmt_id in cmt["list_child_comment_id"]:
-                child_comment = mongodb.comments.find_one({"_id": child_cmt_id})
+                child_comment = mongodb.comments.find_one({"_id": ObjectId(child_cmt_id)})
                 child_user = mongodb.users.find_one({"user_id": child_comment["user_id"]})
                 commentbase_list.append(CommentBase(**child_comment,user_name=child_user["user_name"],user_avatar=child_user["avatar"])) 
             parrent_user = mongodb.users.find_one({"user_id": cmt["user_id"]})

@@ -107,9 +107,11 @@ import {
   mdiArrowUpBold,
   mdiDotsHorizontal,
 } from "@mdi/js";
-import { ref } from "vue";
-
-const props = defineProps(["comment"]);
+import { ref, toRefs } from "vue";
+import { useAuthStore } from "@/stores/auth.js";
+import { useUserStore } from "@/stores/user.js";
+import Constants from "@/plugins/Constants.js";
+import axios from "axios";
 
 const Sentiment = {
   DISLIKE: -1,
@@ -117,23 +119,62 @@ const Sentiment = {
   LIKE: 1,
 };
 
+const props = defineProps(["comment"]);
+const content = toRefs(props);
+
+const authStore = useAuthStore();
+const userStore = useUserStore();
 const showReply = ref(false);
-const userSentiment = ref(Sentiment.NEUTRAL);
+const userSentiment = ref(userStore.checkCommentVoted(props.comment._id));
+
+const config = authStore.getAuthHeader();
+const instance = axios.create({
+  baseURL: Constants.BACKEND_URL + "users/comment/",
+  ...config,
+});
+
+userStore.checkCommentVoted();
 
 function toggleReply() {
   showReply.value = !showReply.value;
 }
 
 function changeSentiment(oldSentiment, newSentiment) {
-  if (oldSentiment == Sentiment.NEUTRAL) {
-    userSentiment.value = newSentiment;
-  } else {
-    if (oldSentiment === newSentiment) {
-      userSentiment.value = Sentiment.NEUTRAL;
+  if (oldSentiment !== Sentiment.NEUTRAL) {
+    if (oldSentiment === Sentiment.LIKE) {
+      content.comment.value.upvote--;
     } else {
-      userSentiment.value = newSentiment;
+      content.comment.value.downvote--;
     }
   }
+
+  if (oldSentiment === newSentiment) {
+    userSentiment.value = Sentiment.NEUTRAL;
+  } else {
+    userSentiment.value = newSentiment;
+    if (newSentiment === Sentiment.LIKE) {
+      content.comment.value.upvote++;
+    } else {
+      content.comment.value.downvote++;
+    }
+  }
+
+  var requestURL = "";
+  if (newSentiment === Sentiment.LIKE) {
+    requestURL += "upvote";
+  } else {
+    requestURL += "downvote";
+  }
+
+  instance
+    .put(requestURL, null, {
+      params: {
+        commentID: props.comment._id,
+      },
+    })
+    .then(async () => {
+      await userStore.fetchCurrentUserInfo();
+    });
 }
 </script>
 

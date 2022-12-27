@@ -9,9 +9,9 @@
     <div class="flex flex-col gap-2 w-full">
       <div class="flex flex-row gap-6">
         <!-- Username -->
-        <div class="text-base font-semibold">Hoai Tu</div>
+        <div class="text-base font-semibold">{{ comment.user_name }}</div>
         <!-- Timestamp -->
-        <div class="text-base text-gray-400">2 hours ago</div>
+        <div class="text-base text-gray-400">{{ timeInterval }}</div>
       </div>
 
       <!-- Content -->
@@ -107,9 +107,10 @@ import {
   mdiArrowUpBold,
   mdiDotsHorizontal,
 } from "@mdi/js";
-import { ref, toRefs } from "vue";
+import { ref, toRefs, computed } from "vue";
 import { useAuthStore } from "@/stores/auth.js";
 import { useUserStore } from "@/stores/user.js";
+import { DateTime } from "luxon";
 import Constants from "@/plugins/Constants.js";
 import axios from "axios";
 
@@ -122,18 +123,43 @@ const Sentiment = {
 const props = defineProps(["comment"]);
 const content = toRefs(props);
 
+console.log(content);
+
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const showReply = ref(false);
-const userSentiment = ref(userStore.checkCommentVoted(props.comment._id));
+const userSentiment = ref(Sentiment.NEUTRAL);
+
+if (authStore.isAuthenticated()) {
+  userSentiment.value = userStore.checkCommentVoted(props.comment._id);
+}
+
+const timeInterval = computed(() => {
+  const dateNow = DateTime.now();
+  const dateCreated = DateTime.fromSQL(props.comment.time_created);
+
+  console.log(dateCreated);
+
+  const diff = dateNow
+    .diff(dateCreated, ["years", "months", "days", "hours", "minutes"])
+    .toObject();
+
+  for (const measurement in diff) {
+    const val = Math.floor(diff[measurement]);
+
+    if (val !== 0) {
+      return `${val} ${measurement} ago`;
+    }
+  }
+
+  return "Just a second ago";
+});
 
 const config = authStore.getAuthHeader();
 const instance = axios.create({
   baseURL: Constants.BACKEND_URL + "users/comment/",
   ...config,
 });
-
-userStore.checkCommentVoted();
 
 function toggleReply() {
   showReply.value = !showReply.value;

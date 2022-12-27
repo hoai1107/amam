@@ -5,7 +5,6 @@
     </h1>
     <SvgIcon size="32" type="mdi" :path="mdiDotsVertical"></SvgIcon>
   </div>
-  <!--TODO: Calculate how from last edit-->
   <PostMetaData
     :time-interval="timeInterval"
     :views="content.view"
@@ -60,7 +59,7 @@ const props = defineProps(["content"]);
 
 const timeInterval = computed(() => {
   const dateNow = DateTime.now();
-  const dateCreated = DateTime.fromISO(props.content.time_created);
+  const dateCreated = DateTime.fromSQL(props.content.time_created);
 
   const diff = dateNow
     .diff(dateCreated, ["years", "months", "days", "hours", "minutes"])

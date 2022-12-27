@@ -57,6 +57,15 @@ export const useAuthStore = defineStore("auth", () => {
     return accessToken.value != "";
   }
 
+  function getAxiosInstance() {
+    return axios.create({
+      baseURL: Constants.BACKEND_URL,
+      headers: {
+        Authorization: `Bearer ${accessToken.value}`,
+      },
+    });
+  }
+
   function getAuthHeader() {
     return {
       headers: {
@@ -76,5 +85,6 @@ export const useAuthStore = defineStore("auth", () => {
     registerUser,
     isAuthenticated,
     getAuthHeader,
+    getAxiosInstance,
   };
 });

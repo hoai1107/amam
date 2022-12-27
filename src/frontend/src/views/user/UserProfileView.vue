@@ -4,93 +4,11 @@
     <div class="w-[1272px] mx-auto">
       <div class="grid grid-cols-12 gap-x-6">
         <div class="col-span-6">
-          <div class="flex flex-row">
-            <div class="flex flex-col items-center w-1/3">
-              <Avatar></Avatar>
-              <div class="flex flex-row mt-2">
-                <SvgIcon
-                  size="24"
-                  type="mdi"
-                  style="color: blue;"
-                  :path="mdiCameraOutline"
-                ></SvgIcon>
-                <p class="text-blue ml-2">change</p>
-              </div>
-            </div>
-            <div class="flex flex-col ml-4">
-              <p class="text-2xl font-semibold">Floyd Miles</p>
-              <p class="text-gray-400 mt-1">camlansuc@gmail.com</p>
-              <div class="flex flex-row text-blue gap-x-8 mt-2">
-                <p>0 following</p>
-                <p>0 follower</p>
-              </div>
-            </div>
-          </div>
-          <div class="mt-3">
-            <p>About me</p>
-            <textarea
-              class="input-form"
-              v-model="question"
-              placeholder="Write something..."
-              rows="5"
-            ></textarea>
-            <div class="flex flex-row justify-between mt-2">
-              <div class="flex flex-col w-1/2">
-                <p>Location</p>
-                <input
-                  class="input-form"
-                  v-model="name"
-                  placeholder="e.g Vietnam"
-                />
-              </div>
-              <div class="flex flex-col w-1/2 ml-4">
-                <p>Title</p>
-                <input
-                  class="input-form"
-                  v-model="name"
-                  placeholder="e.g Student"
-                />
-              </div>
-            </div>
-            <ButtonItem
-              style="margin-top: 1rem; height: 52px; width: 150px"
-              type="primary"
-              state="normal"
-              text="Save Profile"
-            ></ButtonItem>
-          </div>
+          <PostMetaData></PostMetaData>
+          <EditProfileForm></EditProfileForm>
         </div>
         <div class="col-span-6">
-          <div class="flex flex-col items-center">
-            <div class="flex flex-row my-8">
-              <div class="flex flex-col items-center">
-                <p class="text-3xl font-semibold">12</p>
-                <p class="text-xl text-gray-400">Questions</p>
-              </div>
-              <div class="flex flex-col items-center ml-20">
-                <p class="text-3xl font-semibold">78</p>
-                <p class="text-xl text-gray-400">Answers</p>
-              </div>
-            </div>
-          </div>
-          <div>
-            <p class="text-left text-xl font-semibold">Your Questions</p>
-            <p 
-              class="text-sm p-3 border-gray-100 border-solid hover:text-blueSky-dark-300 cursor-pointer" 
-              :class="[index != 1 ? 'border-t-2' : '']" 
-              v-for="index in 3" :key="index"
-            >{{questions[index-1]}}</p>
-            <p class="text-right text-sm text-blue cursor-pointer">See all</p>
-          </div>
-          <div class="mt-8">
-            <p class="text-left text-xl font-semibold">Saved Questions</p>
-            <p 
-              class="text-sm p-3 border-gray-100 border-solid hover:text-blueSky-dark-300 cursor-pointer" 
-              :class="[index != 1 ? 'border-t-2' : '']" 
-              v-for="index in 3" :key="index"
-            >{{questions[index-1]}}</p>
-            <p class="text-right text-sm text-blue cursor-pointer">See all</p>
-          </div>
+          <SectionQuestion></SectionQuestion>
         </div>
       </div>
     </div>
@@ -101,32 +19,12 @@
 const props = defineProps({
   id: String,
 });
-const questions = [
-  "Where should I store my CSV files for Memgraph?",
-  "TabView PageTabViewStyle scroll information not working after tab disappears from screen SwiftUI iOS 16",
-  "Switch Statement not working but does for other statement in java"
-]
-import Avatar from "@/components/ui/Avatar.vue";
-import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
-import QuestionCard from "@/components/layout/QuestionCard.vue";
-import ButtonItem from "@/components/ui/ButtonItem.vue";
 
-import { mdiCameraOutline } from "@mdi/js";
-import SvgIcon from "@jamescoyle/vue-icon";
+import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
+import EditProfileForm from "@/components/layout/views/UserProfile/EditProfileForm.vue"
+import SectionQuestion from "@/components/layout/views/UserProfile/SectionQuestion.vue"
+import PostMetaData from "@/components/layout/views/UserProfile/PostMetaData.vue"
 </script>
 
 <style lang="scss" scoped>
-.input-form {
-  width: 100%;
-
-  padding: 12px 24px;
-  gap: 8px;
-  background: #ffffff;
-  border: 2px solid #000000;
-  border-radius: 8px;
-
-  -moz-appearance: none; /* Firefox */
-  -webkit-appearance: none; /* Safari and Chrome */
-  appearance: none;
-}
 </style>

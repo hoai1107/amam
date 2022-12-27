@@ -22,7 +22,7 @@ firebaseConfig = {
   "measurementId": "G-PK0MK3ZPD2"
 }
 firebase = pyrebase.initialize_app(firebaseConfig)
-db = firebase.database()
+firebasedb = firebase.database()
 auth = firebase.auth()
 
 client = pymongo.MongoClient("mongodb+srv://root:zi2kQbzaJQ5LS4jD@cluster0.evfi3hk.mongodb.net/?retryWrites=true&w=majority")

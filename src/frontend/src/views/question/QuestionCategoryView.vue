@@ -6,7 +6,7 @@
         <div class="col-span-12">
           <div class="text-center text-xl font-semibold mb-3">All categories</div>
           <div class="grid grid-cols-4 grid-flow-row gap-y-2 gap-x-2 pb-9">
-            <ButtonItem 
+            <ButtonItem
             v-for="(category, index) in categories" v-bind:key="index"
             :text="category"
             style="height: 120px"
@@ -26,7 +26,7 @@ const props = defineProps({
 });
 import SidebarCategory from "@/components/layout/sidebar/SidebarCategory.vue";
 import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
-import QuestionForm from "@/components/QuestionForm.vue";
+import QuestionForm from "@/components/layout/views/QuestionCreate/QuestionForm.vue";
 import CheckBox from "@/components/ui/CheckBox.vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 const categories = [

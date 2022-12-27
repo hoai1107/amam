@@ -53,7 +53,9 @@
 
       <!--Button-->
       <div class="h-full">
-        <ButtonItem type="primary" state="normal" text="Create a question" />
+        <router-link :to="{ name: 'questions.create' }">
+          <ButtonItem type="primary" state="normal" text="Create a question" />
+        </router-link>
       </div>
     </div>
   </div>

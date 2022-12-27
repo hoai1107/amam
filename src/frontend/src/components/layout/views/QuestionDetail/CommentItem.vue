@@ -6,7 +6,7 @@
     </div>
 
     <!-- Content -->
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2 w-full">
       <div class="flex flex-row gap-6">
         <!-- Username -->
         <div class="text-base font-semibold">Hoai Tu</div>
@@ -16,8 +16,7 @@
 
       <!-- Content -->
       <div class="text-base">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
-        purus sit amet luctus venenatis
+        {{ comment.content }}
       </div>
 
       <!-- Buttons -->
@@ -25,7 +24,7 @@
         <div class="flex flex-row gap-8">
           <!-- Like -->
           <div class="flex flex-row gap-2">
-            <p>10</p>
+            <p>{{ comment.upvote }}</p>
             <button @click="changeSentiment(userSentiment, Sentiment.LIKE)">
               <SvgIcon
                 class="transition-none"
@@ -43,7 +42,7 @@
 
           <!-- Dislike -->
           <div class="flex flex-row gap-2">
-            <p>2</p>
+            <p>{{ comment.downvote }}</p>
             <button @click="changeSentiment(userSentiment, Sentiment.DISLIKE)">
               <SvgIcon
                 class="transition-none"
@@ -66,6 +65,15 @@
         <button>
           <SvgIcon size="24" type="mdi" :path="mdiDotsHorizontal"></SvgIcon>
         </button>
+      </div>
+
+      <!-- Reply -->
+      <div class="flex flex-col mt-2 gap-2">
+        <CommentItem
+          v-for="reply in comment.list_child_comment"
+          :comment="reply"
+          v-bind:key="reply._id"
+        />
       </div>
 
       <!-- Reply form -->
@@ -100,6 +108,8 @@ import {
   mdiDotsHorizontal,
 } from "@mdi/js";
 import { ref } from "vue";
+
+const props = defineProps(["comment"]);
 
 const Sentiment = {
   DISLIKE: -1,

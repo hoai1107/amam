@@ -29,7 +29,7 @@ async def get_user(user_id: str = Depends(authentication)):
 def customDecoder(studentDict):
     return namedtuple("X", studentDict.keys())(*studentDict.values())
 
-@router.post("/upvote/")
+@router.put("/upvote/")
 def upvote_User( postId: str, userID: str = Depends(authentication)):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_post_voted.id": postId},
     {
@@ -73,7 +73,7 @@ def upvote_User( postId: str, userID: str = Depends(authentication)):
             })
             return "upvote"
 
-@router.post("/downvote/")
+@router.put("/downvote/")
 def downvote_User(postId: str, userID: str = Depends(authentication)):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_post_voted.id": postId},
     {
@@ -130,7 +130,7 @@ def create_comment(*,userID: str = Depends(authentication),comment: CommentDB):
         mongodb.posts.update_one({"_id": ObjectId(comment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
-@router.post("/comment/change")
+@router.put("/comment/change")
 def change_comment(content: str,commentID: str):
     cmd=mongodb.comments.find_one({"_id": ObjectId(commentID)})
     if cmd==None:
@@ -144,7 +144,7 @@ def change_comment(content: str,commentID: str):
         })
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
-@router.post("/comment/upvote")
+@router.put("/comment/upvote")
 def upvote_comment(*,userID: str = Depends(authentication), commentID: str):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_comment_voted.id":commentID},
     {
@@ -188,7 +188,7 @@ def upvote_comment(*,userID: str = Depends(authentication), commentID: str):
         })
         return "upvote"
 
-@router.post("/comment/downvote")
+@router.put("/comment/downvote")
 def downvote_comment(*,userID: str = Depends(authentication), commentID: str):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_comment_voted.id":commentID},
     {
@@ -250,7 +250,7 @@ def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str,r
         mongodb.posts.update_one({"_id": ObjectId(replyComment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
-@router.post('/user/update')
+@router.put('/user/update')
 def user_update(user: UserDB):
     user_dict=user.dict()
     cmd=mongodb.users.find_one({'user_name':user_dict['user_name']})

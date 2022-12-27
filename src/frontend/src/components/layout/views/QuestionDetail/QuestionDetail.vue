@@ -1,6 +1,8 @@
 <template>
-  <SectionPost :content="content" />
-  <SectionComment :content="content" />
+  <div v-if="!isFetching">
+    <SectionPost :content="post_section" />
+    <SectionComment :content="comment_section" />
+  </div>
 </template>
 
 <script setup>
@@ -13,11 +15,20 @@ import { ref } from "vue";
 
 const route = useRoute();
 const content = ref();
+const isFetching = ref(true);
+const post_section = ref();
+const comment_section = ref();
 
-const response = await axios.get(
-  Constansts.BACKEND_URL + `posts/${route.params.id}`
-);
-content.value = response.data;
+axios
+  .get(Constansts.BACKEND_URL + `posts/${route.params.id}`)
+  .then((response) => {
+    content.value = response.data;
+    post_section.value = content.value["Post Section"];
+    comment_section.value = content.value["Comment Section"];
+  })
+  .then(() => {
+    isFetching.value = false;
+  });
 </script>
 
 <style lang="scss" scoped></style>

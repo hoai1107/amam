@@ -57,6 +57,7 @@ import SvgIcon from "@jamescoyle/vue-icon";
 import { computed } from "vue";
 
 const props = defineProps(["content"]);
+
 const timeInterval = computed(() => {
   const dateNow = DateTime.now();
   const dateCreated = DateTime.fromISO(props.content.time_created);

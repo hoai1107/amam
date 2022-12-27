@@ -187,9 +187,9 @@ async def get_searched_posts(
 
 # This is to create the a post information (and get the ID of the post)
 @router.post("/create")
-async def create_post(*,userID: str = Depends(authentication),title:str, content:str,tags: list[str] = Query(default=list[str]())):
+async def create_post(*,userID: str = Depends(authentication),post: PostDB):
     try:
-        post = PostDB(user_id=userID,title=title,content=content,tags=tags)
+        post.user_id = userID
         post_dict = post.dict()
         post_dict["time_created"] = str(post_dict["time_created"])
         current_post = mongodb["posts"].insert_one(post_dict)

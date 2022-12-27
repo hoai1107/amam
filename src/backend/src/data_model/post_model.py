@@ -34,7 +34,7 @@ class CommentDB(BaseModel):
     post_id: str
     root_comment_id: str = Field(default= "root")
     time_created: datetime.datetime = Field(default= datetime.datetime.now(pytz.UTC))
-    user_id: str
+    user_id: str = Field(default=None)
     content: str
     upvote: int = Field(default=0)
     downvote: int = Field(default=0)
@@ -73,7 +73,7 @@ class Posts(PostBase):
 
 # This model plays a role as a model in the architecture
 class PostDB(BaseModel):
-    user_id: str
+    user_id: str = Field(default= None)
     title: str
     content: str = Field(default="")
     view: int = Field(default=0)

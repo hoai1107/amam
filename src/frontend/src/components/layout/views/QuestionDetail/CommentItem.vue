@@ -82,6 +82,7 @@
           class="border-2 border-solid w-full px-6 rounded"
           type="text"
           placeholder="Add an answer..."
+          v-model="reply"
         />
         <div>
           <ButtonItem
@@ -89,6 +90,7 @@
             type="primary"
             state="normal"
             text="Submit"
+            @click="$emit('submit-reply', reply, comment._id)"
           />
         </div>
       </div>
@@ -123,10 +125,11 @@ const Sentiment = {
 const props = defineProps(["comment"]);
 const content = toRefs(props);
 
-console.log(content);
+console.log(props.comment._id);
 
 const authStore = useAuthStore();
 const userStore = useUserStore();
+const reply = ref();
 const showReply = ref(false);
 const userSentiment = ref(Sentiment.NEUTRAL);
 
@@ -137,8 +140,6 @@ if (authStore.isAuthenticated()) {
 const timeInterval = computed(() => {
   const dateNow = DateTime.now();
   const dateCreated = DateTime.fromSQL(props.comment.time_created);
-
-  console.log(dateCreated);
 
   const diff = dateNow
     .diff(dateCreated, ["years", "months", "days", "hours", "minutes"])

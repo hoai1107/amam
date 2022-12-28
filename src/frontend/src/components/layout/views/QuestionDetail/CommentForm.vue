@@ -7,10 +7,11 @@
           class="border-2 border-solid w-full px-6 rounded"
           type="text"
           placeholder="Add an answer..."
+          v-model="comment"
         />
       </div>
       <div class="flex flex-row-reverse w-full">
-        <div>
+        <div @click="$emit('submit-comment', comment)">
           <ButtonItem type="primary" state="normal" text="Submit" />
         </div>
       </div>
@@ -21,6 +22,9 @@
 <script setup>
 import Avatar from "@/components/ui/Avatar.vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
+import { ref } from "vue";
+
+const comment = ref();
 </script>
 
 <style lang="scss" scoped></style>

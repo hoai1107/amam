@@ -31,7 +31,6 @@ export const useUserStore = defineStore("user", () => {
 
   function checkCommentVoted(id) {
     const commentVotes = user.value.list_of_comment_voted;
-    console.log(commentVotes);
 
     for (var i = 0; i < commentVotes.length; ++i) {
       var vote = commentVotes[i];
@@ -43,9 +42,24 @@ export const useUserStore = defineStore("user", () => {
         }
       }
     }
-
     return 0;
   }
 
-  return { user, fetchCurrentUserInfo, checkCommentVoted };
+  function checkPostVoted(id) {
+    const postVotes = user.value.list_of_post_voted;
+
+    for (var i = 0; i < postVotes.length; ++i) {
+      var vote = postVotes[i];
+      if (vote.id === id) {
+        if (vote.upvote_downvote === "upvote") {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+    }
+    return 0;
+  }
+
+  return { user, fetchCurrentUserInfo, checkCommentVoted, checkPostVoted };
 });

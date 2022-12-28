@@ -9,9 +9,9 @@
     <div class="flex flex-col gap-2 w-full">
       <div class="flex flex-row gap-6">
         <!-- Username -->
-        <div class="text-base font-semibold">Hoai Tu</div>
+        <div class="text-base font-semibold">{{ comment.user_name }}</div>
         <!-- Timestamp -->
-        <div class="text-base text-gray-400">2 hours ago</div>
+        <div class="text-base text-gray-400">{{ timeInterval }}</div>
       </div>
 
       <!-- Content -->
@@ -82,6 +82,7 @@
           class="border-2 border-solid w-full px-6 rounded"
           type="text"
           placeholder="Add an answer..."
+          v-model="reply"
         />
         <div>
           <ButtonItem
@@ -89,6 +90,7 @@
             type="primary"
             state="normal"
             text="Submit"
+            @click="$emit('submit-reply', reply, comment._id)"
           />
         </div>
       </div>
@@ -107,9 +109,12 @@ import {
   mdiArrowUpBold,
   mdiDotsHorizontal,
 } from "@mdi/js";
-import { ref } from "vue";
-
-const props = defineProps(["comment"]);
+import { ref, toRefs, computed } from "vue";
+import { useAuthStore } from "@/stores/auth.js";
+import { useUserStore } from "@/stores/user.js";
+import { DateTime } from "luxon";
+import Constants from "@/plugins/Constants.js";
+import axios from "axios";
 
 const Sentiment = {
   DISLIKE: -1,
@@ -117,23 +122,88 @@ const Sentiment = {
   LIKE: 1,
 };
 
+const props = defineProps(["comment"]);
+const content = toRefs(props);
+
+const authStore = useAuthStore();
+const userStore = useUserStore();
+const reply = ref();
 const showReply = ref(false);
 const userSentiment = ref(Sentiment.NEUTRAL);
+
+if (authStore.isAuthenticated()) {
+  userSentiment.value = userStore.checkCommentVoted(props.comment._id);
+}
+
+const timeInterval = computed(() => {
+  const dateNow = DateTime.now();
+  const dateCreated = DateTime.fromSQL(props.comment.time_created);
+
+  const diff = dateNow
+    .diff(dateCreated, ["years", "months", "days", "hours", "minutes"])
+    .toObject();
+
+  for (const measurement in diff) {
+    const val = Math.floor(diff[measurement]);
+
+    if (val !== 0) {
+      return `${val} ${measurement} ago`;
+    }
+  }
+
+  return "Just a second ago";
+});
+
+const config = authStore.getAuthHeader();
+const instance = axios.create({
+  baseURL: Constants.BACKEND_URL + "users/comment/",
+  ...config,
+});
 
 function toggleReply() {
   showReply.value = !showReply.value;
 }
 
 function changeSentiment(oldSentiment, newSentiment) {
-  if (oldSentiment == Sentiment.NEUTRAL) {
-    userSentiment.value = newSentiment;
+  // Set Ref value
+  if (oldSentiment === newSentiment) {
+    userSentiment.value = Sentiment.NEUTRAL;
   } else {
-    if (oldSentiment === newSentiment) {
-      userSentiment.value = Sentiment.NEUTRAL;
+    userSentiment.value = newSentiment;
+  }
+
+  if (oldSentiment === Sentiment.LIKE) {
+    content.comment.value.upvote--;
+  }
+
+  if (oldSentiment === Sentiment.DISLIKE) {
+    content.comment.value.downvote--;
+  }
+
+  if (oldSentiment === Sentiment.NEUTRAL || oldSentiment !== newSentiment) {
+    if (newSentiment === Sentiment.LIKE) {
+      content.comment.value.upvote++;
     } else {
-      userSentiment.value = newSentiment;
+      content.comment.value.downvote++;
     }
   }
+
+  var requestURL = "";
+  if (newSentiment === Sentiment.LIKE) {
+    requestURL += "upvote";
+  } else {
+    requestURL += "downvote";
+  }
+
+  instance
+    .put(requestURL, null, {
+      params: {
+        commentID: props.comment._id,
+      },
+    })
+    .then(async () => {
+      await userStore.fetchCurrentUserInfo();
+    });
 }
 </script>
 

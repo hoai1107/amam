@@ -12,7 +12,9 @@
       <p>Password</p>
       <input type="password" class="input-form" v-model="password" />
     </div>
-    <p class="warning text-red">Wrong account or password</p>
+    <p class="warning text-red" v-show="errorMessage !== ''">
+      {{ errorMessage }}
+    </p>
     <ButtonItem
       class="mt-3"
       type="primary"

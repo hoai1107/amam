@@ -27,7 +27,39 @@ export const useUserStore = defineStore("user", () => {
   async function fetchCurrentUserInfo() {
     const response = await instance.get("");
     user.value = response.data;
-    console.log(response);
   }
-  return { user, fetchCurrentUserInfo };
+
+  function checkCommentVoted(id) {
+    const commentVotes = user.value.list_of_comment_voted;
+
+    for (var i = 0; i < commentVotes.length; ++i) {
+      var vote = commentVotes[i];
+      if (vote.id === id) {
+        if (vote.upvote_downvote === "upvote") {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+    }
+    return 0;
+  }
+
+  function checkPostVoted(id) {
+    const postVotes = user.value.list_of_post_voted;
+
+    for (var i = 0; i < postVotes.length; ++i) {
+      var vote = postVotes[i];
+      if (vote.id === id) {
+        if (vote.upvote_downvote === "upvote") {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+    }
+    return 0;
+  }
+
+  return { user, fetchCurrentUserInfo, checkCommentVoted, checkPostVoted };
 });

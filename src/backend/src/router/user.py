@@ -19,17 +19,17 @@ router = APIRouter(
 # This is to get all information related to a specific user
 @router.get("", response_model= User)
 async def get_user(user_id: str = Depends(authentication)):
-    try:    
+    # try:    
         current_user = mongodb.users.find_one({"user_id": user_id})
         profile_user_model = User(**(current_user))
-    except:
-        return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!") 
-    return profile_user_model
+    # except:
+    #     return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!") 
+        return profile_user_model
 
 def customDecoder(studentDict):
     return namedtuple("X", studentDict.keys())(*studentDict.values())
 
-@router.post("/upvote/")
+@router.put("/upvote/")
 def upvote_User( postId: str, userID: str = Depends(authentication)):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_post_voted.id": postId},
     {
@@ -73,7 +73,7 @@ def upvote_User( postId: str, userID: str = Depends(authentication)):
             })
             return "upvote"
 
-@router.post("/downvote/")
+@router.put("/downvote/")
 def downvote_User(postId: str, userID: str = Depends(authentication)):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_post_voted.id": postId},
     {
@@ -119,18 +119,20 @@ def downvote_User(postId: str, userID: str = Depends(authentication)):
             
 
 @router.post("/comments/create")
-def create_comment(*,userID: str = Depends(authentication),post_id: str, content: str):
-    cmd=mongodb.posts.find_one({"_id": ObjectId(post_id)})
+def create_comment(*,userID: str = Depends(authentication),comment: CommentDB):
+    cmd=mongodb.posts.find_one({"_id": ObjectId(comment.post_id)})
     if cmd==None:
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
     else:
-        comment = CommentDB(post_id=post_id,content=content,user_id=userID)
-        current_comment = mongodb.comments.insert_one(comment.dict())
-        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
-        mongodb.posts.update_one({"_id": ObjectId(post_id)},{"$inc":{"num_comments": 1}})
+        comment.user_id = userID
+        comment_dict = comment.dict()
+        comment_dict["time_created"] = str(comment_dict["time_created"])
+        current_comment = mongodb.comments.insert_one(comment_dict)
+        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": str(current_comment.inserted_id)}})
+        mongodb.posts.update_one({"_id": ObjectId(comment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
-@router.post("/comment/change")
+@router.put("/comment/change")
 def change_comment(content: str,commentID: str):
     cmd=mongodb.comments.find_one({"_id": ObjectId(commentID)})
     if cmd==None:
@@ -144,7 +146,7 @@ def change_comment(content: str,commentID: str):
         })
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
-@router.post("/comment/upvote")
+@router.put("/comment/upvote")
 def upvote_comment(*,userID: str = Depends(authentication), commentID: str):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_comment_voted.id":commentID},
     {
@@ -188,7 +190,7 @@ def upvote_comment(*,userID: str = Depends(authentication), commentID: str):
         })
         return "upvote"
 
-@router.post("/comment/downvote")
+@router.put("/comment/downvote")
 def downvote_comment(*,userID: str = Depends(authentication), commentID: str):
     cmd= mongodb.users.find_one({"user_id": userID, "list_of_comment_voted.id":commentID},
     {
@@ -234,7 +236,7 @@ def downvote_comment(*,userID: str = Depends(authentication), commentID: str):
 
 # Will have a meeting for the input of this endpoint
 @router.post("/comments/reply")
-def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str, post_id: str, content: str):
+def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str,replyComment:CommentDB):
     cmd=mongodb.comments.find_one({"_id": ObjectId(parentCommentID)})
     if cmd is None: 
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
@@ -242,14 +244,17 @@ def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str, 
         root_id = parentCommentID
         if not cmd['root_comment_id']== "root":
             root_id = cmd['root_comment_id']
-        replyComment = CommentDB(user_id=userID,post_id=post_id,content=content,root_comment_id=root_id)
-        current_comment = mongodb.comments.insert_one(replyComment.dict())
-        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": current_comment.inserted_id}})
-        mongodb.comments.update_one({"_id": ObjectId(root_id)}, {"$addToSet": {"list_child_comment_id": current_comment.inserted_id}})
+        replyComment.user_id = userID
+        replyComment.root_comment_id = root_id
+        comment_dict = replyComment.dict()
+        comment_dict["time_created"] = str(comment_dict["time_created"])
+        current_comment = mongodb.comments.insert_one(comment_dict)
+        mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": str(current_comment.inserted_id)}})
+        mongodb.comments.update_one({"_id": ObjectId(root_id)}, {"$addToSet": {"list_child_comment_id": str(current_comment.inserted_id)}})
         mongodb.posts.update_one({"_id": ObjectId(replyComment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
-@router.post('/user/update')
+@router.put('/user/update')
 def user_update(user: UserDB):
     user_dict=user.dict()
     cmd=mongodb.users.find_one({'user_name':user_dict['user_name']})

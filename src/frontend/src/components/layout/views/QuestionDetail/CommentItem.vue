@@ -125,8 +125,6 @@ const Sentiment = {
 const props = defineProps(["comment"]);
 const content = toRefs(props);
 
-console.log(props.comment._id);
-
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const reply = ref();
@@ -167,18 +165,22 @@ function toggleReply() {
 }
 
 function changeSentiment(oldSentiment, newSentiment) {
-  if (oldSentiment !== Sentiment.NEUTRAL) {
-    if (oldSentiment === Sentiment.LIKE) {
-      content.comment.value.upvote--;
-    } else {
-      content.comment.value.downvote--;
-    }
-  }
-
+  // Set Ref value
   if (oldSentiment === newSentiment) {
     userSentiment.value = Sentiment.NEUTRAL;
   } else {
     userSentiment.value = newSentiment;
+  }
+
+  if (oldSentiment === Sentiment.LIKE) {
+    content.comment.value.upvote--;
+  }
+
+  if (oldSentiment === Sentiment.DISLIKE) {
+    content.comment.value.downvote--;
+  }
+
+  if (oldSentiment === Sentiment.NEUTRAL || oldSentiment !== newSentiment) {
     if (newSentiment === Sentiment.LIKE) {
       content.comment.value.upvote++;
     } else {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="aspect-square h-full cursor-pointer flex grow-0 items-center content-center"
+    class="aspect-square cursor-pointer flex grow-0 items-center content-center"
   >
     <img class="avatar-container" src="@/assets/img/user.webp " alt="avatar" />
   </div>

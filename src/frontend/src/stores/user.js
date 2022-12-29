@@ -29,6 +29,14 @@ export const useUserStore = defineStore("user", () => {
     user.value = response.data;
   }
 
+  function getQuestionList() {
+    if (user.value) {
+      return user.value.list_of_user_question;
+    }
+
+    return [];
+  }
+
   function checkCommentVoted(id) {
     const commentVotes = user.value.list_of_comment_voted;
 
@@ -61,5 +69,20 @@ export const useUserStore = defineStore("user", () => {
     return 0;
   }
 
-  return { user, fetchCurrentUserInfo, checkCommentVoted, checkPostVoted };
+  function getUserId() {
+    if (user.value) {
+      return user.value._id;
+    }
+
+    return "";
+  }
+
+  return {
+    user,
+    fetchCurrentUserInfo,
+    checkCommentVoted,
+    checkPostVoted,
+    getUserId,
+    getQuestionList,
+  };
 });

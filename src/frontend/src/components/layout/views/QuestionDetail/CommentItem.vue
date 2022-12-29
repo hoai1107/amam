@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row gap-3">
     <!-- Avatar -->
-    <div class="h-12">
+    <div class="h-12 aspect-square">
       <Avatar />
     </div>
 

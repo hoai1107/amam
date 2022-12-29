@@ -23,7 +23,9 @@
           class="text-lg mt-2 border-2 border-solid rounded px-2 py-2 absolute bg-white z-10 shadow-sm"
         >
           <ul class="flex flex-col gap-1">
-            <router-link :to="{ name: 'user', params: { id: 1 } }">
+            <router-link
+              :to="{ name: 'user', params: { id: userStore.getUserId() } }"
+            >
               <li
                 class="rounded flex flex-row gap-2 items-center justify-start px-4 hover:bg-blueSky-light-800"
               >
@@ -67,8 +69,10 @@ import { mdiBellOutline, mdiAccountOutline, mdiLogoutVariant } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
 
 import { ref } from "vue";
+import { useUserStore } from "@/stores/user.js";
 
 const showMenu = ref(false);
+const userStore = useUserStore();
 
 function toggleMenu() {
   showMenu.value = !showMenu.value;

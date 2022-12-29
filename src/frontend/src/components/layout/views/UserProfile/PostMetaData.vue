@@ -24,13 +24,13 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  name: String,
-});
-
 import Avatar from "@/components/ui/Avatar.vue";
 import { mdiCameraOutline } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
+
+const props = defineProps({
+  name: String,
+});
 </script>
 
 <style lang="scss" scoped></style>

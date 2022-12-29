@@ -59,7 +59,7 @@
           </div>
 
           <div>
-            <button @click="toggleReply">Reply</button>
+            <button @click="toggleReply" v-show="canReply">Reply</button>
           </div>
         </div>
         <button>
@@ -72,6 +72,7 @@
         <CommentItem
           v-for="reply in comment.list_child_comment"
           :comment="reply"
+          :can-reply="false"
           v-bind:key="reply._id"
         />
       </div>
@@ -122,7 +123,13 @@ const Sentiment = {
   LIKE: 1,
 };
 
-const props = defineProps(["comment"]);
+const props = defineProps({
+  comment: Object,
+  canReply: Boolean,
+});
+
+console.log(props.canReply);
+
 const content = toRefs(props);
 
 const authStore = useAuthStore();

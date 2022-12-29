@@ -131,7 +131,7 @@ function changeSentiment(oldSentiment, newSentiment) {
   }
 
   if (oldSentiment === Sentiment.LIKE) {
-    post.comment.value.upvote--;
+    post.content.value.upvote--;
   }
 
   if (oldSentiment === Sentiment.DISLIKE) {

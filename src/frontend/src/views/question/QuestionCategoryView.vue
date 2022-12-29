@@ -19,6 +19,12 @@
                   : 'bg-yellow-light-800 hover:bg-yellow',
               ]"
               state="normal"
+              @click="
+                router.push({
+                  name: 'questions.category',
+                  params: { category: category.toLowerCase() },
+                })
+              "
             ></ButtonItem>
           </div>
         </div>
@@ -28,44 +34,13 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  category: String,
-});
-import SidebarCategory from "@/components/layout/sidebar/SidebarCategory.vue";
+import Constants from "@/plugins/Constants.js";
 import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
-import QuestionForm from "@/components/layout/views/QuestionCreate/QuestionForm.vue";
-import CheckBox from "@/components/ui/CheckBox.vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
-const categories = [
-  "All",
-  "Books",
-  "Business",
-  "Cooking",
-  "Design",
-  "Economics",
-  "Education",
-  "Fashion & Style",
-  "Finance",
-  "Fine Art",
-  "Food",
-  "Health",
-  "History",
-  "Journalism",
-  "Literature",
-  "Marketing",
-  "Mathematics",
-  "Movies",
-  "Music",
-  "Philosophy",
-  "Politics",
-  "Psychology",
-  "Science",
-  "Sports",
-  "Technology",
-  "Travel",
-  "Writing",
-  "Others",
-];
+import { useRouter } from "vue-router";
+
+const categories = Constants.CATEGORIES;
+const router = useRouter();
 </script>
 
 <style lang="scss" scoped></style>

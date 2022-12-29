@@ -16,14 +16,14 @@
 </template>
 
 <script setup>
-const props = defineProps({
-  id: String,
-});
-
 import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
 import EditProfileForm from "@/components/layout/views/UserProfile/EditProfileForm.vue";
 import SectionQuestion from "@/components/layout/views/UserProfile/SectionQuestion.vue";
 import PostMetaData from "@/components/layout/views/UserProfile/PostMetaData.vue";
+
+const props = defineProps({
+  id: String,
+});
 </script>
 
 <style lang="scss" scoped></style>

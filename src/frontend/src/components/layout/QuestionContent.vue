@@ -31,6 +31,7 @@ import Constants from "@/plugins/Constants.js";
 import Pagination from "@/components/layout/pagination/Pagination.vue";
 import { useRoute } from "vue-router";
 import { ref, computed, watchEffect } from "vue";
+import voca from "voca";
 
 import axios from "axios";
 const instance = axios.create({
@@ -55,6 +56,8 @@ const totalPages = computed(() => {
     : Math.floor(questions.value.total / 7) + 1;
 });
 
+console.log(route.name);
+
 const result_heading = computed(() => {
   const name = route.name;
   var result = "";
@@ -67,7 +70,12 @@ const result_heading = computed(() => {
       result = `Results for "${route.query.query_title}"`;
       break;
     default:
-      result = "Hi";
+      if (route.query.category) {
+        var category = voca
+          .split(route.query.category, " ")
+          .map((item) => voca.capitalize(item));
+        result = category.join(" ");
+      }
       break;
   }
 

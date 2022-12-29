@@ -40,13 +40,16 @@ const questionsRoutes = [
     props: (route) => ({ id: route.params.id }),
   },
   {
+    path: "/questions/categories/all",
+    name: "questions.category.all",
+    component: () => import("@/views/question/QuestionCategoryView.vue"),
+  },
+  {
     path: "/questions/categories/:category",
     name: "questions.category",
-    // redirect: (to) => {
-    //   return { name: "questions", query: { category: to.params.category } };
-    // },
-    component: () => import("@/views/question/QuestionCategoryView.vue"),
-    props: (route) => ({ category: route.params.category }),
+    redirect: (to) => {
+      return { name: "questions", query: { category: to.params.category } };
+    },
   },
   {
     path: "/questions/search",

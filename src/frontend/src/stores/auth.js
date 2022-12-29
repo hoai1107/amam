@@ -32,10 +32,7 @@ export const useAuthStore = defineStore("auth", () => {
       accessToken.value = response.data.access_token;
       isLogin.value = true;
 
-      // Access token cannot be used immediately
-      // Temporary solution is to sleep for 5 seconds
-      await sleep(5000);
-
+      await sleep(2000);
       await userStore.fetchCurrentUserInfo();
       router.push({ name: "home" });
     } else {

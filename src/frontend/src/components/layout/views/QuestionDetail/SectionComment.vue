@@ -8,6 +8,7 @@
         <CommentItem
           v-for="comment in content"
           :comment="comment"
+          :can-reply="true"
           @submit-reply="submitReply"
           v-bind:key="comment._id"
         />

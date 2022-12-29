@@ -16,11 +16,11 @@
 </template>
 
 <script setup>
+import QuestionList from "@/components/layout/views/UserProfile/QuestionList.vue";
+
 const props = defineProps({
   name: String,
 });
-
-import QuestionList from "@/components/layout/views/UserProfile/QuestionList.vue";
 </script>
 
 <style lang="scss" scoped></style>

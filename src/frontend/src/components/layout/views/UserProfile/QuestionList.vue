@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-left text-xl font-semibold">{{ props.name }}</p>
+    <p class="px-3 text-left text-xl font-semibold">{{ props.name }}</p>
     <p
       class="text-sm p-3 border-gray-100 border-solid hover:text-blueSky-dark-300 cursor-pointer"
       :class="[index != 1 ? 'border-t-2' : '']"

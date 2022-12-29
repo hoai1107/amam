@@ -61,5 +61,19 @@ export const useUserStore = defineStore("user", () => {
     return 0;
   }
 
-  return { user, fetchCurrentUserInfo, checkCommentVoted, checkPostVoted };
+  function getUserId() {
+    if (user.value) {
+      return user.value._id;
+    }
+
+    return "";
+  }
+
+  return {
+    user,
+    fetchCurrentUserInfo,
+    checkCommentVoted,
+    checkPostVoted,
+    getUserId,
+  };
 });

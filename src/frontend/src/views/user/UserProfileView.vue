@@ -20,10 +20,17 @@ import NavigationBar from "@/components/layout/navbar/NavigationBar.vue";
 import EditProfileForm from "@/components/layout/views/UserProfile/EditProfileForm.vue";
 import SectionQuestion from "@/components/layout/views/UserProfile/SectionQuestion.vue";
 import PostMetaData from "@/components/layout/views/UserProfile/PostMetaData.vue";
+import { useRoute } from "vue-router";
+import { useUserStore } from "@/stores/user.js";
+import { ref } from "vue";
 
-const props = defineProps({
-  id: String,
-});
+const readOnly = ref(true);
+const route = useRoute();
+const userStore = useUserStore();
+
+if (route.params.id === userStore.getUserId()) {
+  readOnly.value = false;
+}
 </script>
 
 <style lang="scss" scoped></style>

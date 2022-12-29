@@ -3,18 +3,22 @@
     <p>About me</p>
     <textarea
       class="input-form"
-      v-model="question"
+      v-model="aboutMe"
       placeholder="Write something..."
       rows="5"
     ></textarea>
     <div class="flex flex-row justify-between mt-2">
       <div class="flex flex-col w-1/2">
         <p>Location</p>
-        <input class="input-form" v-model="name" placeholder="e.g Vietnam" />
+        <input
+          class="input-form"
+          v-model="location"
+          placeholder="e.g Vietnam"
+        />
       </div>
       <div class="flex flex-col w-1/2 ml-4">
         <p>Title</p>
-        <input class="input-form" v-model="name" placeholder="e.g Student" />
+        <input class="input-form" v-model="title" placeholder="e.g Student" />
       </div>
     </div>
     <ButtonItem
@@ -27,8 +31,25 @@
 </template>
 
 <script setup>
-import Avatar from "@/components/ui/Avatar.vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
+import { ref } from "vue";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+
+const aboutMe = ref("");
+const location = ref("");
+const title = ref("");
+
+const instance = authStore.getAxiosInstance();
+
+function updateProfile() {
+  instance.post("/users/user/update", {
+    about_me: aboutMe.value,
+    location: location.value,
+    title: title.value,
+  });
+}
 </script>
 
 <style lang="scss" scoped>

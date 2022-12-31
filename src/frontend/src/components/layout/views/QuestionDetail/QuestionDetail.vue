@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <PulseLoader :loading="isFetching" color="#467980" size="20px" />
+  </div>
   <div v-if="!isFetching">
     <SectionPost :content="post_section" />
     <SectionComment :content="comment_section" @fetch-data="fetchData" />
@@ -12,6 +15,7 @@ import Constansts from "@/plugins/Constants.js";
 import axios from "axios";
 import { useRoute } from "vue-router";
 import { ref } from "vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 const route = useRoute();
 const content = ref();

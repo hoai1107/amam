@@ -1,7 +1,7 @@
 import axios from "axios";
 import Constants from "@/plugins/Constants.js";
 import { defineStore } from "pinia";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import router from "@/router";
 import { useUserStore } from "./user";
 
@@ -26,17 +26,21 @@ export const useAuthStore = defineStore("auth", () => {
       },
     };
 
-    const response = await instance.post("/sign-in", data, config);
+    try {
+      const response = await instance.post("/sign-in", data, config);
 
-    if (response.status === 200) {
-      accessToken.value = response.data.access_token;
-      isLogin.value = true;
-
-      await sleep(2000);
-      await userStore.fetchCurrentUserInfo();
-      router.push({ name: "home" });
-    } else {
-      router.push({ name: "login", query: { msg: "wrongCredentials" } });
+      if (response.status === 200) {
+        accessToken.value = response.data.access_token;
+        isLogin.value = true;
+        await sleep(2000);
+        await userStore.fetchCurrentUserInfo();
+        // router.push({ name: "home" });
+        return true;
+      }
+    } catch (error) {
+      console.log(error);
+      // router.push({ name: "login", query: { msg: "wrongCredentials" } });
+      return false;
     }
   }
 

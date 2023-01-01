@@ -36,7 +36,9 @@
         </button>
       </div>
       <div class="flex flex-row">
-        <div class="mr-2 text-base">{{ content.downvote }}</div>
+        <div class="mr-2 text-base">
+          <span v-show="content.downvote > 0">-</span>{{ content.downvote }}
+        </div>
         <button @click="changeSentiment(userSentiment, Sentiment.DISLIKE)">
           <SvgIcon
             class="transition-none"

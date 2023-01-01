@@ -2,10 +2,14 @@
   <div>
     <div class="text-xl font-semibold mb-3">{{ result_heading }}</div>
     <div class="w-fit border-2 border-solid rounded px-6 py-3 mb-6">
-      <select v-model="sortCriteria">
-        <option>Newest</option>
-        <option>Most View</option>
-        <option>Most Vote</option>
+      <select v-model="orderBy">
+        <option
+          v-for="option in orderOptions"
+          :value="option.value"
+          :key="option.value"
+        >
+          {{ option.text }}
+        </option>
       </select>
     </div>
     <div class="flex flex-col gap-y-6">
@@ -44,7 +48,14 @@ const props = defineProps({
 
 const route = useRoute();
 const questions = ref([]);
-const sortCriteria = ref("Newest");
+
+const orderOptions = ref([
+  { text: "Newest", value: "default" },
+  { text: "Most Comment", value: "comment" },
+  { text: "Most View", value: "view" },
+  { text: "Most Voted", value: "vote" },
+]);
+const orderBy = ref("default");
 
 const page = computed(() => {
   return route.query.page_index ? Number(route.query.page_index) : 1;
@@ -88,6 +99,7 @@ watchEffect(async () => {
       ...route.query,
       ...route.params,
       page_index: page.value,
+      order_by_option: orderBy.value,
     },
   });
   questions.value = questionsResponse.data;

@@ -46,6 +46,7 @@ export const useAuthStore = defineStore("auth", () => {
   function logoutUser() {
     accessToken.value = "";
     userStore.clearUserData();
+    sessionStorage.removeItem("accessToken");
   }
 
   async function registerUser(name, email, password) {

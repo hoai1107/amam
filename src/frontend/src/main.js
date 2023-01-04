@@ -8,7 +8,6 @@ import "@/assets/styles/styles.scss";
 
 import router from "@/router";
 
-
 const app = createApp(App);
 const clickOutside = {
   beforeMount: (el, binding) => {

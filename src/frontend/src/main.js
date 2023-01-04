@@ -8,6 +8,7 @@ import "@/assets/styles/styles.scss";
 
 import router from "@/router";
 
+
 const app = createApp(App);
 const clickOutside = {
   beforeMount: (el, binding) => {
@@ -28,5 +29,10 @@ const clickOutside = {
 app.use(router);
 app.use(createPinia());
 app.directive("click-outside", clickOutside);
+
+import { useAuthStore } from "./stores/auth";
+
+const authStore = useAuthStore();
+await authStore.getTokenFromStorage();
 
 app.mount("#app");

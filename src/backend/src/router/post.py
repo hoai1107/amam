@@ -193,7 +193,7 @@ async def create_post(*,userID: str = Depends(authentication),post: PostDB):
         post_dict = post.dict()
         post_dict["time_created"] = str(post_dict["time_created"])
         current_post = mongodb["posts"].insert_one(post_dict)
-        mongodb.users.update_one({"_id": post.user_id},{"$addToSet":{"list_of_user_question":{
+        mongodb.users.update_one({"user_id": post.user_id},{"$addToSet":{"list_of_user_question":{
                     "id": str(current_post.inserted_id),
                     "title": post.title
                 }

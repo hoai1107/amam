@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("auth", () => {
       if (response.status === 200) {
         accessToken.value = response.data.access_token;
         isLogin.value = true;
-        await sleep(2000);
+        await sleep(5000);
         await userStore.fetchCurrentUserInfo();
         // router.push({ name: "home" });
         return true;

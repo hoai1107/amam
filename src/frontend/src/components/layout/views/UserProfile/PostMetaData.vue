@@ -1,16 +1,25 @@
 <template>
   <div class="flex flex-row">
     <div class="flex flex-col items-center w-1/3">
-      <Avatar></Avatar>
-      <div class="flex flex-row mt-2">
-        <SvgIcon
-          size="24"
-          type="mdi"
-          style="color: blue"
-          :path="mdiCameraOutline"
-        ></SvgIcon>
-        <p class="text-blue ml-2">change</p>
-      </div>
+      <Avatar :image-src="avatar"></Avatar>
+      <label>
+        <div class="flex flex-row mt-2">
+          <SvgIcon
+            size="24"
+            type="mdi"
+            style="color: blue"
+            :path="mdiCameraOutline"
+          ></SvgIcon>
+          <p class="text-blue ml-2">change</p>
+          <input
+            @change="previewAvatar"
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept="image/png, image/jpeg"
+          />
+        </div>
+      </label>
     </div>
     <div class="flex flex-col ml-4">
       <p class="text-2xl font-semibold">Floyd Miles</p>
@@ -27,10 +36,27 @@
 import Avatar from "@/components/ui/Avatar.vue";
 import { mdiCameraOutline } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
+import { ref } from "vue";
 
-const props = defineProps({
-  name: String,
-});
+const avatar = ref("");
+
+async function previewAvatar() {
+  const imageFile = document.querySelector("input[type=file]").files[0];
+  const reader = new FileReader();
+
+  var rawImg;
+  reader.onloadend = () => {
+    rawImg = reader.result;
+    avatar.value = rawImg;
+
+    //TODO: Sent a request to change image in backend
+  };
+  reader.readAsDataURL(imageFile);
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+input[type="file"] {
+  display: none;
+}
+</style>

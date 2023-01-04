@@ -11,7 +11,9 @@
       </router-link>
     </div>
   </div>
-  <div class="text-blue">See all</div>
+  <div class="text-blue">
+    <router-link :to="{ name: 'questions.category.all' }">See all</router-link>
+  </div>
 </template>
 
 <script setup>

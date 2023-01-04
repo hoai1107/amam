@@ -10,14 +10,14 @@
         <Tag :name="capitalize(tag)" />
       </div>
     </div>
-    <p class="text-base mb-4">
+    <p class="text-base mb-4 truncate">
       {{ question.content }}
     </p>
     <div class="flex flex-row">
       <div class="flex flex-row gap-8">
         <div class="flex flex-row">
           <div class="mr-2 text-base">
-            {{ question.upvote - question.downvote }}
+            {{ question.upvote + question.downvote }}
           </div>
           <SvgIcon size="24" type="mdi" :path="mdiArrowUpBoldOutline"></SvgIcon>
         </div>

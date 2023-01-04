@@ -21,6 +21,12 @@
       state="normal"
       text="Login"
     ></ButtonItem>
+    <PulseLoader
+      class="mt-4 mx-auto"
+      :loading="isLogin"
+      color="#467980"
+      size="15px"
+    />
   </div>
 </template>
 
@@ -29,13 +35,16 @@ import ButtonItem from "@/components/ui/ButtonItem.vue";
 import CheckBox from "@/components/ui/CheckBox.vue";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 const authStore = useAuthStore();
 const route = useRoute();
+const router = useRouter();
 const email = ref();
 const password = ref();
 
+const isLogin = ref(false);
 const wrongCredentials = ref(false);
 const notVerify = ref(false);
 const afterSignup = ref(false);
@@ -55,7 +64,14 @@ switch (route.query.msg) {
 }
 
 async function onSubmit() {
-  await authStore.loginUser(email.value, password.value);
+  isLogin.value = true;
+  const status = await authStore.loginUser(email.value, password.value);
+
+  if (status) {
+    router.push({ name: "home" });
+  } else {
+    router.push({ name: "login", query: { msg: "wrongCredentials" } });
+  }
 }
 </script>
 

@@ -58,7 +58,6 @@
 
 <script setup>
 import Constants from "@/plugins/Constants";
-import CheckBox from "@/components/ui/CheckBox.vue";
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { mdiCheckBold } from "@mdi/js";
@@ -66,6 +65,7 @@ import axios from "axios";
 
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 const categoriesNames = Constants.CATEGORIES;
 
@@ -73,8 +73,7 @@ const title = ref();
 const content = ref();
 const categories = ref([]);
 const authStore = useAuthStore();
-
-console.log(authStore.getAuthHeader());
+const router = useRouter();
 
 function submitQuestion() {
   const instance = axios.create({
@@ -83,15 +82,19 @@ function submitQuestion() {
 
   let config = authStore.getAuthHeader();
 
-  instance.post(
-    "/create",
-    {
-      title: title.value,
-      content: content.value,
-      tags: categories.value,
-    },
-    config
-  );
+  instance
+    .post(
+      "/create",
+      {
+        title: title.value,
+        content: content.value,
+        tags: categories.value,
+      },
+      config
+    )
+    .then(() => {
+      router.push({ name: "home" });
+    });
 }
 </script>
 

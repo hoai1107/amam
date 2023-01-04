@@ -44,6 +44,11 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
+  function logoutUser() {
+    accessToken.value = "";
+    userStore.clearUserData();
+  }
+
   async function registerUser(name, email, password) {
     const response = await instance.post("/sign-up", {
       user_name: name,
@@ -87,5 +92,6 @@ export const useAuthStore = defineStore("auth", () => {
     isAuthenticated,
     getAuthHeader,
     getAxiosInstance,
+    logoutUser,
   };
 });

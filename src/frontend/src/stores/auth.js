@@ -86,6 +86,10 @@ export const useAuthStore = defineStore("auth", () => {
 
   async function getTokenFromStorage() {
     try {
+      if (sessionStorage.getItem("accessToken") === null) {
+        return;
+      }
+
       accessToken.value = sessionStorage.getItem("accessToken");
       await userStore.fetchCurrentUserInfo();
     } catch (error) {

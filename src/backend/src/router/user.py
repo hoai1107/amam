@@ -254,14 +254,43 @@ def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str,r
         mongodb.posts.update_one({"_id": ObjectId(replyComment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
-@router.put('/user/update')
-def user_update(user: UserDB):
-    user_dict=user.dict()
-    cmd=mongodb.users.find_one({'user_name':user_dict['user_name']})
-    if cmd==None: return Response(status_code=status.HTTP_400_BAD_REQUEST)
-    user_dict['_id']=cmd['_id']
-    mongodb.users.replace_one({'_id': user_dict['_id']},
-                              user_dict, upsert=False)
+@router.put('/user/update/')
+def user_update(*,userID= Depends(authentication),user: User):
+    mongodb.users.update_one({"user_id":userID},{
+        "$set":{
+            "avatar": user.avatar,
+            "about_me": user.about_me,
+            "location":user.location,
+            "title": user.title
+        }})
+    return Response(status_code=status.HTTP_202_ACCEPTED)
+
+@router.put("/user/bookmark/{postID}")
+async def save_book_mark(*,userID=Depends(authentication),postID:str):
+    try:
+        bookmark = mongodb.users.find_one({"user_id": userID, "bookmark.id":postID})
+        post = mongodb.posts.find_one({"_id": ObjectId(postID)})
+        if bookmark == None:
+            mongodb.users.update_one({"user_id": userID},
+            {"$addToSet":
+                {
+                    "bookmark":{
+                        "id": postID,
+                        "title": post["title"]
+                    }
+                }
+            })
+        else:
+            mongodb.users.update_one({"user_id": userID},
+            {"$pull":
+                {
+                    "bookmark":{
+                        "id": postID
+                    }
+                }
+            })
+    except:
+        return Response(status_code= status.HTTP_400_BAD_REQUEST)
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 @router.delete("/delete/all")

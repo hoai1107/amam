@@ -31,17 +31,22 @@ export const useAuthStore = defineStore("auth", () => {
 
       if (response.status === 200) {
         accessToken.value = response.data.access_token;
+        sessionStorage.setItem("accessToken", response.data.access_token);
         isLogin.value = true;
-        await sleep(2000);
+        await sleep(5000);
         await userStore.fetchCurrentUserInfo();
-        // router.push({ name: "home" });
         return true;
       }
     } catch (error) {
       console.log(error);
-      // router.push({ name: "login", query: { msg: "wrongCredentials" } });
       return false;
     }
+  }
+
+  function logoutUser() {
+    accessToken.value = "";
+    userStore.clearUserData();
+    sessionStorage.removeItem("accessToken");
   }
 
   async function registerUser(name, email, password) {
@@ -55,7 +60,7 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   function isAuthenticated() {
-    return accessToken.value != "";
+    return accessToken.value != "" && accessToken.value != null;
   }
 
   function getAxiosInstance() {
@@ -79,6 +84,15 @@ export const useAuthStore = defineStore("auth", () => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  async function getTokenFromStorage() {
+    try {
+      accessToken.value = sessionStorage.getItem("accessToken");
+      await userStore.fetchCurrentUserInfo();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return {
     accessToken,
     isLogin,
@@ -87,5 +101,7 @@ export const useAuthStore = defineStore("auth", () => {
     isAuthenticated,
     getAuthHeader,
     getAxiosInstance,
+    logoutUser,
+    getTokenFromStorage,
   };
 });

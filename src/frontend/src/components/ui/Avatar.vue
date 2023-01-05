@@ -2,11 +2,24 @@
   <div
     class="aspect-square cursor-pointer flex grow-0 items-center content-center"
   >
-    <img class="avatar-container" src="@/assets/img/user.webp " alt="avatar" />
+    <img
+      v-if="props.imageSrc"
+      class="avatar-container"
+      :src="props.imageSrc"
+      alt="avatar"
+    />
+    <img
+      v-else
+      class="avatar-container"
+      src="@/assets/img/user.webp"
+      alt="avatar"
+    />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const props = defineProps(["imageSrc"]);
+</script>
 
 <style lang="scss" scoped>
 .avatar-container {

@@ -37,18 +37,13 @@
                 <p>Profile</p>
               </li>
             </router-link>
-            <router-link :to="{ name: 'login' }">
-              <li
-                class="rounded flex flex-row gap-2 items-center text-red px-4 hover:bg-blueSky-light-800"
-              >
-                <SvgIcon
-                  size="24"
-                  type="mdi"
-                  :path="mdiLogoutVariant"
-                ></SvgIcon>
-                <p>Logout</p>
-              </li>
-            </router-link>
+            <li
+              class="rounded flex flex-row gap-2 items-center text-red px-4 hover:bg-blueSky-light-800"
+              @click="logout"
+            >
+              <SvgIcon size="24" type="mdi" :path="mdiLogoutVariant"></SvgIcon>
+              <p>Logout</p>
+            </li>
           </ul>
         </div>
       </div>
@@ -70,9 +65,13 @@ import SvgIcon from "@jamescoyle/vue-icon";
 
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user.js";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 const showMenu = ref(false);
+const router = useRouter();
 const userStore = useUserStore();
+const authStore = useAuthStore();
 
 function toggleMenu() {
   showMenu.value = !showMenu.value;
@@ -80,6 +79,11 @@ function toggleMenu() {
 
 function hideMenu() {
   showMenu.value = false;
+}
+
+function logout() {
+  authStore.logoutUser();
+  router.push({ name: "login" });
 }
 </script>
 

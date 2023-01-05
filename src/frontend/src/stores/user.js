@@ -77,6 +77,10 @@ export const useUserStore = defineStore("user", () => {
     return "";
   }
 
+  function clearUserData() {
+    user.value = "";
+  }
+
   return {
     user,
     fetchCurrentUserInfo,
@@ -84,5 +88,6 @@ export const useUserStore = defineStore("user", () => {
     checkPostVoted,
     getUserId,
     getQuestionList,
+    clearUserData,
   };
 });

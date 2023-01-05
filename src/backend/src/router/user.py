@@ -132,7 +132,7 @@ def create_comment(*,userID: str = Depends(authentication),comment: CommentDB):
         mongodb.posts.update_one({"_id": ObjectId(comment.post_id)},{"$inc":{"num_comments": 1}})
     return str(current_comment.inserted_id)
 
-@router.put("/comment/change")
+@router.put("/comment/{commentID}")
 def change_comment(content: str,commentID: str):
     cmd=mongodb.comments.find_one({"_id": ObjectId(commentID)})
     if cmd==None:
@@ -145,6 +145,10 @@ def change_comment(content: str,commentID: str):
             }
         })
     return Response(status_code=status.HTTP_202_ACCEPTED)
+
+@router.delete("/comment/{commentID}")
+def delete_comment(*,userID: str = Depends(authentication),commentID: str):
+    pass
 
 @router.put("/comment/upvote")
 def upvote_comment(*,userID: str = Depends(authentication), commentID: str):

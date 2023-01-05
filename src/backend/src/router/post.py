@@ -72,7 +72,7 @@ async def get_posts_on_homepage(
         category: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
     ):
     count = 0 
-    if category == ["all"]:
+    if category == ["All"]:
         list_of_full_posts = mongodb.posts.aggregate([
             {"$sort":
                     {

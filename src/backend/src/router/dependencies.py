@@ -4,9 +4,6 @@ import sys
 import os
 from pathlib import Path
 sys.path.insert(0,os.path.join(Path(__file__).parents[0],"router"))
-from constant import shard_number
-import random
-from google.cloud import firestore
 
 """
 In fact, tokenUrl merely does have a meaning for the fastapi documentation
@@ -26,8 +23,8 @@ async def search_query_processing(
     query_title: str = Query(title="The query for the title of the post", default="")
 ):
     word_arr = query_title.split(" ")
-    query_title_pattern = "(.)*"
+    query_title_pattern = ""
     for word in word_arr:
-        query_title_pattern += word + "(.)*|"
-    return query_title_pattern
+        query_title_pattern += " " + word + " " + "(.)*|"
+    return query_title_pattern[:-1]
 

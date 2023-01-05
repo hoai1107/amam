@@ -86,9 +86,17 @@ class PostDB(BaseModel):
 
 # This will be refined in the future when the frontend is fullfiled
 class SearchFilter(str,Enum):
-    all = "all"
-    technology = "technology"
-    math = "math"
+    all = "All"
+    technology = "Technology"
+    movies = "Movies"
+    health = "Health"
+    food = "Food"
+    music = "Music"
+    books = "Books"
+    business = "Business"
+    psychology = "Psychology"
+    history = "History"
+    cooking = "Cooking"
 
 class OrderByOption(str,Enum):
     default = "default"

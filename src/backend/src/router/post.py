@@ -130,7 +130,7 @@ async def get_searched_posts(
         order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default)
     ):
     count = 0
-    if category == ["all"]:
+    if category == ["All"]:
         list_of_full_posts = mongodb.posts.aggregate([
             {"$match":
                 {"title":

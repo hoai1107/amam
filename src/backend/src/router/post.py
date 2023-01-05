@@ -39,6 +39,32 @@ async def get_post(
         return Response(status_code= status.HTTP_400_BAD_REQUEST)
     return {"Post Section":post_info_model, "Comment Section": comment_list}
 
+@router.put("/{post_id}/view")
+async def update_post_view(*,userID: str = Depends(authentication),post_id:str):
+    try:
+        mongodb.posts.update_one({"_id": ObjectId(post_id)},{"$inc":{"view":1}})
+        post = mongodb.posts.find_one({"_id": ObjectId(post_id)})
+        user_history_post = mongodb.users.find_one({"user_id":userID,"history_posts":{"$size":30}})
+        if user_history_post != None:
+            mongodb.users.update_one({"user_id":userID},
+                {
+                    "$pop":{"history_posts": -1},
+                }
+            )
+        mongodb.users.update_one({"user_id":userID},
+            {
+                "$push":{
+                    "history_posts":{
+                        "id": post_id,
+                        "title": post["title"]
+                    }
+                }
+            }
+        )
+    except:
+        return Response(status_code= status.HTTP_400_BAD_REQUEST)
+    return Response(status_code=status.HTTP_202_ACCEPTED)
+
 @router.get("/all")
 async def get_posts_on_homepage(
         page_index : int = Query(title="The page index in the homepage", default=1),
@@ -46,7 +72,7 @@ async def get_posts_on_homepage(
         category: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
     ):
     count = 0 
-    if category == ["all"]:
+    if category == ["All"]:
         list_of_full_posts = mongodb.posts.aggregate([
             {"$sort":
                     {
@@ -104,7 +130,7 @@ async def get_searched_posts(
         order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default)
     ):
     count = 0
-    if category == ["all"]:
+    if category == ["All"]:
         list_of_full_posts = mongodb.posts.aggregate([
             {"$match":
                 {"title":
@@ -193,7 +219,7 @@ async def create_post(*,userID: str = Depends(authentication),post: PostDB):
         post_dict = post.dict()
         post_dict["time_created"] = str(post_dict["time_created"])
         current_post = mongodb["posts"].insert_one(post_dict)
-        mongodb.users.update_one({"_id": post.user_id},{"$addToSet":{"list_of_user_question":{
+        mongodb.users.update_one({"user_id": post.user_id},{"$addToSet":{"list_of_user_question":{
                     "id": str(current_post.inserted_id),
                     "title": post.title
                 }

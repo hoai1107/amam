@@ -59,7 +59,13 @@
           </div>
 
           <div>
-            <button @click="toggleReply" v-show="canReply">Reply</button>
+            <button
+              v-if="authStore.isAuthenticated()"
+              @click="toggleReply"
+              v-show="canReply"
+            >
+              Reply
+            </button>
           </div>
         </div>
         <button>
@@ -128,7 +134,6 @@ const props = defineProps({
   canReply: Boolean,
 });
 const content = toRefs(props);
-
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const reply = ref();
@@ -192,7 +197,7 @@ function changeSentiment(oldSentiment, newSentiment) {
     }
   }
 
-  var requestURL = "";
+  var requestURL = `users/comment/${props.comment._id}/`;
   if (newSentiment === Sentiment.LIKE) {
     requestURL += "upvote";
   } else {

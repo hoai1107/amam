@@ -148,7 +148,7 @@ function changeSentiment(oldSentiment, newSentiment) {
     }
   }
 
-  var requestURL = "users/";
+  var requestURL = `users/comment/`;
   if (newSentiment === Sentiment.LIKE) {
     requestURL += "upvote";
   } else {

@@ -2,8 +2,13 @@
   <div>
     <!-- Comment Input Form -->
     <div>
-      <div class="text-xl font-semibold">Comments ({{ totalComments }})</div>
-      <CommentForm @submit-comment="submitComment" />
+      <div class="text-xl font-semibold mb-3">
+        Comments ({{ totalComments }})
+      </div>
+      <CommentForm
+        v-if="authStore.isAuthenticated()"
+        @submit-comment="submitComment"
+      />
       <div class="flex flex-col gap-6">
         <CommentItem
           v-for="comment in content"

@@ -55,12 +55,12 @@
       </div>
     </div>
 
-    <!-- bookmark icon, bien mat doi voi anonymous, khi click se chuyen qua icon mdiBookmark co color blue (xem design system) -->
     <SvgIcon
+      class="transition-none cursor-pointer ml-auto"
       size="24"
       type="mdi"
-      :path="mdiBookmarkOutline"
-      class="ml-auto"
+      :path="isBookmark ? mdiBookmark : mdiBookmarkOutline"
+      @click="changeBookmark"
     ></SvgIcon>
   </div>
 </template>
@@ -96,14 +96,14 @@ const post = toRefs(props);
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const userSentiment = ref(Sentiment.NEUTRAL);
+const isBookmark = ref(false);
 
 const instance = authStore.getAxiosInstance();
 
 if (authStore.isAuthenticated()) {
   userSentiment.value = userStore.checkPostVoted(props.content._id);
+  isBookmark.value = userStore.checkPostBookmark(props.content._id);
 }
-
-console.log(props.content);
 
 const timeInterval = computed(() => {
   const dateNow = DateTime.now();
@@ -164,6 +164,13 @@ function changeSentiment(oldSentiment, newSentiment) {
     .then(async () => {
       await userStore.fetchCurrentUserInfo();
     });
+}
+
+function changeBookmark() {
+  isBookmark.value = !isBookmark.value;
+  instance.put(`/users/bookmark/${props.content._id}`).then(async () => {
+    await userStore.fetchCurrentUserInfo();
+  });
 }
 </script>
 

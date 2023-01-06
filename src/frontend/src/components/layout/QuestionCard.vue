@@ -35,7 +35,11 @@
       <SvgIcon
         size="24"
         type="mdi"
-        :path="mdiBookmarkOutline"
+        :path="
+          userStore.checkPostBookmark(question._id)
+            ? mdiBookmark
+            : mdiBookmarkOutline
+        "
         class="ml-auto"
       ></SvgIcon>
     </div>
@@ -52,8 +56,10 @@ import {
   mdiBookmark,
 } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
+import { useUserStore } from "@/stores/user.js";
 
 const props = defineProps(["question"]);
+const userStore = useUserStore();
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);

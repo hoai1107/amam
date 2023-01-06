@@ -2,33 +2,33 @@ from fastapi import APIRouter, Response, status, Depends, Query, Path
 import os
 import sys
 from pathlib import Path
-sys.path.insert(0,os.path.join(Path(__file__).parents[1],"database_connection"))
-sys.path.insert(0,os.path.join(Path(__file__).parents[1],"data_model"))
+
+sys.path.insert(0, os.path.join(Path(__file__).parents[1], "database_connection"))
+sys.path.insert(0, os.path.join(Path(__file__).parents[1], "data_model"))
 from user_model import User, UserDB
-from post_model import  CommentDB
+from post_model import CommentDB
 from authentication import authentication
 from dependencies import recursive_remove_comment
 from db_connection import mongodb, client, read_concern, WriteConcern
 from collections import namedtuple
 from bson import ObjectId
 
-router = APIRouter(
-    prefix="/users",
-    tags= ["Users"]
-)
+router = APIRouter(prefix="/users", tags=["Users"])
 
 # This is to get all information related to a specific user
-@router.get("", response_model= User)
+@router.get("", response_model=User)
 async def get_user(user_id: str = Depends(authentication)):
-    # try:    
-        current_user = mongodb.users.find_one({"user_id": user_id})
-        profile_user_model = User(**(current_user))
+    # try:
+    current_user = mongodb.users.find_one({"user_id": user_id})
+    profile_user_model = User(**(current_user))
     # except:
-    #     return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!") 
-        return profile_user_model
+    #     return Response(status_code= status.HTTP_400_BAD_REQUEST, content="Something wrong!")
+    return profile_user_model
+
 
 def customDecoder(studentDict):
     return namedtuple("X", studentDict.keys())(*studentDict.values())
+
 
 @router.put("/upvote/")
 async def upvote_User( postId: str, userID: str = Depends(authentication)):
@@ -82,6 +82,7 @@ async def upvote_User( postId: str, userID: str = Depends(authentication)):
                 session.abort_transaction()
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return "upvote"
+
 
 @router.put("/downvote/")
 async def downvote_User(postId: str, userID: str = Depends(authentication)):
@@ -154,6 +155,7 @@ async def create_comment(*,userID: str = Depends(authentication),comment: Commen
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return str(current_comment.inserted_id)
 
+
 @router.put("/comment/{commentID}")
 async def change_comment(content: str,commentID: str):
     with client.start_session() as session:
@@ -170,6 +172,7 @@ async def change_comment(content: str,commentID: str):
                 session.abort_transaction()
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return Response(status_code=status.HTTP_202_ACCEPTED)
+
 
 @router.delete("/comment/{commentID}")
 async def delete_comment(*,userID: str = Depends(authentication),commentID: str):
@@ -291,6 +294,7 @@ async def downvote_comment(*,userID: str = Depends(authentication), commentID: s
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return "downvote"
 
+
 # Will have a meeting for the input of this endpoint
 @router.post("/comments/reply")
 async def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str,replyComment:CommentDB):
@@ -362,9 +366,11 @@ async def save_book_mark(*,userID=Depends(authentication),postID:str):
                 return Response(status_code= status.HTTP_400_BAD_REQUEST)
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
+
 @router.delete("/delete/all")
 async def delete_all_users():
     mongodb.users.delete_many({})
+
 
 @router.delete("/delete/comments/all")
 async def delete_all_comments():

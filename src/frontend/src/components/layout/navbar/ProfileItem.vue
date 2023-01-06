@@ -14,7 +14,15 @@
         <div
           class="img-container aspect-square h-full flex grow-0 items-center content-center"
         >
-          <img src="@/assets/img/user.webp " alt="avatar" @click="toggleMenu" />
+          <img
+            :src="
+              userStore.user.avatar
+                ? userStore.user.avatar
+                : '@/assets/img/user.webp'
+            "
+            alt="avatar"
+            @click="toggleMenu"
+          />
         </div>
 
         <!--Menu-->

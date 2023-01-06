@@ -30,7 +30,7 @@ def customDecoder(studentDict):
     return namedtuple("X", studentDict.keys())(*studentDict.values())
 
 
-@router.put("/upvote/")
+@router.put("/upvote/{postId}")
 async def upvote_User( postId: str, userID: str = Depends(authentication)):
     with client.start_session() as session:
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
@@ -83,7 +83,7 @@ async def upvote_User( postId: str, userID: str = Depends(authentication)):
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return "upvote"
 
-@router.put("/downvote/")
+@router.put("/downvote/{postId}")
 async def downvote_User(postId: str, userID: str = Depends(authentication)):
     with client.start_session() as session:
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):

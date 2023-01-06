@@ -37,6 +37,14 @@ export const useUserStore = defineStore("user", () => {
     return [];
   }
 
+  function getBookmarkList() {
+    if (user.value) {
+      return user.value.bookmark;
+    }
+
+    return [];
+  }
+
   function checkCommentVoted(id) {
     const commentVotes = user.value.list_of_comment_voted;
 
@@ -69,6 +77,33 @@ export const useUserStore = defineStore("user", () => {
     return 0;
   }
 
+  function checkPostBookmark(id) {
+    if (!user.value) {
+      return;
+    }
+
+    const postBookmark = user.value.bookmark;
+    for (var i = 0; i < postBookmark.length; ++i) {
+      var post = postBookmark[i];
+      if (post._id === id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function updateUserProfile(fields) {
+    user.value = { ...user.value, ...fields };
+    const instance = auth.getAxiosInstance();
+
+    try {
+      instance.put("/users/update", user.value);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function getUserId() {
     if (user.value) {
       return user.value._id;
@@ -86,8 +121,11 @@ export const useUserStore = defineStore("user", () => {
     fetchCurrentUserInfo,
     checkCommentVoted,
     checkPostVoted,
+    checkPostBookmark,
     getUserId,
     getQuestionList,
+    getBookmarkList,
+    updateUserProfile,
     clearUserData,
   };
 });

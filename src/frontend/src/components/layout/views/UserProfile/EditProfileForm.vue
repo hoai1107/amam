@@ -22,6 +22,7 @@
       </div>
     </div>
     <ButtonItem
+      @click="updateProfile"
       style="margin-top: 1rem; height: 52px; width: 150px"
       type="primary"
       state="normal"
@@ -34,17 +35,19 @@
 import ButtonItem from "@/components/ui/ButtonItem.vue";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
+import { useUserStore } from "@/stores/user";
 
 const authStore = useAuthStore();
+const userStore = useUserStore();
 
-const aboutMe = ref("");
-const location = ref("");
-const title = ref("");
+const aboutMe = ref(userStore.user.about_me);
+const location = ref(userStore.user.location);
+const title = ref(userStore.user.title);
 
-const instance = authStore.getAxiosInstance();
+console.log(userStore.user);
 
 function updateProfile() {
-  instance.post("/users/user/update", {
+  userStore.updateUserProfile({
     about_me: aboutMe.value,
     location: location.value,
     title: title.value,

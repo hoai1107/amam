@@ -16,7 +16,7 @@
     name="Your Questions"
   ></QuestionList>
   <QuestionList
-    :questions="questions"
+    :questions="userStore.getBookmarkList()"
     class="mt-8"
     name="Saved Questions"
   ></QuestionList>
@@ -29,12 +29,6 @@ import { useUserStore } from "@/stores/user";
 const props = defineProps({
   name: String,
 });
-
-const questions = [
-  "Where should I store my CSV files for Memgraph?",
-  "TabView PageTabViewStyle scroll information not working after tab disappears from screen SwiftUI iOS 16",
-  "Switch Statement not working but does for other statement in java",
-];
 
 const userStore = useUserStore();
 </script>

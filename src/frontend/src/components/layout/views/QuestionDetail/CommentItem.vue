@@ -2,7 +2,7 @@
   <div class="flex flex-row gap-3">
     <!-- Avatar -->
     <div class="h-12 aspect-square">
-      <Avatar />
+      <Avatar :image-src="comment.user_avatar" />
     </div>
 
     <!-- Content -->
@@ -127,9 +127,6 @@ const props = defineProps({
   comment: Object,
   canReply: Boolean,
 });
-
-console.log(props.canReply);
-
 const content = toRefs(props);
 
 const authStore = useAuthStore();

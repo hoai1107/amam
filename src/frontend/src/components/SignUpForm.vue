@@ -22,6 +22,12 @@
       text="Sign up"
       @click="signUp"
     ></ButtonItem>
+    <PulseLoader
+      :loading="isSignup"
+      class="mt-4 mx-auto"
+      color="#467980"
+      size="15px"
+    />
   </div>
 </template>
 
@@ -30,6 +36,7 @@ import ButtonItem from "@/components/ui/ButtonItem.vue";
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -37,8 +44,10 @@ const name = ref();
 const email = ref();
 const password = ref();
 const errorMessage = ref("");
+const isSignup = ref(false);
 
 async function signUp() {
+  isSignup.value = true;
   const response = await authStore.registerUser(
     name.value,
     email.value,
@@ -50,6 +59,7 @@ async function signUp() {
     router.push({ name: "login", query: { msg: "afterSignup" } });
   } else {
     errorMessage.value = "Sign up failed.";
+    isSignup.value = false;
   }
 }
 </script>

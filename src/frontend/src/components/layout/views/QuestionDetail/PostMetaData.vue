@@ -4,7 +4,9 @@
     <div
       class="aspect-square h-full cursor-pointer flex grow-0 items-center content-center"
     >
+      <img v-if="avatar" class="avatar-container" :src="avatar" alt="avatar" />
       <img
+        v-else
         class="avatar-container"
         src="@/assets/img/user.webp "
         alt="avatar"
@@ -14,7 +16,7 @@
     <!--Meta Data-->
     <div class="flex flex-col">
       <!--Post's Username-->
-      <div class="text-base font-semibold">Hoai Tu</div>
+      <div class="text-base font-semibold">{{ username }}</div>
 
       <!--Time, View-->
       <div class="flex flex-row gap-3 text-gray-400">
@@ -27,6 +29,8 @@
 
 <script setup>
 const props = defineProps({
+  username: String,
+  avatar: String,
   timeInterval: String,
   views: Number,
 });

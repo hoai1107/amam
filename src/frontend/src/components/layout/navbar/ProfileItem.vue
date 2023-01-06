@@ -15,11 +15,14 @@
           class="img-container aspect-square h-full flex grow-0 items-center content-center"
         >
           <img
-            :src="
-              userStore.user.avatar
-                ? userStore.user.avatar
-                : '@/assets/img/user.webp'
-            "
+            v-if="userStore.user.avatar"
+            :src="userStore.user.avatar"
+            alt="avatar"
+            @click="toggleMenu"
+          />
+          <img
+            v-else
+            src="@/assets/img/user.webp"
             alt="avatar"
             @click="toggleMenu"
           />

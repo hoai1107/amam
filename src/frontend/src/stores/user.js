@@ -93,15 +93,18 @@ export const useUserStore = defineStore("user", () => {
     return false;
   }
 
-  function updateUserProfile(fields) {
+  async function updateUserProfile(fields) {
     user.value = { ...user.value, ...fields };
     const instance = auth.getAxiosInstance();
 
     try {
-      instance.put("/users/update", user.value);
+      await instance.put("/users/update", user.value);
     } catch (error) {
       console.log(error);
+      return;
     }
+
+    await fetchCurrentUserInfo();
   }
 
   function getUserId() {

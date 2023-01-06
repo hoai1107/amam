@@ -67,10 +67,13 @@ async function onSubmit() {
   isLogin.value = true;
   const status = await authStore.loginUser(email.value, password.value);
 
+  console.log(status);
+
   if (status) {
     router.push({ name: "home" });
   } else {
-    router.push({ name: "login", query: { msg: "wrongCredentials" } });
+    wrongCredentials.value = true;
+    isLogin.value = false;
   }
 }
 </script>

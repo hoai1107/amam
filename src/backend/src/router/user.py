@@ -30,9 +30,12 @@ def customDecoder(studentDict):
 
 
 @router.put("/upvote/{postId}")
-async def upvote_User( postId: str, userID: str = Depends(authentication)):
+async def upvote_User(postId: str, userID: str = Depends(authentication)):
     with client.start_session() as session:
-        with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
+        with session.start_transaction(
+            read_concern=read_concern.ReadConcern("majority"),
+            write_concern=WriteConcern("majority"),
+        ):
             try:
                 cmd = mongodb.users.aggregate([
                     {"$match":
@@ -54,18 +57,24 @@ async def upvote_User( postId: str, userID: str = Depends(authentication)):
                     }
                 ],session=session)
                 cmd = list(cmd)
-                if cmd!= []:
+                if cmd != []:
                     if cmd[0]['list_of_post_voted'][0]['upvote_downvote']=='upvote':
-                        mongodb.posts.update_one({"_id":ObjectId(postId)},
-                        {'$inc':{
-                            'upvote':-1
-                        }},session=session)
-                        mongodb.users.update_one({"user_id": userID},
-                        {'$pull':{
-                            'list_of_post_voted':{
-                                'id': postId,
-                            }
-                        }},session=session)
+                        mongodb.posts.update_one(
+                            {"_id": ObjectId(postId)},
+                            {"$inc": {"upvote": -1}},
+                            session=session,
+                        )
+                        mongodb.users.update_one(
+                            {"user_id": userID},
+                            {
+                                "$pull": {
+                                    "list_of_post_voted": {
+                                        "id": postId,
+                                    }
+                                }
+                            },
+                            session=session,
+                        )
                         session.commit_transaction()
                         return "not upvote"
                     else:
@@ -81,26 +90,38 @@ async def upvote_User( postId: str, userID: str = Depends(authentication)):
                         array_filters=[{"elem.id":{"$eq":postId}}],upsert=False,session=session)
                         session.commit_transaction()
                         return "upvote"
-                else: 
-                        mongodb.posts.update_one({"_id":ObjectId(postId)},{'$inc':{'upvote':1}},session=session)
-                        mongodb.users.update_one({"user_id": userID},
-                        {"$addToSet":{
-                            'list_of_post_voted':{
-                                    'id': postId,
-                                    'upvote_downvote': 'upvote'
+                else:
+                    mongodb.posts.update_one(
+                        {"_id": ObjectId(postId)},
+                        {"$inc": {"upvote": 1}},
+                        session=session,
+                    )
+                    mongodb.users.update_one(
+                        {"user_id": userID},
+                        {
+                            "$addToSet": {
+                                "list_of_post_voted": {
+                                    "id": postId,
+                                    "upvote_downvote": "upvote",
                                 }
                             }
-                        },session=session)
+                        },
+                        session=session,
+                    )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return "upvote"
 
+
 @router.put("/downvote/{postId}")
 async def downvote_User(postId: str, userID: str = Depends(authentication)):
     with client.start_session() as session:
-        with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
+        with session.start_transaction(
+            read_concern=read_concern.ReadConcern("majority"),
+            write_concern=WriteConcern("majority"),
+        ):
             try:
                 cmd = mongodb.users.aggregate([
                     {"$match":
@@ -149,34 +170,59 @@ async def downvote_User(postId: str, userID: str = Depends(authentication)):
                         array_filters=[{"elem.id":{"$eq":postId}}],upsert=False,session=session)
                         session.commit_transaction()
                         return "downvote"
-                else: 
-                        mongodb.posts.update_one({"_id":ObjectId(postId)},{'$inc':{'downvote':1}},session=session)
-                        mongodb.users.update_one({"user_id": userID},
-                        {"$addToSet":{
-                            'list_of_post_voted':{
-                                    'id': postId,
-                                    'upvote_downvote': 'downvote'
+                else:
+                    mongodb.posts.update_one(
+                        {"_id": ObjectId(postId)},
+                        {"$inc": {"downvote": 1}},
+                        session=session,
+                    )
+                    mongodb.users.update_one(
+                        {"user_id": userID},
+                        {
+                            "$addToSet": {
+                                "list_of_post_voted": {
+                                    "id": postId,
+                                    "upvote_downvote": "downvote",
                                 }
                             }
-                        },session=session)
+                        },
+                        session=session,
+                    )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return "downvote"
-            
+
 
 @router.post("/comments/create")
-async def create_comment(*,userID: str = Depends(authentication),comment: CommentDB):
+async def create_comment(*, userID: str = Depends(authentication), comment: CommentDB):
     with client.start_session() as session:
-        with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
+        with session.start_transaction(
+            read_concern=read_concern.ReadConcern("majority"),
+            write_concern=WriteConcern("majority"),
+        ):
             try:
                 comment.user_id = userID
                 comment_dict = comment.dict()
                 comment_dict["time_created"] = str(comment_dict["time_created"])
-                current_comment = mongodb.comments.insert_one(comment_dict,session=session)
-                mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": str(current_comment.inserted_id)}},session=session)
-                mongodb.posts.update_one({"_id": ObjectId(comment.post_id)},{"$inc":{"num_comments": 1}},session=session)
+                current_comment = mongodb.comments.insert_one(
+                    comment_dict, session=session
+                )
+                mongodb.users.update_one(
+                    {"user_id": userID},
+                    {
+                        "$addToSet": {
+                            "list_of_user_comments_id": str(current_comment.inserted_id)
+                        }
+                    },
+                    session=session,
+                )
+                mongodb.posts.update_one(
+                    {"_id": ObjectId(comment.post_id)},
+                    {"$inc": {"num_comments": 1}},
+                    session=session,
+                )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
@@ -185,16 +231,15 @@ async def create_comment(*,userID: str = Depends(authentication),comment: Commen
 
 
 @router.put("/comment/{commentID}")
-async def change_comment(content: str,commentID: str):
+async def change_comment(content: str, commentID: str):
     with client.start_session() as session:
         with session.start_transaction(write_concern=WriteConcern("majority")):
             try:
-                mongodb.comments.update_one({'_id':ObjectId(commentID)},
-                {
-                    "$set": {
-                        "content": content
-                    }
-                },session=session)
+                mongodb.comments.update_one(
+                    {"_id": ObjectId(commentID)},
+                    {"$set": {"content": content}},
+                    session=session,
+                )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
@@ -203,10 +248,11 @@ async def change_comment(content: str,commentID: str):
 
 
 @router.delete("/comment/{commentID}")
-async def delete_comment(*,userID: str = Depends(authentication),commentID: str):
+async def delete_comment(*, userID: str = Depends(authentication), commentID: str):
     with client.start_session() as session:
-        recursive_remove_comment(commentID=commentID,session=session)
+        recursive_remove_comment(commentID=commentID, session=session)
     return Response(status_code=status.HTTP_202_ACCEPTED)
+
 
 """
 The reason why I use the majority for both read and write concern is that:
@@ -216,10 +262,15 @@ If the first transaction is commited first, every thing happens as expected
 If the second one is commited first, then the first transaction will be aborted by the raise of error due to not finding the entity in the database
 That's is how I choose this concern, since it's ensure the consistency but with slight downgrade in the performance which is insignificant
 """
+
+
 @router.put("/comment/{commentID}/upvote")
-async def upvote_comment(*,userID: str = Depends(authentication), commentID: str):
+async def upvote_comment(*, userID: str = Depends(authentication), commentID: str):
     with client.start_session() as session:
-        with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
+        with session.start_transaction(
+            read_concern=read_concern.ReadConcern("majority"),
+            write_concern=WriteConcern("majority"),
+        ):
             try:
                 cmd = mongodb.users.aggregate([
                     {"$match":
@@ -269,25 +320,37 @@ async def upvote_comment(*,userID: str = Depends(authentication), commentID: str
                     session.commit_transaction()
                     return "upvote"
                 else:
-                    mongodb.comments.update_one({"_id":ObjectId(commentID)},{'$inc':{'upvote':1}},session=session)
-                    mongodb.users.update_one({"user_id": userID},
-                    {"$addToSet":{
-                        'list_of_comment_voted':{
-                                'id': commentID,
-                                'upvote_downvote': 'upvote'
+                    mongodb.comments.update_one(
+                        {"_id": ObjectId(commentID)},
+                        {"$inc": {"upvote": 1}},
+                        session=session,
+                    )
+                    mongodb.users.update_one(
+                        {"user_id": userID},
+                        {
+                            "$addToSet": {
+                                "list_of_comment_voted": {
+                                    "id": commentID,
+                                    "upvote_downvote": "upvote",
+                                }
                             }
-                        }
-                    },session=session)
+                        },
+                        session=session,
+                    )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return "upvote"
 
+
 @router.put("/comment/{commentID}/downvote")
-async def downvote_comment(*,userID: str = Depends(authentication), commentID: str):
+async def downvote_comment(*, userID: str = Depends(authentication), commentID: str):
     with client.start_session() as session:
-        with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
+        with session.start_transaction(
+            read_concern=read_concern.ReadConcern("majority"),
+            write_concern=WriteConcern("majority"),
+        ):
             try:
                 cmd = mongodb.users.aggregate([
                     {"$match":
@@ -337,15 +400,23 @@ async def downvote_comment(*,userID: str = Depends(authentication), commentID: s
                     session.commit_transaction()
                     return "downvote"
                 else:
-                    mongodb.comments.update_one({"_id":ObjectId(commentID)},{'$inc':{'downvote':1}},session=session)
-                    mongodb.users.update_one({"user_id": userID},
-                    {"$addToSet":{
-                        'list_of_comment_voted':{
-                                'id': commentID,
-                                'upvote_downvote': 'downvote'
+                    mongodb.comments.update_one(
+                        {"_id": ObjectId(commentID)},
+                        {"$inc": {"downvote": 1}},
+                        session=session,
+                    )
+                    mongodb.users.update_one(
+                        {"user_id": userID},
+                        {
+                            "$addToSet": {
+                                "list_of_comment_voted": {
+                                    "id": commentID,
+                                    "upvote_downvote": "downvote",
+                                }
                             }
-                        }
-                    },session=session)
+                        },
+                        session=session,
+                    )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
@@ -355,73 +426,115 @@ async def downvote_comment(*,userID: str = Depends(authentication), commentID: s
 
 # Will have a meeting for the input of this endpoint
 @router.post("/comments/reply")
-async def reply_comment(*,userID: str = Depends(authentication),parentCommentID: str,replyComment:CommentDB):
+async def reply_comment(
+    *,
+    userID: str = Depends(authentication),
+    parentCommentID: str,
+    replyComment: CommentDB
+):
     with client.start_session() as session:
-        
-        with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
+
+        with session.start_transaction(
+            read_concern=read_concern.ReadConcern("majority"),
+            write_concern=WriteConcern("majority"),
+        ):
             try:
-                cmd=mongodb.comments.find_one({"_id": ObjectId(parentCommentID)},session=session)
+                cmd = mongodb.comments.find_one(
+                    {"_id": ObjectId(parentCommentID)}, session=session
+                )
                 root_id = parentCommentID
-                if not cmd['root_comment_id']== "root":
-                    root_id = cmd['root_comment_id']
+                if not cmd["root_comment_id"] == "root":
+                    root_id = cmd["root_comment_id"]
                 replyComment.user_id = userID
                 replyComment.root_comment_id = root_id
                 comment_dict = replyComment.dict()
                 comment_dict["time_created"] = str(comment_dict["time_created"])
-                current_comment = mongodb.comments.insert_one(comment_dict,session=session)
-                mongodb.users.update_one({"user_id": userID},{"$addToSet":{"list_of_user_comments_id": str(current_comment.inserted_id)}},session=session)
-                mongodb.comments.update_one({"_id": ObjectId(root_id)}, {"$addToSet": {"list_child_comment_id": str(current_comment.inserted_id)}},session=session)
-                mongodb.posts.update_one({"_id": ObjectId(replyComment.post_id)},{"$inc":{"num_comments": 1}},session=session)
+                current_comment = mongodb.comments.insert_one(
+                    comment_dict, session=session
+                )
+                mongodb.users.update_one(
+                    {"user_id": userID},
+                    {
+                        "$addToSet": {
+                            "list_of_user_comments_id": str(current_comment.inserted_id)
+                        }
+                    },
+                    session=session,
+                )
+                mongodb.comments.update_one(
+                    {"_id": ObjectId(root_id)},
+                    {
+                        "$addToSet": {
+                            "list_child_comment_id": str(current_comment.inserted_id)
+                        }
+                    },
+                    session=session,
+                )
+                mongodb.posts.update_one(
+                    {"_id": ObjectId(replyComment.post_id)},
+                    {"$inc": {"num_comments": 1}},
+                    session=session,
+                )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return str(current_comment.inserted_id)
 
-@router.put('/user/update/')
-async def user_update(*,userID= Depends(authentication),user: User):
+
+@router.put("/update/")
+async def user_update(*, userID=Depends(authentication), user: User):
     try:
-        mongodb.users.update_one({"user_id":userID},{
-            "$set":{
-                "avatar": user.avatar,
-                "about_me": user.about_me,
-                "location":user.location,
-                "title": user.title
-            }})
+        mongodb.users.update_one(
+            {"user_id": userID},
+            {
+                "$set": {
+                    "avatar": user.avatar,
+                    "about_me": user.about_me,
+                    "location": user.location,
+                    "title": user.title,
+                }
+            },
+        )
     except:
         return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
-@router.put("/user/bookmark/{postID}")
-async def save_book_mark(*,userID=Depends(authentication),postID:str):
+
+@router.put("/bookmark/{postID}")
+async def save_book_mark(*, userID=Depends(authentication), postID: str):
     with client.start_session() as session:
-        with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
+        with session.start_transaction(
+            read_concern=read_concern.ReadConcern("majority"),
+            write_concern=WriteConcern("majority"),
+        ):
             try:
-                bookmark = mongodb.users.find_one({"user_id": userID, "bookmark.id":postID},session=session)
+                bookmark = mongodb.users.find_one(
+                    {"user_id": userID, "bookmark.id": postID}, session=session
+                )
                 if bookmark == None:
-                    post = mongodb.posts.find_one({"_id": ObjectId(postID)},session=session)
-                    mongodb.users.update_one({"user_id": userID},
-                    {"$addToSet":
+                    post = mongodb.posts.find_one(
+                        {"_id": ObjectId(postID)}, session=session
+                    )
+                    mongodb.users.update_one(
+                        {"user_id": userID},
                         {
-                            "bookmark":{
-                                "id": postID,
-                                "title": post["title"]
+                            "$addToSet": {
+                                "bookmark": {"id": postID, "title": post["title"]}
                             }
-                        }
-                    },session=session)
+                        },
+                        session=session,
+                    )
                 else:
-                    mongodb.users.update_one({"user_id": userID},
-                    {"$pull":
-                        {
-                            "bookmark":{
-                                "id": postID
-                            }
-                        }
-                    },session=session)
+                    mongodb.users.update_one(
+                        {"user_id": userID},
+                        {"$pull": {"bookmark": {"id": postID}}},
+                        session=session,
+                    )
                 session.commit_transaction()
             except:
                 session.abort_transaction()
-                return Response(status_code= status.HTTP_400_BAD_REQUEST)
+                return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return Response(status_code=status.HTTP_202_ACCEPTED)
 
 

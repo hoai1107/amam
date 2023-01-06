@@ -26,7 +26,12 @@ async def get_post(
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority")):
             try:
                 current_post = mongodb.posts.find_one({"_id":ObjectId(post_id)},session=session)
-                post_info_model = Posts (**(current_post))
+                current_user = mongodb.users.find_one({"user_id": current_post["user_id"]})
+                post_info_model = Posts(**(current_post))
+                post_info_model.id = str(post_info_model.id)
+                post_info_model = post_info_model.dict()
+                post_info_model["user_name"] = current_user["user_name"]
+                post_info_model["avatar"] = current_user["avatar"]
                 current_comments= mongodb.comments.find({"post_id": post_id, "root_comment_id": "root"},session=session)
                 comment_list = list[Comments]()
                 for cmt in current_comments:

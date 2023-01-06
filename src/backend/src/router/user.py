@@ -83,7 +83,6 @@ async def upvote_User( postId: str, userID: str = Depends(authentication)):
                 return Response(status_code=status.HTTP_400_BAD_REQUEST)
     return "upvote"
 
-
 @router.put("/downvote/")
 async def downvote_User(postId: str, userID: str = Depends(authentication)):
     with client.start_session() as session:

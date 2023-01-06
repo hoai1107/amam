@@ -6,6 +6,8 @@
     <SvgIcon size="32" type="mdi" :path="mdiDotsVertical"></SvgIcon>
   </div>
   <PostMetaData
+    :username="content.user_name"
+    :avatar="content.avatar"
     :time-interval="timeInterval"
     :views="content.view"
   ></PostMetaData>
@@ -56,6 +58,7 @@
     </div>
 
     <SvgIcon
+      v-if="authStore.isAuthenticated()"
       class="transition-none cursor-pointer ml-auto"
       size="24"
       type="mdi"
@@ -98,11 +101,13 @@ const userStore = useUserStore();
 const userSentiment = ref(Sentiment.NEUTRAL);
 const isBookmark = ref(false);
 
+console.log(props.content);
+
 const instance = authStore.getAxiosInstance();
 
 if (authStore.isAuthenticated()) {
-  userSentiment.value = userStore.checkPostVoted(props.content._id);
-  isBookmark.value = userStore.checkPostBookmark(props.content._id);
+  userSentiment.value = userStore.checkPostVoted(props.content.id);
+  isBookmark.value = userStore.checkPostBookmark(props.content.id);
 }
 
 const timeInterval = computed(() => {
@@ -148,22 +153,17 @@ function changeSentiment(oldSentiment, newSentiment) {
     }
   }
 
-  var requestURL = "users/";
+  var requestURL = `users/`;
   if (newSentiment === Sentiment.LIKE) {
     requestURL += "upvote";
   } else {
     requestURL += "downvote";
   }
+  requestURL += `/${props.content.id}`;
 
-  instance
-    .put(requestURL, null, {
-      params: {
-        postId: props.content._id,
-      },
-    })
-    .then(async () => {
-      await userStore.fetchCurrentUserInfo();
-    });
+  instance.put(requestURL).then(async () => {
+    await userStore.fetchCurrentUserInfo();
+  });
 }
 
 function changeBookmark() {

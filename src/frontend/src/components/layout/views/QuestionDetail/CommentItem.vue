@@ -59,7 +59,13 @@
           </div>
 
           <div>
-            <button @click="toggleReply" v-show="canReply">Reply</button>
+            <button
+              v-if="authStore.isAuthenticated()"
+              @click="toggleReply"
+              v-show="canReply"
+            >
+              Reply
+            </button>
           </div>
         </div>
         <button>
@@ -128,12 +134,13 @@ const props = defineProps({
   canReply: Boolean,
 });
 const content = toRefs(props);
-
 const authStore = useAuthStore();
 const userStore = useUserStore();
 const reply = ref();
 const showReply = ref(false);
 const userSentiment = ref(Sentiment.NEUTRAL);
+
+console.log(props.comment);
 
 if (authStore.isAuthenticated()) {
   userSentiment.value = userStore.checkCommentVoted(props.comment._id);
@@ -160,7 +167,7 @@ const timeInterval = computed(() => {
 
 const config = authStore.getAuthHeader();
 const instance = axios.create({
-  baseURL: Constants.BACKEND_URL + "users/comment/",
+  baseURL: Constants.BACKEND_URL,
   ...config,
 });
 
@@ -192,22 +199,16 @@ function changeSentiment(oldSentiment, newSentiment) {
     }
   }
 
-  var requestURL = "";
+  var requestURL = `users/comment/${props.comment._id}/`;
   if (newSentiment === Sentiment.LIKE) {
     requestURL += "upvote";
   } else {
     requestURL += "downvote";
   }
 
-  instance
-    .put(requestURL, null, {
-      params: {
-        commentID: props.comment._id,
-      },
-    })
-    .then(async () => {
-      await userStore.fetchCurrentUserInfo();
-    });
+  instance.put(requestURL).then(async () => {
+    await userStore.fetchCurrentUserInfo();
+  });
 }
 </script>
 

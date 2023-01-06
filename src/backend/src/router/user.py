@@ -2,10 +2,9 @@ from fastapi import APIRouter, Response, status, Depends, Query, Path
 import os
 import sys
 from pathlib import Path
-
 sys.path.insert(0, os.path.join(Path(__file__).parents[1], "database_connection"))
 sys.path.insert(0, os.path.join(Path(__file__).parents[1], "data_model"))
-from user_model import User, UserDB
+from user_model import User
 from post_model import CommentDB
 from authentication import authentication
 from dependencies import recursive_remove_comment
@@ -35,14 +34,28 @@ async def upvote_User( postId: str, userID: str = Depends(authentication)):
     with client.start_session() as session:
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
             try:
-                cmd= mongodb.users.find_one({"user_id": userID, "list_of_post_voted.id": postId},
-                {
-                    'upvote_downvote': '$list_of_post_voted.upvote_downvote',
-                    'id': '$list_of_post_voted.id'
-                },session=session)
-                if cmd==0: cmd=None
-                if cmd!=None:
-                    if cmd['upvote_downvote']==['upvote']:
+                cmd = mongodb.users.aggregate([
+                    {"$match":
+                        {
+                            "user_id": userID,
+                            "list_of_post_voted.id": postId
+                        }
+                    },
+                    {"$project":
+                        {"list_of_post_voted":
+                            {"$filter":
+                                {
+                                    "input":"$list_of_post_voted",
+                                    "as": "post_vote",
+                                    "cond":{"$eq":["$$post_vote.id",postId]}
+                                }
+                            }
+                        }
+                    }
+                ],session=session)
+                cmd = list(cmd)
+                if cmd!= []:
+                    if cmd[0]['list_of_post_voted'][0]['upvote_downvote']=='upvote':
                         mongodb.posts.update_one({"_id":ObjectId(postId)},
                         {'$inc':{
                             'upvote':-1
@@ -61,10 +74,11 @@ async def upvote_User( postId: str, userID: str = Depends(authentication)):
                             'upvote':1,
                             'downvote':-1
                         }},session=session)
-                        mongodb.users.update_one({"user_id": userID,"list_of_post_voted.id":postId},
+                        mongodb.users.update_one({"user_id": userID},
                         {'$set':{
-                            'list_of_post_voted.0.upvote_downvote': 'upvote'
-                        }},session=session)
+                            'list_of_post_voted.$[elem].upvote_downvote': 'upvote'
+                        }},
+                        array_filters=[{"elem.id":{"$eq":postId}}],upsert=False,session=session)
                         session.commit_transaction()
                         return "upvote"
                 else: 
@@ -88,14 +102,28 @@ async def downvote_User(postId: str, userID: str = Depends(authentication)):
     with client.start_session() as session:
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
             try:
-                cmd= mongodb.users.find_one({"user_id": userID, "list_of_post_voted.id": postId},
-                {
-                    'upvote_downvote': '$list_of_post_voted.upvote_downvote',
-                    'id': '$list_of_post_voted.id'
-                },session=session)
-                if cmd==0: cmd=None
-                if cmd!=None:
-                    if (cmd['upvote_downvote']==['downvote']):
+                cmd = mongodb.users.aggregate([
+                    {"$match":
+                        {
+                            "user_id": userID,
+                            "list_of_post_voted.id": postId
+                        }
+                    },
+                    {"$project":
+                        {"list_of_post_voted":
+                            {"$filter":
+                                {
+                                    "input":"$list_of_post_voted",
+                                    "as": "post_vote",
+                                    "cond":{"$eq":["$$post_vote.id",postId]}
+                                }
+                            }
+                        }
+                    }
+                ],session=session)
+                cmd = list(cmd)
+                if cmd!=[]:
+                    if cmd[0]['list_of_post_voted'][0]['upvote_downvote']=='downvote':
                         mongodb.posts.update_one({"_id":ObjectId(postId)},
                         {'$inc':{
                             'downvote':-1
@@ -114,10 +142,11 @@ async def downvote_User(postId: str, userID: str = Depends(authentication)):
                             'upvote':-1,
                             'downvote':1
                         }},session=session)
-                        mongodb.users.update_one({"user_id": userID,"list_of_post_voted.id":postId},
+                        mongodb.users.update_one({"user_id": userID},
                         {'$set':{
-                            'list_of_post_voted.0.upvote_downvote': 'downvote'
-                        }},session=session)
+                            'list_of_post_voted.$[elem].upvote_downvote': 'downvote'
+                        }},
+                        array_filters=[{"elem.id":{"$eq":postId}}],upsert=False,session=session)
                         session.commit_transaction()
                         return "downvote"
                 else: 
@@ -192,14 +221,28 @@ async def upvote_comment(*,userID: str = Depends(authentication), commentID: str
     with client.start_session() as session:
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
             try:
-                cmd= mongodb.users.find_one({"user_id": userID, "list_of_comment_voted.id":commentID},
-                {
-                    'upvote_downvote': '$list_of_comment_voted.upvote_downvote',
-                    'id': '$list_of_comment_voted.id'
-                },session=session)
-                if cmd==0: cmd=None
-                if cmd != None:
-                    if cmd['upvote_downvote']==['upvote']:
+                cmd = mongodb.users.aggregate([
+                    {"$match":
+                        {
+                            "user_id": userID,
+                            "list_of_comment_voted.id": commentID
+                        }
+                    },
+                    {"$project":
+                        {"list_of_comment_voted":
+                            {"$filter":
+                                {
+                                    "input":"$list_of_comment_voted",
+                                    "as": "comment_vote",
+                                    "cond":{"$eq":["$$comment_vote.id",commentID]}
+                                }
+                            }
+                        }
+                    }
+                ],session=session)
+                cmd = list(cmd)
+                if cmd != []:
+                    if cmd[0]['list_of_comment_voted'][0]['upvote_downvote']=='upvote':
                         mongodb.comments.update_one({"_id":ObjectId(commentID)},
                         {'$inc':{
                             'upvote':-1
@@ -218,10 +261,11 @@ async def upvote_comment(*,userID: str = Depends(authentication), commentID: str
                             'upvote':1,
                             'downvote':-1
                         }},session=session)
-                        mongodb.users.update_one({"user_id": userID,"list_of_comment_voted.id":commentID},
+                        mongodb.users.update_one({"user_id": userID},
                         {'$set':{
-                            'list_of_comment_voted.0.upvote_downvote': 'upvote'
-                        }},session=session)
+                            'list_of_comment_voted.$[elem].upvote_downvote': 'upvote'
+                        }},
+                        array_filters=[{"elem.id":{"$eq":commentID}}],upsert=False,session=session)
                     session.commit_transaction()
                     return "upvote"
                 else:
@@ -245,14 +289,28 @@ async def downvote_comment(*,userID: str = Depends(authentication), commentID: s
     with client.start_session() as session:
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
             try:
-                cmd= mongodb.users.find_one({"user_id": userID, "list_of_comment_voted.id":commentID},
-                {
-                    'upvote_downvote': '$list_of_comment_voted.upvote_downvote',
-                    'id': '$list_of_comment_voted.id'
-                },session=session)
-                if cmd==0: cmd=None
-                if cmd != None:
-                    if cmd['upvote_downvote']==['downvote']:
+                cmd = mongodb.users.aggregate([
+                    {"$match":
+                        {
+                            "user_id": userID,
+                            "list_of_comment_voted.id": commentID
+                        }
+                    },
+                    {"$project":
+                        {"list_of_comment_voted":
+                            {"$filter":
+                                {
+                                    "input":"$list_of_comment_voted",
+                                    "as": "comment_vote",
+                                    "cond":{"$eq":["$$comment_vote.id",commentID]}
+                                }
+                            }
+                        }
+                    }
+                ],session=session)
+                cmd = list(cmd)
+                if cmd != []:
+                    if cmd[0]['list_of_comment_voted'][0]['upvote_downvote']=='downvote':
                         mongodb.comments.update_one({"_id":ObjectId(commentID)},
                         {'$inc':{
                             'downvote':-1
@@ -271,10 +329,11 @@ async def downvote_comment(*,userID: str = Depends(authentication), commentID: s
                             'upvote':-1,
                             'downvote':1
                         }},session=session)
-                        mongodb.users.update_one({"user_id": userID,"list_of_comment_voted.id":commentID},
+                        mongodb.users.update_one({"user_id": userID},
                         {'$set':{
-                            'list_of_comment_voted.0.upvote_downvote': 'downvote'
-                        }},session=session)
+                            'list_of_comment_voted.$[elem].upvote_downvote': 'downvote'
+                        }},
+                        array_filters=[{"elem.id":{"$eq":commentID}}],upsert=False,session=session)
                     session.commit_transaction()
                     return "downvote"
                 else:

@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore, auth as auth_admin
 import os
-import pymongo
+from pymongo import MongoClient, client_session, read_concern, WriteConcern
 from pathlib import Path
 import pyrebase
 
@@ -25,5 +25,5 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 firebasedb = firebase.database()
 auth = firebase.auth()
 
-client = pymongo.MongoClient("mongodb+srv://root:zi2kQbzaJQ5LS4jD@cluster0.evfi3hk.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://root:zi2kQbzaJQ5LS4jD@cluster0.evfi3hk.mongodb.net/?retryWrites=true&w=majority")
 mongodb = client["ANAM"]

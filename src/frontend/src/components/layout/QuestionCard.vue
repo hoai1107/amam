@@ -61,6 +61,8 @@ import { useUserStore } from "@/stores/user.js";
 const props = defineProps(["question"]);
 const userStore = useUserStore();
 
+console.log(props.question);
+
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }

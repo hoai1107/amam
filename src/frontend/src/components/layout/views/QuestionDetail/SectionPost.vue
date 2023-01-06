@@ -106,8 +106,8 @@ console.log(props.content);
 const instance = authStore.getAxiosInstance();
 
 if (authStore.isAuthenticated()) {
-  userSentiment.value = userStore.checkPostVoted(props.content._id);
-  isBookmark.value = userStore.checkPostBookmark(props.content._id);
+  userSentiment.value = userStore.checkPostVoted(props.content.id);
+  isBookmark.value = userStore.checkPostBookmark(props.content.id);
 }
 
 const timeInterval = computed(() => {
@@ -153,22 +153,17 @@ function changeSentiment(oldSentiment, newSentiment) {
     }
   }
 
-  var requestURL = `users/comment/`;
+  var requestURL = `users/`;
   if (newSentiment === Sentiment.LIKE) {
     requestURL += "upvote";
   } else {
     requestURL += "downvote";
   }
+  requestURL += `/${props.content.id}`;
 
-  instance
-    .put(requestURL, null, {
-      params: {
-        postId: props.content._id,
-      },
-    })
-    .then(async () => {
-      await userStore.fetchCurrentUserInfo();
-    });
+  instance.put(requestURL).then(async () => {
+    await userStore.fetchCurrentUserInfo();
+  });
 }
 
 function changeBookmark() {

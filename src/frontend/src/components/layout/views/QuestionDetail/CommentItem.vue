@@ -140,6 +140,8 @@ const reply = ref();
 const showReply = ref(false);
 const userSentiment = ref(Sentiment.NEUTRAL);
 
+console.log(props.comment);
+
 if (authStore.isAuthenticated()) {
   userSentiment.value = userStore.checkCommentVoted(props.comment._id);
 }
@@ -165,7 +167,7 @@ const timeInterval = computed(() => {
 
 const config = authStore.getAuthHeader();
 const instance = axios.create({
-  baseURL: Constants.BACKEND_URL + "users/comment/",
+  baseURL: Constants.BACKEND_URL,
   ...config,
 });
 
@@ -204,15 +206,9 @@ function changeSentiment(oldSentiment, newSentiment) {
     requestURL += "downvote";
   }
 
-  instance
-    .put(requestURL, null, {
-      params: {
-        commentID: props.comment._id,
-      },
-    })
-    .then(async () => {
-      await userStore.fetchCurrentUserInfo();
-    });
+  instance.put(requestURL).then(async () => {
+    await userStore.fetchCurrentUserInfo();
+  });
 }
 </script>
 

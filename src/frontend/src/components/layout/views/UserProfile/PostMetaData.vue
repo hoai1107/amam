@@ -37,8 +37,10 @@ import Avatar from "@/components/ui/Avatar.vue";
 import { mdiCameraOutline } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
 
-const avatar = ref("");
+const userStore = useUserStore();
+const avatar = ref(userStore.user.avatar);
 
 async function previewAvatar() {
   const imageFile = document.querySelector("input[type=file]").files[0];
@@ -48,8 +50,7 @@ async function previewAvatar() {
   reader.onloadend = () => {
     rawImg = reader.result;
     avatar.value = rawImg;
-
-    //TODO: Sent a request to change image in backend
+    userStore.updateUserProfile({ avatar: rawImg });
   };
   reader.readAsDataURL(imageFile);
 }

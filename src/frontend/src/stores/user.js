@@ -93,6 +93,17 @@ export const useUserStore = defineStore("user", () => {
     return false;
   }
 
+  function updateUserProfile(fields) {
+    user.value = { ...user.value, ...fields };
+    const instance = auth.getAxiosInstance();
+
+    try {
+      instance.put("/users/update", user.value);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function getUserId() {
     if (user.value) {
       return user.value._id;
@@ -114,6 +125,7 @@ export const useUserStore = defineStore("user", () => {
     getUserId,
     getQuestionList,
     getBookmarkList,
+    updateUserProfile,
     clearUserData,
   };
 });

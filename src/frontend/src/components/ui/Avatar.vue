@@ -1,6 +1,6 @@
 <template>
   <div
-    class="aspect-square cursor-pointer flex grow-0 items-center content-center"
+    class="aspect-square cursor-pointer flex grow-0 items-center content-center w-full"
   >
     <img
       v-if="props.imageSrc"

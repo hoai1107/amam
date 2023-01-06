@@ -25,8 +25,6 @@ const props = defineProps({
 });
 const router = useRouter();
 
-console.log(props.questions);
-
 function onClick(postId) {
   router.push({ name: "questions.single", params: { id: postId } });
 }

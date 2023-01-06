@@ -98,7 +98,7 @@ export const useUserStore = defineStore("user", () => {
     const instance = auth.getAxiosInstance();
 
     try {
-      instance.put("/users/update", user.value);
+      await instance.put("/users/update", user.value);
     } catch (error) {
       console.log(error);
       return;

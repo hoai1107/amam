@@ -55,7 +55,6 @@
       </div>
     </div>
 
-    <!-- bookmark icon, bien mat doi voi anonymous, khi click se chuyen qua icon mdiBookmark co color blue (xem design system) -->
     <SvgIcon
       class="transition-none cursor-pointer ml-auto"
       size="24"

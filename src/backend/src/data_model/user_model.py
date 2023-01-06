@@ -22,9 +22,9 @@ class User(UserBase):
     user_name: str
     email: str
     avatar: str = Field(default=None)
-    about_me: str = Field(default="Write something...")
-    location: str = Field(default="e.g Vietnam")
-    title: str = Field(default="e.g Student")
+    about_me: str = Field(default="")
+    location: str = Field(default="")
+    title: str = Field(default="")
     list_of_user_question: list[PostBase] = Field(default=list[PostBase]())
     list_of_post_voted: list[Voting] = Field(default= list[Voting]())
     list_of_comment_voted: list[Voting] = Field(default=list[Voting]())
@@ -40,9 +40,9 @@ class UserDB(BaseModel):
     user_name: str
     email: str
     avatar: str = Field(default="")
-    about_me: str = Field(default="Write something...")
-    location: str = Field(default="e.g Vietnam")
-    title: str = Field(default="e.g Student")
+    about_me: str = Field(default="")
+    location: str = Field(default="")
+    title: str = Field(default="")
     list_of_user_question: list[PostBase] = Field(default=list[PostBase]())
     list_of_post_voted: list[Voting] = Field(default= list[Voting]())
     list_of_comment_voted: list[Voting] = Field(default=list[Voting]())

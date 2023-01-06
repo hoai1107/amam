@@ -127,7 +127,6 @@ const props = defineProps({
   comment: Object,
   canReply: Boolean,
 });
-console.log(props.comment);
 const content = toRefs(props);
 
 const authStore = useAuthStore();

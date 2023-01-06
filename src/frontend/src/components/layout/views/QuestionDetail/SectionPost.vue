@@ -168,7 +168,7 @@ function changeSentiment(oldSentiment, newSentiment) {
 
 function changeBookmark() {
   isBookmark.value = !isBookmark.value;
-  instance.put(`/users/bookmark/${props.content._id}`).then(async () => {
+  instance.put(`/users/bookmark/${props.content.id}`).then(async () => {
     await userStore.fetchCurrentUserInfo();
   });
 }

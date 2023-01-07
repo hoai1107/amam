@@ -25,7 +25,10 @@
           <!-- Like -->
           <div class="flex flex-row gap-2">
             <p>{{ comment.upvote }}</p>
-            <button @click="changeSentiment(userSentiment, Sentiment.LIKE)">
+            <button
+              :class="authStore.isAuthenticated() ? '' : 'pointer-events-none'"
+              @click="changeSentiment(userSentiment, Sentiment.LIKE)"
+            >
               <SvgIcon
                 class="transition-none"
                 :class="userSentiment === Sentiment.LIKE ? 'text-blue' : ''"
@@ -43,7 +46,10 @@
           <!-- Dislike -->
           <div class="flex flex-row gap-2">
             <p>{{ comment.downvote }}</p>
-            <button @click="changeSentiment(userSentiment, Sentiment.DISLIKE)">
+            <button
+              :class="authStore.isAuthenticated() ? '' : 'pointer-events-none'"
+              @click="changeSentiment(userSentiment, Sentiment.DISLIKE)"
+            >
               <SvgIcon
                 class="transition-none"
                 :class="userSentiment === Sentiment.DISLIKE ? 'text-blue' : ''"

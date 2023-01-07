@@ -67,8 +67,6 @@ const totalPages = computed(() => {
     : Math.floor(questions.value.total / 7) + 1;
 });
 
-console.log(route.name);
-
 const result_heading = computed(() => {
   const name = route.name;
   var result = "";

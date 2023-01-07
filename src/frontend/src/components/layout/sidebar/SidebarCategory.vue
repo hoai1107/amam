@@ -5,7 +5,7 @@
       <router-link
         :to="{
           name: 'questions.category',
-          params: { category: category.toLowerCase() },
+          params: { category: category },
         }"
         >{{ category }}
       </router-link>

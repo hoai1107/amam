@@ -22,7 +22,7 @@
               @click="
                 router.push({
                   name: 'questions.category',
-                  params: { category: category.toLowerCase() },
+                  params: { category: category },
                 })
               "
             ></ButtonItem>

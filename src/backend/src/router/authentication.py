@@ -83,7 +83,7 @@ async def sign_in(signin_form: OAuth2PasswordRequestForm = Depends()):
                 status_code=400, detail={"message": "Email needs to be verified first"}
             )
     except:
-        raise HTTPException(
+        return HTTPException(
             status_code=400, detail={"message": "There is a problem in the process"}
         )
     return {"access_token": token, "token_type": "bearer"}
@@ -99,7 +99,7 @@ async def authentication(token: str = Depends(oauth2_scheme)):
         decode_token = auth_admin.verify_id_token(token)
         return decode_token["uid"]
     except:
-        raise credentials_exception
+        return credentials_exception
 
 
 @router.get("/test_authentication")

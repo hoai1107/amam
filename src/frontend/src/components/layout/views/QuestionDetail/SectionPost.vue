@@ -23,10 +23,13 @@
     <div class="flex flex-row gap-8">
       <div class="flex flex-row">
         <div class="mr-2 text-base">{{ content.upvote }}</div>
-        <button @click="changeSentiment(userSentiment, Sentiment.LIKE)">
+        <button
+          :class="authStore.isAuthenticated() ? '' : 'pointer-events-none'"
+          @click="changeSentiment(userSentiment, Sentiment.LIKE)"
+        >
           <SvgIcon
             class="transition-none"
-            :class="userSentiment === Sentiment.LIKE ? 'text-blue' : ''"
+            :class="[userSentiment === Sentiment.LIKE ? 'text-blue' : '']"
             size="24"
             type="mdi"
             :path="
@@ -41,7 +44,10 @@
         <div class="mr-2 text-base">
           <span v-show="content.downvote > 0">-</span>{{ content.downvote }}
         </div>
-        <button @click="changeSentiment(userSentiment, Sentiment.DISLIKE)">
+        <button
+          :class="authStore.isAuthenticated() ? '' : 'pointer-events-none'"
+          @click="changeSentiment(userSentiment, Sentiment.DISLIKE)"
+        >
           <SvgIcon
             class="transition-none"
             :class="userSentiment === Sentiment.DISLIKE ? 'text-blue' : ''"
@@ -60,6 +66,7 @@
     <SvgIcon
       v-if="authStore.isAuthenticated()"
       class="transition-none cursor-pointer ml-auto"
+      :class="isBookmark ? 'text-blue' : ''"
       size="24"
       type="mdi"
       :path="isBookmark ? mdiBookmark : mdiBookmarkOutline"

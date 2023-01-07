@@ -147,7 +147,7 @@ async def downvote_User(postId: str, userID: str = Depends(authentication)):
                     if cmd[0]['list_of_post_voted'][0]['upvote_downvote']=='downvote':
                         mongodb.posts.update_one({"_id":ObjectId(postId)},
                         {'$inc':{
-                            'downvote':-1
+                            'downvote': 1
                         }},session=session)
                         mongodb.users.update_one({"user_id": userID},
                         {'$pull':{
@@ -376,7 +376,7 @@ async def downvote_comment(*, userID: str = Depends(authentication), commentID: 
                     if cmd[0]['list_of_comment_voted'][0]['upvote_downvote']=='downvote':
                         mongodb.comments.update_one({"_id":ObjectId(commentID)},
                         {'$inc':{
-                            'downvote':-1
+                            'downvote': 1
                         }},session=session)
                         mongodb.users.update_one({"user_id": userID},
                         {'$pull':{

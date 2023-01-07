@@ -22,8 +22,8 @@
       </label>
     </div>
     <div class="flex flex-col ml-4">
-      <p class="text-2xl font-semibold">Floyd Miles</p>
-      <p class="text-gray-400 mt-1">camlansuc@gmail.com</p>
+      <p class="text-2xl font-semibold">{{ userStore.user.user_name }}</p>
+      <p class="text-gray-400 mt-1">{{ userStore.user.email }}</p>
       <div class="flex flex-row text-blue gap-x-8 mt-2">
         <p>0 following</p>
         <p>0 follower</p>
@@ -41,6 +41,8 @@ import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
 const avatar = ref(userStore.user.avatar);
+
+console.log(userStore.user);
 
 async function previewAvatar() {
   const imageFile = document.querySelector("input[type=file]").files[0];

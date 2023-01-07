@@ -38,6 +38,7 @@ async function fetchData() {
     })
     .then(() => {
       isFetching.value = false;
+      userStore.fetchCurrentUserInfo();
     });
 }
 

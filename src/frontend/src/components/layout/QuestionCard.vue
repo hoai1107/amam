@@ -33,14 +33,13 @@
 
       <!-- bookmark icon, bien mat doi voi anonymous, khi click se chuyen qua icon mdiBookmark co color blue (xem design system) -->
       <SvgIcon
+        v-if="authStore.isAuthenticated()"
         size="24"
         type="mdi"
-        :path="
-          userStore.checkPostBookmark(question._id)
-            ? mdiBookmark
-            : mdiBookmarkOutline
-        "
-        class="ml-auto"
+        :path="isBookmark ? mdiBookmark : mdiBookmarkOutline"
+        class="ml-auto transition-none"
+        :class="isBookmark ? 'text-blue' : ''"
+        @click="changeBookmark"
       ></SvgIcon>
     </div>
   </div>
@@ -57,14 +56,29 @@ import {
 } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
 import { useUserStore } from "@/stores/user.js";
+import { useAuthStore } from "@/stores/auth.js";
+import { ref } from "vue";
 
 const props = defineProps(["question"]);
 const userStore = useUserStore();
+const authStore = useAuthStore();
+const isBookmark = ref(false);
+const instance = authStore.getAxiosInstance();
 
-console.log(props.question);
+if (authStore.isAuthenticated()) {
+  isBookmark.value = userStore.checkPostBookmark(props.question._id);
+}
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function changeBookmark(event) {
+  event.preventDefault();
+  isBookmark.value = !isBookmark.value;
+  instance.put(`/users/bookmark/${props.question._id}`).then(async () => {
+    await userStore.fetchCurrentUserInfo();
+  });
 }
 </script>
 

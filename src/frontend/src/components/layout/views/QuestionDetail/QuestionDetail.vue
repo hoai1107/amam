@@ -16,7 +16,11 @@ import axios from "axios";
 import { useRoute } from "vue-router";
 import { ref } from "vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+import { useAuthStore } from "@/stores/auth.js";
+import { useUserStore } from "@/stores/user.js";
 
+const authStore = useAuthStore();
+const userStore = useUserStore();
 const route = useRoute();
 const content = ref();
 const isFetching = ref(true);
@@ -34,10 +38,20 @@ async function fetchData() {
     })
     .then(() => {
       isFetching.value = false;
+      userStore.fetchCurrentUserInfo();
     });
 }
 
-fetchData();
+fetchData().then(() => {
+  if (authStore.isAuthenticated()) {
+    authStore
+      .getAxiosInstance()
+      .put(`posts/${route.params.id}/view`)
+      .then(() => {
+        userStore.fetchCurrentUserInfo();
+      });
+  }
+});
 </script>
 
 <style lang="scss" scoped></style>

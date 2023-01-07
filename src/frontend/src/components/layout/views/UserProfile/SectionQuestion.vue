@@ -2,12 +2,16 @@
   <div class="flex flex-col items-center">
     <div class="flex flex-row my-8">
       <div class="flex flex-col items-center">
-        <p class="text-3xl font-semibold">12</p>
-        <p class="text-xl text-gray-400">Questions</p>
+        <p class="text-3xl font-semibold">
+          {{ userStore.user.list_of_user_question.length }}
+        </p>
+        <p class="text-xl text-gray-400">Question(s)</p>
       </div>
       <div class="flex flex-col items-center ml-20">
-        <p class="text-3xl font-semibold">78</p>
-        <p class="text-xl text-gray-400">Answers</p>
+        <p class="text-3xl font-semibold">
+          {{ userStore.user.list_of_user_comments_id.length }}
+        </p>
+        <p class="text-xl text-gray-400">Answer(s)</p>
       </div>
     </div>
   </div>

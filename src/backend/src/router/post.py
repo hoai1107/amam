@@ -82,6 +82,11 @@ async def update_post_view(*,userID: str = Depends(authentication),post_id:str):
                         mongodb.users.update_one({"user_id":userID},
                             {
                                 "$pop":{"history_posts": -1},
+                            },
+                        upsert=False,
+                        session=session)
+                        mongodb.users.update_one({"user_id": userID},
+                            {
                                 "$push":
                                     {
                                     "history_posts":{
@@ -102,6 +107,7 @@ async def update_post_view(*,userID: str = Depends(authentication),post_id:str):
                                     }
                                 }
                             },
+                        upsert=False,
                         session=session)
                 session.commit_transaction()
             except:

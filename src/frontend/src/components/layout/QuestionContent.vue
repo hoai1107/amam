@@ -13,7 +13,10 @@
       </select>
     </div>
     <div class="flex flex-col gap-y-6">
-      <div v-for="question in questions.data" :key="question._id">
+      <div v-if="questions.data && questions.data.length === 0">
+        Opps! Nothing here ¯\_(ツ)_/¯
+      </div>
+      <div v-else v-for="question in questions.data" :key="question._id">
         <router-link
           :to="{ name: 'questions.single', params: { id: question._id } }"
         >
@@ -22,8 +25,8 @@
       </div>
     </div>
     <Pagination
-      :total-pages="totalPages"
-      :current-page="page"
+      :total-pages="Math.max(totalPages, 1)"
+      :current-page="Math.max(page, 1)"
       :route-name="route.name"
     />
   </div>

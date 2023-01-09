@@ -80,5 +80,6 @@ const pages = (currentPage, totalPages) => {
 .selected {
   background-color: theme("colors.blueSky.DEFAULT");
   border: 1px solid;
+  pointer-events: none;
 }
 </style>

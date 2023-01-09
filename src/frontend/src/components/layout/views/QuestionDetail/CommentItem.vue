@@ -76,9 +76,9 @@
             </button>
           </div>
         </div>
-        <button>
+        <!-- <button>
           <SvgIcon size="24" type="mdi" :path="mdiDotsHorizontal"></SvgIcon>
-        </button>
+        </button> -->
       </div>
 
       <!-- Reply -->

@@ -82,7 +82,7 @@ class PostDB(BaseModel):
     upvote: int = Field(default=0)
     downvote: int = Field(default=0)
     num_comments: int = Field(default=0)
-
+    list_user_view_id: list[int] = Field(default=list[int]())
 
 # This will be refined in the future when the frontend is fullfiled
 class SearchFilter(str,Enum):

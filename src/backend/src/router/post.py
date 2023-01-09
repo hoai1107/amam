@@ -52,25 +52,63 @@ async def update_post_view(*,userID: str = Depends(authentication),post_id:str):
     with client.start_session() as session:
         with session.start_transaction(read_concern=read_concern.ReadConcern("majority"),write_concern=WriteConcern("majority")):
             try:
-                mongodb.posts.update_one({"_id": ObjectId(post_id)},{"$inc":{"view":1}},session=session)
-                post = mongodb.posts.find_one({"_id": ObjectId(post_id)},session=session)
-                user_history_post = mongodb.users.find_one({"user_id":userID,"history_posts":{"$size":30}},session=session)
+                post = mongodb.posts.find_one({"_id": ObjectId(post_id),"list_user_view_id": userID},session=session)
+                if post == None:
+                    mongodb.posts.update_one({"_id": ObjectId(post_id)},{"$inc":{"view":1},"$push":{"list_user_view_id": userID}},upsert=False,session=session)
+                    post = mongodb.posts.find_one({"_id": ObjectId(post_id)},session=session)
+                user_history_post = mongodb.users.find_one({"user_id": userID,"history_posts.id":post_id},session=session)
                 if user_history_post != None:
                     mongodb.users.update_one({"user_id":userID},
                         {
-                            "$pop":{"history_posts": -1},
-                        }
-                    ,session=session)
-                mongodb.users.update_one({"user_id":userID},
-                    {
-                        "$push":{
-                            "history_posts":{
-                                "id": post_id,
-                                "title": post["title"]
-                            }
-                        }
-                    }
-                ,session=session)
+                           "$pull": {"history_posts": {"id": post_id}}
+                        },
+                    upsert=False,
+                    session=session)
+                    mongodb.users.update_one({"user_id": userID},
+                        {"$push":
+                                {"history_posts":
+                                    {
+                                    "id": post_id,
+                                    "title": post["title"]
+                                    }
+                                }
+                        },
+                    upsert=False,
+                    session=session)
+                else:
+                    user_history_post = mongodb.users.find_one({"user_id":userID},session=session)
+                    history_post_size = len(user_history_post["history_posts"])
+                    if history_post_size == 30:
+                        mongodb.users.update_one({"user_id":userID},
+                            {
+                                "$pop":{"history_posts": -1},
+                            },
+                        upsert=False,
+                        session=session)
+                        mongodb.users.update_one({"user_id": userID},
+                            {
+                                "$push":
+                                    {
+                                    "history_posts":{
+                                        "id": post_id,
+                                        "title": post["title"]
+                                        }
+                                    }
+                            },
+                        upsert=False,
+                        session=session)
+                    else:
+                        mongodb.users.update_one({"user_id":userID},
+                            {
+                            "$push":{
+                                "history_posts":{
+                                    "id": post_id,
+                                    "title": post["title"]
+                                    }
+                                }
+                            },
+                        upsert=False,
+                        session=session)
                 session.commit_transaction()
             except:
                 session.abort_transaction()

@@ -260,7 +260,7 @@ The conflict may happen here is when there are 2 transactions either of which in
 use majority means that it affects and is affected by the majority of nodes which is made consistent later on by MVCC of WiredTiger in MongoDB
 If the first transaction is commited first, every thing happens as expected
 If the second one is commited first, then the first transaction will be aborted by the raise of error due to not finding the entity in the database
-That's is how I choose this concern, since it's ensure the consistency but with slight downgrade in the performance which is insignificant
+That's is how I choose this concern, since it ensures the consistency but with slight downgrade in the performance which is insignificant
 """
 
 

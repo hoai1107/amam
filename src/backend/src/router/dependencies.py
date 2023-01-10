@@ -28,6 +28,7 @@ async def search_query_processing(
     query_title_pattern = ""
     for word in word_arr:
         query_title_pattern += " " + word + " " + "(.)*|"
+        query_title_pattern += " " + word.capitalize() + " " + "(.)*|"
     return query_title_pattern[:-1]
 
 """

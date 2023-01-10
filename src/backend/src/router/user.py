@@ -11,6 +11,8 @@ from dependencies import recursive_remove_comment
 from db_connection import mongodb, client, read_concern, WriteConcern
 from collections import namedtuple
 from bson import ObjectId
+import datetime
+import pytz
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -205,7 +207,7 @@ async def create_comment(*, userID: str = Depends(authentication), comment: Comm
             try:
                 comment.user_id = userID
                 comment_dict = comment.dict()
-                comment_dict["time_created"] = str(comment_dict["time_created"])
+                comment_dict["time_created"] = str(datetime.datetime.now(pytz.UTC))
                 current_comment = mongodb.comments.insert_one(
                     comment_dict, session=session
                 )
@@ -448,7 +450,7 @@ async def reply_comment(
                 replyComment.user_id = userID
                 replyComment.root_comment_id = root_id
                 comment_dict = replyComment.dict()
-                comment_dict["time_created"] = str(comment_dict["time_created"])
+                comment_dict["time_created"] = str(datetime.datetime.now(pytz.UTC))
                 current_comment = mongodb.comments.insert_one(
                     comment_dict, session=session
                 )

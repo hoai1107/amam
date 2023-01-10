@@ -25,7 +25,9 @@
         <SvgIcon
           class="cursor-pointer hover:text-blueSky-dark-300 transition-none"
           :class="[
-            page === maxPage - 1 ? 'pointer-events-none text-gray-400' : '',
+            maxPage === 0 || page === maxPage - 1
+              ? 'pointer-events-none text-gray-400'
+              : '',
           ]"
           size="24"
           type="mdi"
@@ -54,6 +56,9 @@ const maxPage = Math.ceil(props.questions.length / 5);
 const router = useRouter();
 const page = ref(0);
 const currentQuestionList = ref();
+
+console.log(props.questions);
+console.log(maxPage);
 
 watchEffect(() => {
   currentQuestionList.value = props.questions.slice(

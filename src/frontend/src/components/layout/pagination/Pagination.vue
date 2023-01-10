@@ -2,18 +2,27 @@
   <div class="pt-3 flex flex-row gap-x-3 w-fit mx-auto mt-3 items-center">
     <div>
       <SvgIcon
+        v-show="currentPage !== 1"
         class="cursor-pointer hover:text-blueSky-dark-300 transition-none"
         size="24"
         type="mdi"
         :path="mdiChevronDoubleLeft"
+        @click="router.push({ name: routeName, query: { page_index: 1 } })"
       ></SvgIcon>
     </div>
     <div>
       <SvgIcon
+        v-show="currentPage !== 1"
         class="cursor-pointer hover:text-blueSky-dark-300 transition-none"
         size="24"
         type="mdi"
         :path="mdiChevronLeft"
+        @click="
+          router.push({
+            name: routeName,
+            query: { page_index: currentPage - 1 },
+          })
+        "
       ></SvgIcon>
     </div>
     <div class="px-3 h-[40px]">
@@ -31,18 +40,29 @@
     </div>
     <div>
       <SvgIcon
+        v-show="currentPage !== totalPages"
         class="cursor-pointer hover:text-blueSky-dark-300 transition-none"
         size="24"
         type="mdi"
         :path="mdiChevronRight"
+        @click="
+          router.push({
+            name: routeName,
+            query: { page_index: currentPage + 1 },
+          })
+        "
       ></SvgIcon>
     </div>
     <div>
       <SvgIcon
+        v-show="currentPage !== totalPages"
         class="cursor-pointer hover:text-blueSky-dark-300 transition-none"
         size="24"
         type="mdi"
         :path="mdiChevronDoubleRight"
+        @click="
+          router.push({ name: routeName, query: { page_index: totalPages } })
+        "
       ></SvgIcon>
     </div>
   </div>
@@ -56,6 +76,9 @@ import {
   mdiChevronDoubleRight,
 } from "@mdi/js";
 import SvgIcon from "@jamescoyle/vue-icon";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const props = defineProps({
   currentPage: Number,

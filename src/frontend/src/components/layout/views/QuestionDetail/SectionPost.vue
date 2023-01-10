@@ -3,7 +3,32 @@
     <h1 class="text-xl font-semibold pr-4 mr-auto">
       {{ content.title }}
     </h1>
-    <SvgIcon size="32" type="mdi" :path="mdiDotsVertical"></SvgIcon>
+    <div>
+      <button @click="toggleOptions">
+        <SvgIcon size="32" type="mdi" :path="mdiDotsVertical"></SvgIcon>
+      </button>
+      <div
+        v-show="showOptions"
+        class="text-base mt-2 border-2 border-solid rounded px-2 py-2 absolute bg-white z-10 shadow-sm -translate-x-28"
+      >
+        <ul class="flex flex-col gap-1">
+          <router-link :to="{ name: 'home' }">
+            <li
+              class="rounded flex flex-row gap-2 items-center justify-start px-4 hover:bg-blueSky-light-800"
+            >
+              <SvgIcon size="24" type="mdi" :path="mdiPencilOutline"></SvgIcon>
+              <p>Edit</p>
+            </li>
+          </router-link>
+          <li
+            class="rounded flex flex-row gap-2 items-center text-red px-4 hover:bg-blueSky-light-800 cursor-pointer"
+          >
+            <SvgIcon size="24" type="mdi" :path="mdiDeleteOutline"></SvgIcon>
+            <p>Delete</p>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
   <PostMetaData
     :username="content.user_name"
@@ -84,8 +109,8 @@ import {
   mdiArrowUpBold,
   mdiArrowUpBoldOutline,
   mdiArrowDownBoldOutline,
-  mdiCommentOutline,
-  mdiEyeOutline,
+  mdiPencilOutline,
+  mdiDeleteOutline,
   mdiBookmarkOutline,
   mdiBookmark,
   mdiDotsVertical,
@@ -107,6 +132,7 @@ const authStore = useAuthStore();
 const userStore = useUserStore();
 const userSentiment = ref(Sentiment.NEUTRAL);
 const isBookmark = ref(false);
+const showOptions = ref(false);
 
 console.log(props.content);
 
@@ -178,6 +204,10 @@ function changeBookmark() {
   instance.put(`/users/bookmark/${props.content.id}`).then(async () => {
     await userStore.fetchCurrentUserInfo();
   });
+}
+
+function toggleOptions() {
+  showOptions.value = !showOptions.value;
 }
 </script>
 

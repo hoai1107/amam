@@ -45,7 +45,9 @@
 
           <!-- Dislike -->
           <div class="flex flex-row gap-2">
-            <p>{{ comment.downvote }}</p>
+            <p>
+              <span v-show="comment.downvote > 0">-</span>{{ comment.downvote }}
+            </p>
             <button
               :class="authStore.isAuthenticated() ? '' : 'pointer-events-none'"
               @click="changeSentiment(userSentiment, Sentiment.DISLIKE)"
@@ -74,9 +76,9 @@
             </button>
           </div>
         </div>
-        <button>
+        <!-- <button>
           <SvgIcon size="24" type="mdi" :path="mdiDotsHorizontal"></SvgIcon>
-        </button>
+        </button> -->
       </div>
 
       <!-- Reply -->

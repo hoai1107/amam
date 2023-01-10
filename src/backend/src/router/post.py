@@ -121,54 +121,95 @@ async def get_posts_on_homepage(
         order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default),
         category: list[SearchFilter] = Query(title="The tags to filter the searched posts", default= [SearchFilter.all])
     ):
-    count = 0 
-    if category == ["All"]:
-        list_of_full_posts = mongodb.posts.aggregate([
-            {"$sort":
-                    {
-                        "_id":-1
-                    }
-            },
-            {
-                "$skip": (page_index - 1)*pagination_number
-            },
-            {
-                "$limit": pagination_number
-            }
-        ])
-        count = mongodb.posts.count_documents(filter={})
-    else:
-        list_of_full_posts = mongodb.posts.aggregate([
-            {"$match":
-                    {
-                        "tags":
+    with client.start_session() as session:
+        with session.start_transaction(read_concern=read_concern.ReadConcern("majority")):
+            try:
+                if category == ["All"]:
+                    pipeline = []
+                else:
+                    pipeline = [
+                        {"$match":
+                                {
+                                    "tags":
+                                        {
+                                            "$in": category
+                                        }
+                                }
+                        }
+                    ]
+                if order_by_option.value == OrderByOption.default:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$sort":
+                                {
+                                    "_id":-1,
+                                }
+                        },
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
+                        }
+                    ],session=session)
+                elif order_by_option.value == OrderByOption.comment:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$sort":
+                                {
+                                    "num_comments":-1,
+                                    "_id":-1
+                                    
+                                }
+                        },
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
+                        }
+                    ],session=session)
+                elif order_by_option.value ==  OrderByOption.view:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$sort":
+                                {
+                                    "view":-1,
+                                    "_id":-1
+                                }
+                        },
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
+                        }
+                    ],session=session)
+                elif order_by_option.value == OrderByOption.vote:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$addFields":
                             {
-                                "$in": category
+                                "total_vote": {"$subtract":["$upvote","$downvote"]}
                             }
-                    }
-            },
-            {"$sort":
-                    {
-                        "_id":-1
-                    }
-            },
-            {
-                "$skip":(page_index - 1)*pagination_number
-            },
-            {
-                "$limit": pagination_number
-            }
-        ])
-        count = mongodb.posts.count_documents(filter={"tags": {"$in": category}})
-    res = list[Posts]()
-    for doc in list_of_full_posts:
-        res.append(Posts(**doc))
-    if order_by_option.value == OrderByOption.comment:
-        res.sort(key= lambda x: x.num_comments, reverse=True)
-    elif order_by_option.value ==  OrderByOption.view:
-        res.sort(key= lambda x: x.view, reverse= True)
-    elif order_by_option.value == OrderByOption.vote:
-        res.sort(key= lambda x: x.upvote + x.downvote, reverse= True)
+                        },
+                        {"$sort":
+                                {
+                                    "total_vote":-1,
+                                    "_id":-1
+                                }
+                        },
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
+                        }
+                    ],session=session)
+                count = len(list(mongodb.posts.aggregate(pipeline= pipeline,session=session)))
+                res = list[Posts]()
+                for doc in list_of_full_posts:
+                    res.append(Posts(**doc))
+                session.commit_transaction()
+            except:
+                session.abort_transaction()
+                return Response(status_code= status.HTTP_400_BAD_REQUEST)
     return {"data":res, "total": count}
 
 # this is to search the post
@@ -179,86 +220,112 @@ async def get_searched_posts(
         page_index : int = Query(title="The page index in the homepage", default=1),
         order_by_option: OrderByOption = Query(title= "The option that users use to sort the result", default=OrderByOption.default)
     ):
-    count = 0
-    if category == ["All"]:
-        list_of_full_posts = mongodb.posts.aggregate([
-            {"$match":
-                {"title":
-                        {
-                            "$regex": query_title_pattern,
-                            "$options": 'i'
-                        }
-                }
-            },
-            {"$sort":
-                {
-                    "_id":-1
-                }
-            },
-            {
-                "$skip": (page_index - 1)*pagination_number
-            },
-            {
-                "$limit": pagination_number
-            }
-        ])
-        count = mongodb.posts.count_documents(filter =
-                {"title":
-                    {
-                        "$regex":query_title_pattern,
-                        "$options":"i"
-                    }
-                })
-    else:
-        list_of_full_posts = mongodb.posts.aggregate([
-            {"$match":
-                {
-                    "tags":
-                        {
-                            "$in": category
+    with client.start_session() as session:
+        with session.start_transaction(read_concern=read_concern.ReadConcern("majority")):
+            try:
+                count = 0
+                if category == ["All"]:
+                    pipeline = [
+                        {"$match":
+                            {"title":
+                                    {
+                                        "$regex": query_title_pattern,
+                                        "$options": 'i'
+                                    }
+                            }
+                        }]
+                else:
+                    pipeline = [
+                        {"$match":
+                            {
+                                "tags":
+                                    {
+                                        "$in": category
+                                    },
+                                "title":
+                                    { 
+                                        
+                                        "$regex":query_title_pattern,
+                                        "$options":'i'
+                                        
+                                    }
+                            }
+                        }]
+
+                if order_by_option.value == OrderByOption.default:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$sort":
+                                {
+                                    "_id":-1,
+                                }
                         },
-                    "title":
-                        { 
-                            
-                            "$regex":query_title_pattern,
-                            "$options":'i'
-                            
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
                         }
-                }
-            },
-            {"$sort":
-                {
-                    "_id":-1
-                }
-            },
-            {
-                "$skip":(page_index - 1)*pagination_number
-            },
-            {
-                "$limit": pagination_number
-            }
-        ])
-        count = mongodb.posts.count_documents(filter =
-            {
-                "tags":
-                    {
-                        "$in": category
-                    },
-                "title":
-                    {
-                        "$regex":query_title_pattern,
-                        "$options":"i"
-                    }
-            })
-    res = list[Posts]()
-    for doc in list_of_full_posts:
-        res.append(Posts(**doc))
-    if order_by_option.value == OrderByOption.comment:
-        res.sort(key= lambda x: x.num_comments, reverse=True)
-    elif order_by_option.value ==  OrderByOption.view:
-        res.sort(key= lambda x: x.view, reverse= True)
-    elif order_by_option.value == OrderByOption.vote:
-        res.sort(key= lambda x: x.upvote + x.downvote, reverse= True)
+                    ],session=session)
+                elif order_by_option.value == OrderByOption.comment:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$sort":
+                                {
+                                    "num_comments":-1,
+                                    "_id":-1
+                                    
+                                }
+                        },
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
+                        }
+                    ],session=session)
+                elif order_by_option.value ==  OrderByOption.view:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$sort":
+                                {
+                                    "view":-1,
+                                    "_id":-1
+                                }
+                        },
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
+                        }
+                    ],session=session)
+                elif order_by_option.value == OrderByOption.vote:
+                    list_of_full_posts = mongodb.posts.aggregate(pipeline= pipeline + [
+                        {"$addFields":
+                            {
+                                "total_vote": {"$subtract":["$upvote","$downvote"]}
+                            }
+                        },
+                        {"$sort":
+                                {
+                                    "total_vote":-1,
+                                    "_id":-1
+                                }
+                        },
+                        {
+                            "$skip":(page_index - 1)*pagination_number
+                        },
+                        {
+                            "$limit": pagination_number
+                        }
+                    ],session=session)
+                    
+                count = len(list(mongodb.posts.aggregate(pipeline= pipeline,session=session)))
+                res = list[Posts]()
+                for doc in list_of_full_posts:
+                    res.append(Posts(**doc))
+                session.commit_transaction()
+            except:
+                session.abort_transaction()
+                return Response(status_code= status.HTTP_400_BAD_REQUEST)
     return {"data":res, "total": count}
 
 # This is to create the a post information (and get the ID of the post)

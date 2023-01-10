@@ -9,6 +9,8 @@ from post_model import Posts, PostDB, ObjectId, SearchFilter, OrderByOption, Com
 from constant import pagination_number
 from dependencies import search_query_processing
 from authentication import authentication
+import datetime
+import pytz
 
 router = APIRouter(
     prefix= "/posts",
@@ -336,7 +338,7 @@ async def create_post(*,userID: str = Depends(authentication),post: PostDB):
             try:
                 post.user_id = userID
                 post_dict = post.dict()
-                post_dict["time_created"] = str(post_dict["time_created"])
+                post_dict["time_created"] = str(datetime.datetime.now(pytz.UTC))
                 current_post = mongodb["posts"].insert_one(post_dict,session=session)
                 mongodb.users.update_one({"user_id": post.user_id},{"$addToSet":{"list_of_user_question":{
                             "id": str(current_post.inserted_id),
